@@ -29,9 +29,9 @@ export const getCoordinatesFromAddress = async (address: string) => {
 // Calculate distance (in km)
 export const calculateDistance = (
   pickup: { lat: number; lon: number },
-  dropoff: { lat: number; lon: number }
+  destination: { lat: number; lon: number }
 ) => {
-  const distanceInMeters = haversine(pickup, dropoff);
+  const distanceInMeters = haversine(pickup, destination);
   return (distanceInMeters / 1000).toFixed(2);
 };
 

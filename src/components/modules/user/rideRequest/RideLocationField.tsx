@@ -37,7 +37,7 @@ const RideLocationField = ({
       name={name}
       render={({ field }) => (
         <FormItem className="relative">
-          <FormLabel className="text-base font-medium flex items-center gap-1">
+          <FormLabel className="text-base font-medium flex items-center gap-1.5">
             {icon} {label}
           </FormLabel>
           <FormControl>
@@ -46,7 +46,7 @@ const RideLocationField = ({
                 {...field}
                 type="text"
                 placeholder={`Enter ${label.toLowerCase()}`}
-                className="pl-9 h-14 text-base bg-background border-2 focus-visible:ring-2"
+                className="pl-5 h-12 text-base bg-background border-2 focus-visible:ring-2"
                 onChange={(e) => {
                   field.onChange(e);
                   onChange(e.target.value);

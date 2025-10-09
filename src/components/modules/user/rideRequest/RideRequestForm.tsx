@@ -14,15 +14,18 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import RideLocationField from "./RideLocationField";
 import RideSummaryCard from "./RideSummaryCard";
+import { useRequestRideMutation } from "@/redux/features/user/user.api";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 // Zod schema
 const rideRequestZodSchema = z.object({
   pickup: z
     .string()
     .min(2, { message: "Pickup address must be at least 2 characters long." }),
-  dropoff: z
-    .string()
-    .min(2, { message: "Dropoff address must be at least 2 characters long." }),
+  destination: z.string().min(2, {
+    message: "Destination address must be at least 2 characters long.",
+  }),
 });
 
 const RideRequestForm = ({
@@ -35,14 +38,23 @@ const RideRequestForm = ({
   const [showCard, setShowCard] = useState(false);
   const [rideData, setRideData] = useState<any>(null);
   const [pickupSuggestions, setPickupSuggestions] = useState<any[]>([]);
-  const [dropoffSuggestions, setDropoffSuggestions] = useState<any[]>([]);
+  const [destinationSuggestions, setDestinationSuggestions] = useState<any[]>(
+    []
+  );
   const [loadingPickup, setLoadingPickup] = useState(false);
-  const [loadingDropoff, setLoadingDropoff] = useState(false);
+  const [loadingDestination, setLoadingDestination] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  // Navigation hook
+  const navigate = useNavigate();
+
+  // RTK Query mutation hook
+  const [requestRide] = useRequestRideMutation();
 
   // useHook form
   const form = useForm<z.infer<typeof rideRequestZodSchema>>({
     resolver: zodResolver(rideRequestZodSchema),
-    defaultValues: { pickup: "", dropoff: "" },
+    defaultValues: { pickup: "", destination: "" },
   });
 
   // Debounce for pickup
@@ -57,15 +69,15 @@ const RideRequestForm = ({
     }
   }, 350);
 
-  // Debounce for dropoff
-  const debounceDropoff = useDebounce(async (value: string) => {
-    if (!value.trim()) return setDropoffSuggestions([]);
+  // Debounce for destination
+  const debounceDestination = useDebounce(async (value: string) => {
+    if (!value.trim()) return setDestinationSuggestions([]);
     try {
-      setLoadingDropoff(true);
+      setLoadingDestination(true);
       const res = await searchAddressSuggestions(value);
-      setDropoffSuggestions(res);
+      setDestinationSuggestions(res);
     } finally {
-      setLoadingDropoff(false);
+      setLoadingDestination(false);
     }
   }, 350);
 
@@ -74,15 +86,17 @@ const RideRequestForm = ({
     setIsLoading(true);
     try {
       const pickupCoords = await getCoordinatesFromAddress(data.pickup);
-      const dropoffCoords = await getCoordinatesFromAddress(data.dropoff);
-      const distance = calculateDistance(pickupCoords, dropoffCoords);
-      const estFare = (parseFloat(distance) * 15).toFixed(0);
+      const destinationCoords = await getCoordinatesFromAddress(
+        data.destination
+      );
+      const distance = calculateDistance(pickupCoords, destinationCoords);
+      const fare = (parseFloat(distance) * 15).toFixed(0);
 
       setRideData({
         pickup: data.pickup,
-        dropoff: data.dropoff,
-        distance,
-        estFare,
+        destination: data.destination,
+        distance: parseFloat(distance),
+        fare: parseFloat(fare),
       });
       setShowCard(true);
       setShowHeading(false);
@@ -91,8 +105,35 @@ const RideRequestForm = ({
     }
   };
 
-  // Handle ride confirm
-  const handleConfirm = () => console.log("Confirmed ride:", rideData);
+  // Handle confirm to trigger backend
+  const handleConfirm = async () => {
+    setConfirmLoading(true);
+
+    try {
+      const result = await requestRide(rideData).unwrap();
+      console.log(result);
+      toast.success(result.message || "Ride requested successfully");
+      navigate("/active-rides");
+    } catch (error: any) {
+      console.log(error);
+      toast.error(
+        error?.data?.error[0]?.message ||
+          error?.data?.message ||
+          "Something went wrong!"
+      );
+
+      // Redirect to verify if not verified
+      if (
+        error.status === 400 &&
+        error.data.message ===
+          "Please update your profile with phone number before requesting a ride"
+      ) {
+        navigate("/update-profile");
+      }
+    } finally {
+      setConfirmLoading(false);
+    }
+  };
 
   // Manage card
   if (showCard && rideData) {
@@ -104,6 +145,7 @@ const RideRequestForm = ({
           setShowCard(false);
           setShowHeading(true);
         }}
+        confirmLoading={confirmLoading}
       />
     );
   }
@@ -131,22 +173,22 @@ const RideRequestForm = ({
 
           <RideLocationField
             control={form.control}
-            name="dropoff"
-            label="Dropoff location"
+            name="destination"
+            label="Destination location"
             icon={<Navigation className="w-4 h-4 text-muted-foreground" />}
-            suggestions={dropoffSuggestions}
-            loading={loadingDropoff}
-            onChange={debounceDropoff}
+            suggestions={destinationSuggestions}
+            loading={loadingDestination}
+            onChange={debounceDestination}
             onSelectSuggestion={(val) => {
-              form.setValue("dropoff", val);
-              setDropoffSuggestions([]);
+              form.setValue("destination", val);
+              setDestinationSuggestions([]);
             }}
           />
 
           <ButtonSubmit
             isLoading={isLoading}
             value="Find ride"
-            loadingValue="Finding..."
+            loadingValue="Finding"
             className="h-11 text-base font-medium"
           />
         </form>

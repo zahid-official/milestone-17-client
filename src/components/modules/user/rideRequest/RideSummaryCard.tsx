@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import ButtonSubmit from "@/components/ui/button-submit";
 import {
   Card,
   CardContent,
@@ -11,18 +12,20 @@ import { MapPin, Navigation } from "lucide-react";
 interface RideSummaryCardProps {
   rideData: {
     pickup: string;
-    dropoff: string;
+    destination: string;
     distance: string;
-    estFare: string;
+    fare: string;
   };
   onConfirm: () => void;
   onBack: () => void;
+  confirmLoading: boolean;
 }
 
 const RideSummaryCard = ({
   rideData,
   onConfirm,
   onBack,
+  confirmLoading,
 }: RideSummaryCardProps) => {
   return (
     <Card className="border border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 rounded-2xl shadow-lg transition-colors">
@@ -47,15 +50,15 @@ const RideSummaryCard = ({
           </div>
         </div>
 
-        {/* Dropoff */}
+        {/* Destination */}
         <div className="flex items-start gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary/10 text-secondary-foreground mt-0.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary mt-0.5">
             <Navigation className="w-4 h-4" />
           </div>
           <div className="flex-1">
-            <p className="text-sm text-muted-foreground">Dropoff</p>
+            <p className="text-sm text-muted-foreground">destination</p>
             <p className="font-medium text-foreground leading-tight">
-              {rideData.dropoff}
+              {rideData.destination}
             </p>
           </div>
         </div>
@@ -73,7 +76,7 @@ const RideSummaryCard = ({
           <div className="flex flex-col text-right">
             <span className="text-muted-foreground">Estimated Fare</span>
             <span className="font-semibold text-foreground">
-              ৳ {rideData.estFare}
+              ৳ {rideData.fare}
             </span>
           </div>
         </div>
@@ -81,12 +84,14 @@ const RideSummaryCard = ({
 
       {/* Buttons */}
       <CardFooter className="flex flex-col gap-3">
-        <Button
-          onClick={onConfirm}
-          className="w-full h-10 text-base font-medium"
-        >
-          Confirm Ride
-        </Button>
+        <div onClick={onConfirm} className="w-full">
+          <ButtonSubmit
+            isLoading={confirmLoading}
+            value="Confirm Ride"
+            loadingValue="Requsting a Ride"
+            className=" h-10 text-base font-medium"
+          />
+        </div>
         <Button
           onClick={onBack}
           variant="ghost"
