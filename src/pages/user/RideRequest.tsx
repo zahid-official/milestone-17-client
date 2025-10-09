@@ -1,6 +1,8 @@
-import RideRequestForm from "@/components/modules/user/RideRequestForm";
+import RideRequestForm from "@/components/modules/user/rideRequest/RideRequestForm";
+import { useState } from "react";
 
 const RideRequest = () => {
+  const [showHeading, setShowHeading] = useState(true);
   return (
     <div className="grid gap-16 sm:px-9 items-center min-h-[85vh] xl:max-w-7xl mx-auto xl:grid-cols-2">
       {/* Content */}
@@ -8,18 +10,20 @@ const RideRequest = () => {
         <div className="flex flex-1 items-center justify-center">
           <div className="space-y-8">
             {/* Heading */}
-            <div className="space-y-4">
-              <h1 className="font-bold tracking-tight text-4xl sm:text-6xl text-balance">
-                Get ready for your first trip
-              </h1>
-              <p className="text-lg text-muted-foreground text-pretty max-w-xl">
-                Discover the convenience of Velocia. Request a ride now directly
-                from your browser.
-              </p>
-            </div>
+            {showHeading && (
+              <div className="space-y-4">
+                <h1 className="font-bold tracking-tight text-4xl sm:text-5xl text-pretty">
+                  Get ready for your road trip
+                </h1>
+                <p className="text-lg text-muted-foreground text-pretty max-w-xl">
+                  Discover the convenience of Velocia. Request a ride now
+                  directly from your browser.
+                </p>
+              </div>
+            )}
 
             {/* Location Form */}
-            <RideRequestForm />
+            <RideRequestForm setShowHeading={setShowHeading} />
           </div>
         </div>
       </div>
