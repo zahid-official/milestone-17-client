@@ -15,6 +15,7 @@ interface RideSummaryCardProps {
     destination: string;
     distance: string;
     fare: string;
+    paymentMethod: string;
   };
   onConfirm: () => void;
   onBack: () => void;
@@ -66,17 +67,28 @@ const RideSummaryCard = ({
         {/* Divider */}
         <div className="border-t border-border mt-7"></div>
         {/* Distance & fare */}
-        <div className="flex items-center justify-between text-sm">
+        <div className="flex items-center justify-between text-center text-sm">
+          {/* distance */}
           <div className="flex flex-col">
             <span className="text-muted-foreground">Distance</span>
             <span className="font-semibold text-foreground">
               {rideData.distance} km
             </span>
           </div>
-          <div className="flex flex-col text-right">
+
+          {/* fare */}
+          <div className="flex flex-col">
             <span className="text-muted-foreground">Estimated Fare</span>
             <span className="font-semibold text-foreground">
               ৳ {rideData.fare}
+            </span>
+          </div>
+
+          {/* fare */}
+          <div className="flex flex-col">
+            <span className="text-muted-foreground">Payment</span>
+            <span className="font-semibold text-foreground">
+              {rideData.paymentMethod}
             </span>
           </div>
         </div>

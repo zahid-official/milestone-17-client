@@ -2,29 +2,52 @@
 import ButtonSubmit from "@/components/ui/button-submit";
 import { Form } from "@/components/ui/form";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useRequestRideMutation } from "@/redux/features/user/user.api";
 import {
   calculateDistance,
   getCoordinatesFromAddress,
   searchAddressSuggestions,
 } from "@/utils/geo";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MapPin, Navigation } from "lucide-react";
+import { CreditCard, MapPin, Navigation } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 import z from "zod";
 import RideLocationField from "./RideLocationField";
 import RideSummaryCard from "./RideSummaryCard";
-import { useRequestRideMutation } from "@/redux/features/user/user.api";
-import { toast } from "sonner";
-import { useNavigate } from "react-router";
+
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // Zod schema
 const rideRequestZodSchema = z.object({
+  // Pickup
   pickup: z
     .string()
-    .min(2, { message: "Pickup address must be at least 2 characters long." }),
+    .min(2, { error: "Pickup address must be at least 2 characters long." }),
+
+  // Destination
   destination: z.string().min(2, {
-    message: "Destination address must be at least 2 characters long.",
+    error: "Destination address must be at least 2 characters long.",
+  }),
+
+  // Payment Method
+  paymentMethod: z.enum(["Cash", "Online"], {
+    error: "Please select a payment method.",
   }),
 });
 
@@ -54,7 +77,7 @@ const RideRequestForm = ({
   // useHook form
   const form = useForm<z.infer<typeof rideRequestZodSchema>>({
     resolver: zodResolver(rideRequestZodSchema),
-    defaultValues: { pickup: "", destination: "" },
+    defaultValues: { pickup: "", destination: "", paymentMethod: "Cash" },
   });
 
   // Debounce for pickup
@@ -84,6 +107,7 @@ const RideRequestForm = ({
   // Handle onSubmit for find ride
   const onSubmit = async (data: z.infer<typeof rideRequestZodSchema>) => {
     setIsLoading(true);
+
     try {
       const pickupCoords = await getCoordinatesFromAddress(data.pickup);
       const destinationCoords = await getCoordinatesFromAddress(
@@ -97,6 +121,7 @@ const RideRequestForm = ({
         destination: data.destination,
         distance: parseFloat(distance),
         fare: parseFloat(fare),
+        paymentMethod: data.paymentMethod,
       });
       setShowCard(true);
       setShowHeading(false);
@@ -108,9 +133,13 @@ const RideRequestForm = ({
   // Handle confirm to trigger backend
   const handleConfirm = async () => {
     setConfirmLoading(true);
+    const confirmData = {
+      ...rideData,
+      paymentMethod: rideData.paymentMethod.toUpperCase(),
+    };
 
     try {
-      const result = await requestRide(rideData).unwrap();
+      const result = await requestRide(confirmData).unwrap();
       console.log(result);
       toast.success(result.message || "Ride requested successfully");
       navigate("/active-rides");
@@ -128,7 +157,7 @@ const RideRequestForm = ({
         error.data.message ===
           "Please update your profile with phone number before requesting a ride"
       ) {
-        navigate("/update-profile");
+        navigate("/user/profile");
       }
     } finally {
       setConfirmLoading(false);
@@ -183,6 +212,32 @@ const RideRequestForm = ({
               form.setValue("destination", val);
               setDestinationSuggestions([]);
             }}
+          />
+
+          {/* ✅ Added payment method field with same design style */}
+          <FormField
+            control={form.control}
+            name="paymentMethod"
+            render={({ field }) => (
+              <FormItem className="relative">
+                <FormLabel className="text-base font-medium flex items-center gap-1.5">
+                  <CreditCard className="w-4 h-4 text-muted-foreground" />
+                  Payment method
+                </FormLabel>
+                <FormControl>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="pl-5 py-5.5  bg-background border-2 focus-visible:ring-2 w-full">
+                      <SelectValue placeholder="Select payment method" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Cash">Cash</SelectItem>
+                      <SelectItem value="Online">Online</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
 
           <ButtonSubmit

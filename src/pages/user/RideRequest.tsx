@@ -13,7 +13,7 @@ const RideRequest = () => {
             {showHeading && (
               <div className="space-y-4">
                 <h1 className="font-bold tracking-tight text-4xl sm:text-5xl text-pretty">
-                  Get ready for your road trip
+                  Get ready for your seamless trip
                 </h1>
                 <p className="text-lg text-muted-foreground text-pretty max-w-xl">
                   Discover the convenience of Velocia. Request a ride now
