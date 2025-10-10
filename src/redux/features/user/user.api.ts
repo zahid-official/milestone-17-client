@@ -1,4 +1,4 @@
-import type { IResponse } from "@/types";
+import type { IResponse, IUpdateProfile, UpdateProfileResponse } from "@/types";
 import baseApi from "../../baseApi";
 
 export const userApi = baseApi.injectEndpoints({
@@ -12,6 +12,19 @@ export const userApi = baseApi.injectEndpoints({
       }),
     }),
 
+    // Update profile
+    updateProfile: builder.mutation<
+      IResponse<UpdateProfileResponse>,
+      IUpdateProfile
+    >({
+      query: (payload) => ({
+        url: `/user/update/${payload._id}`,
+        method: "PATCH",
+        data: payload,
+      }),
+      invalidatesTags: ["USER"]
+    }),
+
     // Profile info
     profileInfo: builder.query({
       query: () => ({
@@ -23,4 +36,8 @@ export const userApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useProfileInfoQuery, useRequestRideMutation } = userApi;
+export const {
+  useRequestRideMutation,
+  useUpdateProfileMutation,
+  useProfileInfoQuery,
+} = userApi;

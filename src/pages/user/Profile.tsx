@@ -17,8 +17,10 @@ import {
   CheckCircle2,
   Edit2,
   Mail,
+  MapPin,
   Phone,
-  User
+  ShieldUser,
+  User,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -40,20 +42,31 @@ export default function Profile() {
       value: userInfo?.phone ? userInfo?.phone : "Not provided",
     },
     {
+      icon: MapPin,
+      label: "Address",
+      value: userInfo?.address ? userInfo.address : "Not provided",
+    },
+    {
+      icon: ShieldUser,
+      label: "Status",
+      value: userInfo?.accountStatus,
+    },
+    {
       icon: Calendar,
       label: "Created",
       value:
         userInfo?.createdAt &&
-        format(new Date(userInfo?.createdAt), "dd-MM-yyyy"),
+        format(new Date(userInfo?.createdAt), "dd-MM-yyyy hh:mm a"),
     },
     {
       icon: Calendar,
       label: "Last Updated",
-      value: userInfo?.lastUpdated
-        ? format(new Date(userInfo.lastUpdated), "dd-MM-yyyy")
+      value: userInfo?.updatedAt
+        ? format(new Date(userInfo?.updatedAt), "dd-MM-yyyy hh:mm a")
         : "Not updated yet",
     },
   ];
+  console.log(userInfo);
 
   if (isEditing) {
     return (

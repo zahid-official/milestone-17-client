@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import ButtonSubmit from "@/components/ui/button-submit";
 import {
@@ -16,10 +17,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useUpdateProfileMutation } from "@/redux/features/user/user.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 import z from "zod";
 
 // Zod schema
@@ -50,6 +54,7 @@ const profileZodSchema = z.object({
 // IProps
 interface IProps {
   userInfo: {
+    _id: string;
     name: string;
     phone: string;
     address: string;
@@ -62,6 +67,12 @@ const ProfileForm = ({ userInfo, handleCancel }: IProps) => {
   // State for loading
   const [isLoading, setIsloading] = useState(false);
 
+  // Navigation hook
+  const navigate = useNavigate();
+
+  // RTK Query mutation hook
+  const [updateProfile] = useUpdateProfileMutation();
+
   // useForm hook
   const form = useForm<z.infer<typeof profileZodSchema>>({
     resolver: zodResolver(profileZodSchema),
@@ -73,8 +84,36 @@ const ProfileForm = ({ userInfo, handleCancel }: IProps) => {
   });
 
   // Handle onSubmit
-  const onSubmit = (data: z.infer<typeof profileZodSchema>) => {
-    console.log(data);
+  const onSubmit = async (data: z.infer<typeof profileZodSchema>) => {
+    // Check if data has changed
+    const isUnchanged =
+      data.name === userInfo.name &&
+      data.phone === userInfo.phone &&
+      data.address === userInfo.address;
+
+    if (isUnchanged) {
+      toast.error("You haven't made any changes.");
+      return;
+    }
+
+    setIsloading(true);
+    const updatedData = { ...data, _id: userInfo?._id };
+
+    try {
+      const result = await updateProfile(updatedData).unwrap();
+      console.log(result);
+      toast.success(result.message || "User details updated successfully");
+      navigate("/user/ride-request");
+    } catch (error: any) {
+      console.log(error);
+      toast.error(
+        error?.data?.error[0]?.message ||
+          error?.data?.message ||
+          "Something went wrong!"
+      );
+    } finally {
+      setIsloading(false);
+    }
   };
 
   // Update form when userInfo is loaded or changed

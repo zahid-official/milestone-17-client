@@ -2,7 +2,10 @@
 import ButtonSubmit from "@/components/ui/button-submit";
 import { Form } from "@/components/ui/form";
 import { useDebounce } from "@/hooks/useDebounce";
-import { useRequestRideMutation } from "@/redux/features/user/user.api";
+import {
+  useProfileInfoQuery,
+  useRequestRideMutation,
+} from "@/redux/features/user/user.api";
 import {
   calculateDistance,
   getCoordinatesFromAddress,
@@ -17,7 +20,6 @@ import { toast } from "sonner";
 import z from "zod";
 import RideLocationField from "./RideLocationField";
 import RideSummaryCard from "./RideSummaryCard";
-
 import {
   FormControl,
   FormField,
@@ -72,6 +74,7 @@ const RideRequestForm = ({
   const navigate = useNavigate();
 
   // RTK Query mutation hook
+  const { data: userInfo } = useProfileInfoQuery(undefined);
   const [requestRide] = useRequestRideMutation();
 
   // useHook form
@@ -136,6 +139,7 @@ const RideRequestForm = ({
     const confirmData = {
       ...rideData,
       paymentMethod: rideData.paymentMethod.toUpperCase(),
+      userId: userInfo.data._id,
     };
 
     try {
