@@ -4,18 +4,26 @@ import { useState } from "react";
 
 // RideHistory Component
 const RideHistory = () => {
-  // State for page
+  // State from react
   const [page, setPage] = useState(1);
+  const [status, setStatus] = useState<string | undefined>(undefined);
   const limit = 10;
 
   // RTK Query mutation hooks
-  const { data, isLoading } = useRideHistoryQuery({ page, limit });
+  const { data, isLoading } = useRideHistoryQuery({ page, limit, status });
 
   // Handle pageChange
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
 
+  // Handle statusChange
+  const handleStatusChange = (newStatus: string | undefined) => {
+    setPage(1); // reset to first page
+    setStatus(newStatus);
+  };
+
+  // Loader
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-6">
@@ -30,6 +38,8 @@ const RideHistory = () => {
         data={data}
         onPageChange={handlePageChange}
         currentPage={page}
+        onStatusChange={handleStatusChange}
+        currentStatus={status}
       />
     </div>
   );

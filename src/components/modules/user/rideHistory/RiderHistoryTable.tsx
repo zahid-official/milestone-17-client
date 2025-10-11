@@ -5,11 +5,18 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+
+import { ChevronDownIcon } from "lucide-react";
 import rideStatus from "@/constants/rideStatus";
 import type { RideStatus } from "@/types";
 import { Link } from "react-router";
@@ -55,16 +62,22 @@ interface IProps {
   };
   onPageChange: (page: number) => void;
   currentPage: number;
+  onStatusChange: (status: string | undefined) => void;
+  currentStatus: string | undefined;
 }
 
 // RiderHistoryTable Component
-const RiderHistoryTable = ({ data, onPageChange, currentPage }: IProps) => {
+const RiderHistoryTable = ({
+  data,
+  onPageChange,
+  currentPage,
+  onStatusChange,
+  currentStatus,
+}: IProps) => {
   const historyData = data?.data;
   const paginationData = data?.meta;
 
-  console.log(paginationData);
-
-  // columnsTitle
+  // Columns title
   const columnsTitle = [
     { label: "No.", value: "index" },
     { label: "Rider", value: "rider" },
@@ -78,124 +91,156 @@ const RiderHistoryTable = ({ data, onPageChange, currentPage }: IProps) => {
   ];
 
   return (
-    <div className="border max-w-7xl mx-auto p-4 rounded-2xl mt-12">
-      <Table>
-        {/* table header */}
-        <TableHeader>
-          <TableRow className="hover:bg-transparent">
-            {columnsTitle?.map((column, index) => (
-              <TableHead
-                key={column.value}
-                className="text-foreground pb-5 transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform transform-gpu animate-in fade-in slide-in-from-top-2 origin-center"
+    <>
+      {/* Header Section */}
+      <div className="max-w-7xl mx-auto mt-10 pb-5">
+        <div className="flex items-center justify-between">
+          {/* Title */}
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold mb-1 text-foreground">
+              Ride Histories
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              Browse your ride history with filtering and search options
+            </p>
+          </div>
+
+          {/* Dropdown Filter */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                {currentStatus ? currentStatus : "All Status"}
+                <ChevronDownIcon className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={() => onStatusChange(undefined)}>
+                All Status
+              </DropdownMenuItem>
+              {Object.values(rideStatus).map((status) => (
+                <DropdownMenuItem
+                  key={status}
+                  onClick={() => onStatusChange(status)}
+                >
+                  {status}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+
+      {/* Table Section */}
+      <div className="border max-w-7xl mx-auto p-4 rounded-2xl">
+        <Table>
+          {/* table header */}
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              {columnsTitle.map((column, index) => (
+                <TableHead
+                  key={column.value}
+                  className="text-foreground pb-5"
+                  style={{
+                    animationDelay: `${index * 100}ms`,
+                    animationDuration: "400ms",
+                    animationFillMode: "both",
+                  }}
+                >
+                  {column.label}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+
+          {/* table body */}
+          <TableBody>
+            {historyData?.map((history: IRideHistory, index: number) => (
+              <TableRow
+                key={history?._id}
+                className="border-b hover:bg-muted/50 cursor-pointer"
                 style={{
-                  animationDelay: `${index * 100}ms`,
+                  animationDelay: `${index * 120}ms`,
                   animationDuration: "400ms",
                   animationFillMode: "both",
                 }}
               >
-                {column.label}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
+                {/* No */}
+                <TableCell className="pl-3">
+                  <div className="text-sm">{index + 1}</div>
+                </TableCell>
 
-        {/* table body */}
-        <TableBody>
-          {historyData?.map((history: IRideHistory, index: number) => (
-            <tr
-              key={history?._id}
-              className="border-b hover:bg-muted/50 cursor-pointer transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform transform-gpu animate-in fade-in slide-in-from-top-2 origin-center"
-              style={{
-                animationDelay: `${index * 120}ms`,
-                animationDuration: "400ms",
-                animationFillMode: "both",
-              }}
-            >
-              {/* No */}
-              <TableCell className="pl-3">
-                <div className="text-sm">{index + 1}</div>
-              </TableCell>
+                {/* Rider */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                    {history?.userId?.name}
+                  </div>
+                </TableCell>
 
-              {/* Rider */}
-              <TableCell className="py-3">
-                <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                  {history?.userId?.name}
-                </div>
-              </TableCell>
+                {/* Driver */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                    {history?.driverInfo?.userId?.name || "Not assigned"}
+                  </div>
+                </TableCell>
 
-              {/* Driver */}
-              <TableCell className="py-3">
-                <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                  {history?.driverInfo?.userId?.name
-                    ? history?.driverInfo?.userId?.name
-                    : "Not assigned"}
-                </div>
-              </TableCell>
+                {/* Pickup */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                    {history?.pickup}
+                  </div>
+                </TableCell>
 
-              {/* Pickup */}
-              <TableCell className="py-3">
-                <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                  {history?.pickup}
-                </div>
-              </TableCell>
+                {/* Destination */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                    {history?.destination}
+                  </div>
+                </TableCell>
 
-              {/* Destination */}
-              <TableCell className="py-3">
-                <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                  {history?.destination}
-                </div>
-              </TableCell>
+                {/* Distance */}
+                <TableCell className="py-3">
+                  <div className="text-sm">{history?.distance} km</div>
+                </TableCell>
 
-              {/* Distance */}
-              <TableCell className="py-3">
-                <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                  {history?.distance} km
-                </div>
-              </TableCell>
+                {/* Fare */}
+                <TableCell className="py-3">
+                  <div className="text-sm">৳ {history?.fare}</div>
+                </TableCell>
 
-              {/* Fare */}
-              <TableCell className="py-3">
-                <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                  ৳ {history?.fare}
-                </div>
-              </TableCell>
-
-              {/* Fare */}
-              <TableCell className="py-3">
-                <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                {/* Status */}
+                <TableCell className="py-3">
                   <Badge
                     className={`${
                       (history.status === rideStatus.CANCELLED ||
                         history.status === rideStatus.REJECTED) &&
-                      " bg-muted-foreground/60 text-primary-foreground"
+                      "bg-muted-foreground/60 text-primary-foreground"
                     }`}
                   >
                     {history.status}
                   </Badge>
-                </div>
-              </TableCell>
+                </TableCell>
 
-              {/* Action */}
-              <TableCell className="py-3">
-                <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                {/* Action */}
+                <TableCell className="py-3">
                   <Link to={`/ride/${history?._id}`}>
-                    <Button size={"sm"}>Details</Button>
+                    <Button size="sm">Details</Button>
                   </Link>
-                </div>
-              </TableCell>
-            </tr>
-          ))}
-        </TableBody>
-      </Table>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
 
-      <div className="px-4 pt-5 flex items-center justify-between border-t">
-        <CustomPagination
-          currentPage={currentPage}
-          totalPages={paginationData?.totalPage || 1}
-          onPageChange={onPageChange}
-        />
+        {/* Pagination */}
+        <div className="px-4 pt-5 flex items-center justify-between border-t">
+          <CustomPagination
+            currentPage={currentPage}
+            totalPages={paginationData?.totalPage || 1}
+            onPageChange={onPageChange}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

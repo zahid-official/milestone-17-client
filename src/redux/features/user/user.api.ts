@@ -36,10 +36,13 @@ export const userApi = baseApi.injectEndpoints({
 
     // Ride History
     rideHistory: builder.query({
-      query: ({ page = 1, limit = 10 }) => ({
-        url: `/ride/history?page=${page}&limit=${limit}`,
-        method: "GET",
-      }),
+      query: ({ page = 1, limit = 10, status }) => {
+        const statusQuery = status ? `&status=${status}` : "";
+        return {
+          url: `/ride/history?page=${page}&limit=${limit}${statusQuery}`,
+          method: "GET",
+        };
+      },
       providesTags: ["RIDE"],
     }),
 
