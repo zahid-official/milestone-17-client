@@ -319,7 +319,7 @@ const RiderHistoryTable = ({
 
                 {/* Action */}
                 <TableCell className="py-3">
-                  <Link to={`/ride/${history?._id}`}>
+                  <Link to={`/user/ride/${history?._id}`}>
                     <Button size="sm">Details</Button>
                   </Link>
                 </TableCell>

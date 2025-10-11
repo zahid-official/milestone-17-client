@@ -1,3 +1,4 @@
+import ActiveRide from "@/pages/user/ActiveRide";
 import type { ISidebarItems } from "@/types";
 import { lazy } from "react";
 
@@ -19,6 +20,11 @@ const userSidebarItems: ISidebarItems[] = [
         title: "Ride Request",
         url: "/user/ride-request",
         component: RideRequest,
+      },
+      {
+        title: "Active Ride",
+        url: "/user/active-ride",
+        component: ActiveRide,
       },
       {
         title: "Ride History",
