@@ -28,7 +28,6 @@ const authApi = baseApi.injectEndpoints({
         method: "POST",
         data: payload,
       }),
-      invalidatesTags: ["USER"],
     }),
 
     // Logout user
@@ -37,12 +36,13 @@ const authApi = baseApi.injectEndpoints({
         url: "/auth/logout",
         method: "POST",
       }),
+      invalidatesTags: ["USER"],
     }),
 
     // Send OTP
     sendOtp: builder.mutation<IResponse<null>, ISendOtp>({
       query: (payload) => ({
-        url: "/otp/send",
+        url: "/auth/sendOTP",
         method: "POST",
         data: payload,
       }),
@@ -51,7 +51,7 @@ const authApi = baseApi.injectEndpoints({
     // Verify OTP
     verifyOtp: builder.mutation<IResponse<null>, IVerifyOtp>({
       query: (payload) => ({
-        url: "/otp/verify",
+        url: "/auth/verifyOTP",
         method: "POST",
         data: payload,
       }),

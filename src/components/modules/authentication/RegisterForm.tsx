@@ -16,7 +16,7 @@ import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -83,6 +83,9 @@ const RegisterForm = ({
   // State for loading
   const [isLoading, setIsloading] = useState(false);
 
+  // Navigation hook
+  const navigate = useNavigate();
+
   // RTK Query mutation hook
   const [register] = useRegisterMutation();
 
@@ -106,6 +109,9 @@ const RegisterForm = ({
       const result = await register(userInfo).unwrap();
       console.log(result);
       toast.success("Account created successfully");
+      if (result.data.email) {
+        navigate("/verify", { state: result.data.email });
+      }
     } catch (error: any) {
       console.log(error);
       toast.error(error.data.message || "Something went wrong!");
@@ -201,7 +207,6 @@ const RegisterForm = ({
             />
 
             {/* Submit btn */}
-
             <ButtonSubmit
               isLoading={isLoading}
               value="Create Account"

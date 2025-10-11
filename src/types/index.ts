@@ -10,6 +10,15 @@ export type {
   IVerifyOtp,
 } from "./auth.types";
 
+// User types
+export type {
+  RideStatus,
+  RideRequestResponse,
+  UpdateProfileResponse,
+  IRideRequest,
+  IUpdateProfile,
+} from "./user.types";
+
 // IResponse for baseApi queries and mutations
 export interface IResponse<T> {
   success: boolean;

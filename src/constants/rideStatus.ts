@@ -1,0 +1,11 @@
+const rideStatus = {
+  REQUESTED: "REQUESTED",
+  ACCEPTED: "ACCEPTED",
+  REJECTED: "REJECTED",
+  CANCELLED: "CANCELLED",
+  PICKED_UP: "PICKED_UP",
+  IN_TRANSIT: "IN_TRANSIT",
+  COMPLETED: "COMPLETED",
+} as const;
+
+export default rideStatus;

@@ -56,7 +56,7 @@ const Router = createBrowserRouter([
     path: "/user",
     Component: withAuth(DashboardLayout, [role.RIDER]),
     children: [
-      { index: true, element: <Navigate to={"/user/bookings"} /> },
+      { index: true, element: <Navigate to={"/user/ride-request"} /> },
       ...generateRoutes(userSidebarItems),
     ],
   },
