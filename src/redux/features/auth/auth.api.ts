@@ -1,4 +1,5 @@
 import type {
+  IChangePassword,
   ILogin,
   IRegister,
   IResponse,
@@ -56,6 +57,16 @@ const authApi = baseApi.injectEndpoints({
         data: payload,
       }),
     }),
+
+    // Change password
+    passwordChange: builder.mutation<IResponse<null>, IChangePassword>({
+      query: (payload) => ({
+        url: `auth/change-password`,
+        method: "PATCH",
+        data: payload,
+      }),
+      invalidatesTags: ["USER"],
+    }),
   }),
 });
 
@@ -65,4 +76,5 @@ export const {
   useLogoutMutation,
   useSendOtpMutation,
   useVerifyOtpMutation,
+  usePasswordChangeMutation,
 } = authApi;

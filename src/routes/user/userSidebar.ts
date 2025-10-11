@@ -1,4 +1,5 @@
 import ActiveRide from "@/pages/user/ActiveRide";
+import ChangePassword from "@/pages/user/ChangePassword";
 import type { ISidebarItems } from "@/types";
 import { lazy } from "react";
 
@@ -9,7 +10,7 @@ const RideHistory = lazy(() => import("@/pages/user/RideHistory"));
 
 const userSidebarItems: ISidebarItems[] = [
   {
-    title: "User Dashboard",
+    title: "Ride Services",
     items: [
       {
         title: "Profile",
@@ -30,6 +31,21 @@ const userSidebarItems: ISidebarItems[] = [
         title: "Ride History",
         url: "/user/history",
         component: RideHistory,
+      },
+    ],
+  },
+  {
+    title: "Profile Management",
+    items: [
+      {
+        title: "Profile",
+        url: "/user/profile",
+        component: Profile,
+      },
+      {
+        title: "Security",
+        url: "/user/chanege-password",
+        component: ChangePassword,
       },
     ],
   },

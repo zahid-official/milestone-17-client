@@ -8,6 +8,7 @@ export type {
   ILogin,
   ISendOtp,
   IVerifyOtp,
+  IChangePassword,
 } from "./auth.types";
 
 // User types
