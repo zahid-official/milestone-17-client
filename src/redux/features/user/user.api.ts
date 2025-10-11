@@ -36,13 +36,23 @@ export const userApi = baseApi.injectEndpoints({
 
     // Ride History
     rideHistory: builder.query({
-      query: ({ page = 1, limit = 10, status, sort, searchTerm }) => {
+      query: ({
+        page = 1,
+        limit = 10,
+        status,
+        sort,
+        searchTerm,
+        minFare,
+        maxFare,
+      }) => {
         const statusQuery = status ? `&status=${status}` : "";
         const sortQuery = sort ? `&sort=${sort}` : "";
         const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
+        const minFareQuery = minFare !== undefined ? `&minFare=${minFare}` : "";
+        const maxFareQuery = maxFare !== undefined ? `&maxFare=${maxFare}` : "";
 
         return {
-          url: `/ride/history?page=${page}&limit=${limit}${statusQuery}${sortQuery}${searchQuery}`,
+          url: `/ride/history?page=${page}&limit=${limit}${statusQuery}${sortQuery}${searchQuery}${minFareQuery}${maxFareQuery}`,
           method: "GET",
         };
       },

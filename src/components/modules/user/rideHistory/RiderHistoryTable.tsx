@@ -69,7 +69,13 @@ interface IProps {
   onSortOrderChange: () => void;
   currentSortOrder: "asc" | "desc";
   searchTerm: string;
-  onSearchChange: (value: string) => void; 
+  onSearchChange: (value: string) => void;
+
+  // নতুন props for min max fare filter
+  minFare?: number | undefined;
+  maxFare?: number | undefined;
+  onMinFareChange: (value: string) => void;
+  onMaxFareChange: (value: string) => void;
 }
 
 // RiderHistoryTable Component
@@ -83,6 +89,11 @@ const RiderHistoryTable = ({
   currentSortOrder,
   searchTerm,
   onSearchChange,
+
+  minFare,
+  maxFare,
+  onMinFareChange,
+  onMaxFareChange,
 }: IProps) => {
   const historyData = data?.data;
   const paginationData = data?.meta;
@@ -126,6 +137,26 @@ const RiderHistoryTable = ({
                 onChange={(e) => onSearchChange(e.target.value)}
                 placeholder="Search pickup, destination & status"
                 className="pl-8 w-68"
+              />
+            </div>
+
+            {/* Min-Max Fare Filter UI */}
+            <div className="flex gap-2 items-center">
+              <Input
+                type="number"
+                placeholder="Min Fare"
+                value={minFare !== undefined ? minFare : ""}
+                onChange={(e) => onMinFareChange(e.target.value)}
+                min={0}
+                className="w-24"
+              />
+              <Input
+                type="number"
+                placeholder="Max Fare"
+                value={maxFare !== undefined ? maxFare : ""}
+                onChange={(e) => onMaxFareChange(e.target.value)}
+                min={0}
+                className="w-24"
               />
             </div>
 

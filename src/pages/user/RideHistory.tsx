@@ -8,7 +8,10 @@ const RideHistory = () => {
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState<string | undefined>(undefined);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const [searchTerm, setSearchTerm] = useState(""); // ✅ নতুন স্টেট for searchTerm
+  const [searchTerm, setSearchTerm] = useState("");
+  const [minFare, setMinFare] = useState<number | undefined>(undefined);
+  const [maxFare, setMaxFare] = useState<number | undefined>(undefined);
+
   const limit = 10;
 
   // RTK Query mutation hooks
@@ -17,7 +20,9 @@ const RideHistory = () => {
     limit,
     status,
     sort: sortOrder === "desc" ? "-createdAt" : "createdAt",
-    searchTerm, 
+    searchTerm,
+    minFare,
+    maxFare,
   });
 
   // Handle pageChange
@@ -27,13 +32,13 @@ const RideHistory = () => {
 
   // Handle statusChange
   const handleStatusChange = (newStatus: string | undefined) => {
-    setPage(1); 
+    setPage(1);
     setStatus(newStatus);
   };
 
   // Handle sortOrderChange
   const handleSortOrderChange = () => {
-    setPage(1); 
+    setPage(1);
     setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
   };
 
@@ -41,6 +46,28 @@ const RideHistory = () => {
   const handleSearchChange = (value: string) => {
     setPage(1);
     setSearchTerm(value);
+  };
+
+  // Handle minFare change
+  const handleMinFareChange = (value: string) => {
+    setPage(1);
+    const parsed = Number(value);
+    if (!isNaN(parsed) && parsed >= 0) {
+      setMinFare(parsed);
+    } else if (value === "") {
+      setMinFare(undefined);
+    }
+  };
+
+  // Handle maxFare change
+  const handleMaxFareChange = (value: string) => {
+    setPage(1);
+    const parsed = Number(value);
+    if (!isNaN(parsed) && parsed >= 0) {
+      setMaxFare(parsed);
+    } else if (value === "") {
+      setMaxFare(undefined);
+    }
   };
 
   // Loader
@@ -62,8 +89,12 @@ const RideHistory = () => {
         currentStatus={status}
         onSortOrderChange={handleSortOrderChange}
         currentSortOrder={sortOrder}
-        searchTerm={searchTerm} 
+        searchTerm={searchTerm}
         onSearchChange={handleSearchChange}
+        minFare={minFare}
+        maxFare={maxFare}
+        onMinFareChange={handleMinFareChange}
+        onMaxFareChange={handleMaxFareChange}
       />
     </div>
   );
