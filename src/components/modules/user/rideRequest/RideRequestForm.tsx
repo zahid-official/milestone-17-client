@@ -218,7 +218,7 @@ const RideRequestForm = ({
             }}
           />
 
-          {/* ✅ Added payment method field with same design style */}
+          {/* Added payment method field with same design style */}
           <FormField
             control={form.control}
             name="paymentMethod"

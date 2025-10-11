@@ -18,6 +18,7 @@ export type {
   UpdateProfileResponse,
   IRideRequest,
   IUpdateProfile,
+  IDriverApplication,
 } from "./user.types";
 
 // IResponse for baseApi queries and mutations

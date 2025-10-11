@@ -1,4 +1,5 @@
 import ActiveRide from "@/pages/user/ActiveRide";
+import ApplyDriver from "@/pages/user/ApplyDriver";
 import ChangePassword from "@/pages/user/ChangePassword";
 import type { ISidebarItems } from "@/types";
 import { lazy } from "react";
@@ -13,11 +14,6 @@ const userSidebarItems: ISidebarItems[] = [
     title: "Ride Services",
     items: [
       {
-        title: "Profile",
-        url: "/user/profile",
-        component: Profile,
-      },
-      {
         title: "Ride Request",
         url: "/user/ride-request",
         component: RideRequest,
@@ -31,6 +27,11 @@ const userSidebarItems: ISidebarItems[] = [
         title: "Ride History",
         url: "/user/history",
         component: RideHistory,
+      },
+      {
+        title: "Become Driver",
+        url: "/user/apply-driver",
+        component: ApplyDriver,
       },
     ],
   },

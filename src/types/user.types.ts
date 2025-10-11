@@ -72,3 +72,15 @@ export interface IUpdateProfile {
   phone: string;
   address: string;
 }
+
+export interface VehicleInfo {
+  vehicleType: string;
+  vehicleModel: string;
+  plateNumber: string;
+}
+
+export interface IDriverApplication {
+  userId: string;
+  licenseNumber: string;
+  vehicleInfo: VehicleInfo;
+}
