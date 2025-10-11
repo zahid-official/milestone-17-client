@@ -11,7 +11,13 @@ export type {
 } from "./auth.types";
 
 // User types
-export type { UpdateProfileResponse, IUpdateProfile } from "./user.types";
+export type {
+  RideStatus,
+  RideRequestResponse,
+  UpdateProfileResponse,
+  IRideRequest,
+  IUpdateProfile,
+} from "./user.types";
 
 // IResponse for baseApi queries and mutations
 export interface IResponse<T> {

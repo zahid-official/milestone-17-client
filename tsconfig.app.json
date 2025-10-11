@@ -33,5 +33,5 @@
     /* Silence deprecated warning */
     "ignoreDeprecations": "6.0"
   },
-  "include": ["src"]
+  "include": ["src", "src/pages/user/.tsx"]
 }

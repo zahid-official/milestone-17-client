@@ -25,7 +25,7 @@ import {
 import { useState } from "react";
 
 // Profile Component
-export default function Profile() {
+const Profile = () => {
   // State form react
   const [isEditing, setIsEditing] = useState(false);
 
@@ -163,4 +163,6 @@ export default function Profile() {
       </Card>
     </div>
   );
-}
+};
+
+export default Profile;

@@ -1,16 +1,25 @@
-import type { IResponse, IUpdateProfile, UpdateProfileResponse } from "@/types";
+import type {
+  IResponse,
+  IRideRequest,
+  IUpdateProfile,
+  RideRequestResponse,
+  UpdateProfileResponse,
+} from "@/types";
 import baseApi from "../../baseApi";
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Ride request
-    requestRide: builder.mutation({
-      query: (payload) => ({
-        url: "/ride/request",
-        method: "POST",
-        data: payload,
-      }),
-    }),
+    requestRide: builder.mutation<IResponse<RideRequestResponse>, IRideRequest>(
+      {
+        query: (payload) => ({
+          url: "/ride/request",
+          method: "POST",
+          data: payload,
+        }),
+        invalidatesTags: ["RIDE"],
+      }
+    ),
 
     // Update profile
     updateProfile: builder.mutation<
@@ -22,13 +31,22 @@ export const userApi = baseApi.injectEndpoints({
         method: "PATCH",
         data: payload,
       }),
-      invalidatesTags: ["USER"]
+      invalidatesTags: ["USER"],
+    }),
+
+    // Ride History
+    rideHistory: builder.query({
+      query: ({ page = 1, limit = 10 }) => ({
+        url: `/ride/history?page=${page}&limit=${limit}`,
+        method: "GET",
+      }),
+      providesTags: ["RIDE"],
     }),
 
     // Profile info
     profileInfo: builder.query({
       query: () => ({
-        url: "user/profile",
+        url: "/user/profile",
         method: "GET",
       }),
       providesTags: ["USER"],
@@ -39,5 +57,6 @@ export const userApi = baseApi.injectEndpoints({
 export const {
   useRequestRideMutation,
   useUpdateProfileMutation,
+  useRideHistoryQuery,
   useProfileInfoQuery,
 } = userApi;
