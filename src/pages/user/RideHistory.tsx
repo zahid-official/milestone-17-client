@@ -7,10 +7,18 @@ const RideHistory = () => {
   // State from react
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState<string | undefined>(undefined);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [searchTerm, setSearchTerm] = useState(""); // ✅ নতুন স্টেট for searchTerm
   const limit = 10;
 
   // RTK Query mutation hooks
-  const { data, isLoading } = useRideHistoryQuery({ page, limit, status });
+  const { data, isLoading } = useRideHistoryQuery({
+    page,
+    limit,
+    status,
+    sort: sortOrder === "desc" ? "-createdAt" : "createdAt",
+    searchTerm, 
+  });
 
   // Handle pageChange
   const handlePageChange = (newPage: number) => {
@@ -19,8 +27,20 @@ const RideHistory = () => {
 
   // Handle statusChange
   const handleStatusChange = (newStatus: string | undefined) => {
-    setPage(1); // reset to first page
+    setPage(1); 
     setStatus(newStatus);
+  };
+
+  // Handle sortOrderChange
+  const handleSortOrderChange = () => {
+    setPage(1); 
+    setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+  };
+
+  // Handle Search Change
+  const handleSearchChange = (value: string) => {
+    setPage(1);
+    setSearchTerm(value);
   };
 
   // Loader
@@ -40,6 +60,10 @@ const RideHistory = () => {
         currentPage={page}
         onStatusChange={handleStatusChange}
         currentStatus={status}
+        onSortOrderChange={handleSortOrderChange}
+        currentSortOrder={sortOrder}
+        searchTerm={searchTerm} 
+        onSearchChange={handleSearchChange}
       />
     </div>
   );
