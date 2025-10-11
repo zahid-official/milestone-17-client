@@ -21,6 +21,15 @@ export const userApi = baseApi.injectEndpoints({
       }
     ),
 
+    // Cancel ride
+    cancelRide: builder.mutation({
+      query: (id) => ({
+        url: `ride/cancel/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["RIDE"],
+    }),
+
     // Update profile
     updateProfile: builder.mutation<
       IResponse<UpdateProfileResponse>,
@@ -90,6 +99,7 @@ export const userApi = baseApi.injectEndpoints({
 
 export const {
   useRequestRideMutation,
+  useCancelRideMutation,
   useUpdateProfileMutation,
   useRideHistoryQuery,
   useSingleRideDetailsQuery,

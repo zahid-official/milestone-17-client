@@ -146,7 +146,7 @@ const RideRequestForm = ({
       const result = await requestRide(confirmData).unwrap();
       console.log(result);
       toast.success(result.message || "Ride requested successfully");
-      navigate("/active-rides");
+      navigate("/user/history");
     } catch (error: any) {
       console.log(error);
       toast.error(
