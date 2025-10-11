@@ -68,6 +68,15 @@ export const userApi = baseApi.injectEndpoints({
       providesTags: ["RIDE"],
     }),
 
+    // Active Ride Details
+    activeRideDetails: builder.query({
+      query: () => ({
+        url: "ride/activeRide",
+        method: "GET",
+      }),
+      providesTags: ["RIDE"],
+    }),
+
     // Profile info
     profileInfo: builder.query({
       query: () => ({
@@ -84,5 +93,6 @@ export const {
   useUpdateProfileMutation,
   useRideHistoryQuery,
   useSingleRideDetailsQuery,
+  useActiveRideDetailsQuery,
   useProfileInfoQuery,
 } = userApi;

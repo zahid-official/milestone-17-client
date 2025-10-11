@@ -22,7 +22,7 @@ const RideDetails = () => {
 
   console.log(data);
   return (
-    <div className="grid lg:grid-cols-2 gap-7 mt-20 max-w-5xl w-full mx-auto">
+    <div className="grid xl:grid-cols-2 gap-7 mt-20 xl:max-w-5xl max-w-lg w-full mx-auto">
       {/* Ride details */}
       <Card className="max-w-lg w-full border border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 rounded-2xl shadow-lg transition-colors">
         {/* Card header */}

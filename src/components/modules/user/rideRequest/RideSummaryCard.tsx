@@ -46,7 +46,7 @@ const RideSummaryCard = ({
           <div className="flex-1">
             <p className="text-sm text-muted-foreground">Pickup</p>
             <p className="font-medium text-foreground leading-tight">
-              {rideData.pickup}
+              {rideData?.pickup}
             </p>
           </div>
         </div>
@@ -59,7 +59,7 @@ const RideSummaryCard = ({
           <div className="flex-1">
             <p className="text-sm text-muted-foreground">destination</p>
             <p className="font-medium text-foreground leading-tight">
-              {rideData.destination}
+              {rideData?.destination}
             </p>
           </div>
         </div>
@@ -72,7 +72,7 @@ const RideSummaryCard = ({
           <div className="flex flex-col">
             <span className="text-muted-foreground">Distance</span>
             <span className="font-semibold text-foreground">
-              {rideData.distance} km
+              {rideData?.distance} km
             </span>
           </div>
 
@@ -80,7 +80,7 @@ const RideSummaryCard = ({
           <div className="flex flex-col">
             <span className="text-muted-foreground">Estimated Fare</span>
             <span className="font-semibold text-foreground">
-              ৳ {rideData.fare}
+              ৳ {rideData?.fare}
             </span>
           </div>
 
@@ -88,7 +88,7 @@ const RideSummaryCard = ({
           <div className="flex flex-col">
             <span className="text-muted-foreground">Payment</span>
             <span className="font-semibold text-foreground">
-              {rideData.paymentMethod}
+              {rideData?.paymentMethod}
             </span>
           </div>
         </div>
