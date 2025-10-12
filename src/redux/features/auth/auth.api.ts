@@ -13,6 +13,9 @@ import baseApi from "../../baseApi";
 // redux toolkit query for authentication
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    /*--------------------------
+            Mutations
+    --------------------------*/
     // Register user
     register: builder.mutation<IResponse<RegisterResponse>, IRegister>({
       query: (userInfo) => ({

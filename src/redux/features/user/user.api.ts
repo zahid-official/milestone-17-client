@@ -10,6 +10,9 @@ import baseApi from "../../baseApi";
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    /*--------------------------
+            Mutations
+    --------------------------*/
     // Ride request
     requestRide: builder.mutation<IResponse<RideRequestResponse>, IRideRequest>(
       {
@@ -54,6 +57,9 @@ export const userApi = baseApi.injectEndpoints({
       invalidatesTags: ["USER"],
     }),
 
+    /*--------------------------
+            Queries
+    --------------------------*/
     // Ride History
     rideHistory: builder.query({
       query: ({
