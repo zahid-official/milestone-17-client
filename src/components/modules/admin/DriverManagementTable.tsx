@@ -11,19 +11,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useApproveDriverMutation } from "@/redux/features/admin/admin.api";
+import accountStatus from "@/constants/accountStatus";
+import {
+  useSuspendDriverMutation,
+  useUnsuspendDriverMutation,
+} from "@/redux/features/admin/admin.api";
+import type { AccountStatus } from "@/types";
+
 import { format } from "date-fns";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
 
-// Interfaces for IDriverApplications, IMeta & IProps
-interface IDriverApplications {
+// Interfaces for IDriverManagement, Meta & IProps
+interface IDriverManagement {
   _id: string;
   userId: {
     _id: string;
     name: string;
     role: string;
+    accountStatus: AccountStatus;
   };
-  applicationStatus: string;
   licenseNumber: string;
   vehicleInfo: {
     vehicleType: string;
@@ -42,7 +48,7 @@ interface IMeta {
 
 interface IProps {
   data: {
-    data: IDriverApplications[];
+    data: IDriverManagement[];
     meta: IMeta;
   };
   onPageChange: (page: number) => void;
@@ -53,8 +59,8 @@ interface IProps {
   onSearchChange: (value: string) => void;
 }
 
-// DriverApplicationsTable Component
-const DriverApplicationsTable = ({
+// DriverManagementTable Component
+const DriverManagementTable = ({
   data,
   onPageChange,
   currentPage,
@@ -64,10 +70,11 @@ const DriverApplicationsTable = ({
   onSearchChange,
 }: IProps) => {
   // RTK Query mutation hook
-  const [approveDriver] = useApproveDriverMutation();
+  const [suspendDriver] = useSuspendDriverMutation();
+  const [unsuspendDriver] = useUnsuspendDriverMutation();
 
   // separate datas
-  const applicationData = data?.data;
+  const managementData = data?.data;
   const paginationData = data?.meta;
 
   // Columns title
@@ -79,7 +86,7 @@ const DriverApplicationsTable = ({
     { label: "Vehicle Type", value: "vehicleType" },
     { label: "Vehicle Model", value: "vehicleModel" },
     { label: "Plate Number", value: "plateNumber" },
-    { label: "Application Status", value: "applicationStatus" },
+    { label: "Account Status", value: "accountStatus" },
     { label: "Date", value: "date" },
     { label: "Actions", value: "actions" },
   ];
@@ -92,11 +99,10 @@ const DriverApplicationsTable = ({
           {/* Title */}
           <div>
             <h1 className="text-3xl md:text-4xl font-bold mb-1 text-foreground">
-              Driver Applications
+              Driver Management
             </h1>
             <p className="text-sm text-muted-foreground">
-              Review driver applications, approve or reject requests based on
-              eligibility
+              View detailed driver profiles and manage their status as needed.
             </p>
           </div>
 
@@ -108,8 +114,8 @@ const DriverApplicationsTable = ({
                 type="text"
                 value={searchTerm}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Search license, vehicle type, model, plate"
-                className="pl-8 w-xs"
+                placeholder="Search pickup, destination & status"
+                className="pl-8 w-68"
               />
             </div>
           </div>
@@ -168,10 +174,10 @@ const DriverApplicationsTable = ({
 
           {/* table body */}
           <TableBody>
-            {applicationData?.map(
-              (application: IDriverApplications, index: number) => (
+            {managementData?.map(
+              (management: IDriverManagement, index: number) => (
                 <TableRow
-                  key={application?._id}
+                  key={management?._id}
                   className="border-b hover:bg-muted/50 cursor-pointer"
                   style={{
                     animationDelay: `${index * 120}ms`,
@@ -187,71 +193,98 @@ const DriverApplicationsTable = ({
                   {/* Name */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {application?.userId?.name}
+                      {management?.userId?.name}
                     </div>
                   </TableCell>
 
                   {/* Role */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {application?.userId?.role}
+                      {management?.userId?.role}
                     </div>
                   </TableCell>
 
                   {/* License Number */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {application?.licenseNumber}
+                      {management?.licenseNumber}
                     </div>
                   </TableCell>
 
                   {/* Vehicle Type */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {application?.vehicleInfo?.vehicleType}
+                      {management?.vehicleInfo?.vehicleType}
                     </div>
                   </TableCell>
 
                   {/* Vehicle Model */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {application?.vehicleInfo?.vehicleModel}
+                      {management?.vehicleInfo?.vehicleModel}
                     </div>
                   </TableCell>
 
                   {/* Plate Number */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {application?.vehicleInfo?.plateNumber}
+                      {management?.vehicleInfo?.plateNumber}
                     </div>
                   </TableCell>
 
-                  {/* Application Status */}
+                  {/* Account Status */}
                   <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      <Badge>{application?.applicationStatus}</Badge>
+                    <div className="text-sm text-center max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                      <Badge
+                        variant={"secondary"}
+                        className={`${
+                          (management?.userId?.accountStatus ===
+                            accountStatus.BLOCKED ||
+                            management?.userId?.accountStatus ===
+                              accountStatus.SUSPENDED) &&
+                          "bg-destructive"
+                        } ${
+                          management?.userId?.accountStatus ===
+                            accountStatus.INACTIVE &&
+                          "bg-muted-foreground/60 text-primary-foreground"
+                        }`}
+                      >
+                        {management?.userId?.accountStatus}
+                      </Badge>
                     </div>
                   </TableCell>
 
                   {/* Date */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {format(new Date(application?.createdAt), "dd-MM-yyyy")}
+                      {format(new Date(management?.createdAt), "dd-MM-yyyy")}
                     </div>
                   </TableCell>
 
                   {/* Action */}
                   <TableCell className="py-3">
-                    <Confirmation
-                      mutationFn={() =>
-                        approveDriver(application?._id).unwrap()
-                      }
-                      successMessage="Driver application approved successfully"
-                    >
-                      <Button size="sm">
-                        Approve
-                      </Button>
-                    </Confirmation>
+                    {management?.userId?.accountStatus ===
+                    accountStatus.SUSPENDED ? (
+                      // Unsuspend btn
+                      <Confirmation
+                        mutationFn={() =>
+                          unsuspendDriver(management?._id).unwrap()
+                        }
+                        successMessage="Driver application approved successfully"
+                      >
+                        <Button size="sm">Unsuspend</Button>
+                      </Confirmation>
+                    ) : (
+                      // Suspend btn
+                      <Confirmation
+                        mutationFn={() =>
+                          suspendDriver(management?._id).unwrap()
+                        }
+                        successMessage="Driver application approved successfully"
+                      >
+                        <Button size="sm">Suspend</Button>
+                      </Confirmation>
+                    )}
                   </TableCell>
                 </TableRow>
               )
@@ -272,4 +305,4 @@ const DriverApplicationsTable = ({
   );
 };
 
-export default DriverApplicationsTable;
+export default DriverManagementTable;

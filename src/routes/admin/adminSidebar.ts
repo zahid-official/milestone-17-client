@@ -1,10 +1,14 @@
-import AllDriverApplications from "@/pages/admin/AllDriverApplications";
 import type { ISidebarItems } from "@/types";
 import { lazy } from "react";
 
 // Lazy loading
 const Analytics = lazy(() => import("@/pages/admin/Analytics"));
+const AllDriverApplications = lazy(
+  () => import("@/pages/admin/AllDriverApplications")
+);
+const DriverManagement = lazy(() => import("@/pages/admin/DriverManagement"));
 
+// adminSidebarItems
 const adminSidebarItems: ISidebarItems[] = [
   // Dashboard
   {
@@ -26,6 +30,11 @@ const adminSidebarItems: ISidebarItems[] = [
         title: "Driver Applications",
         url: "/admin/driver-applications",
         component: AllDriverApplications,
+      },
+      {
+        title: "Driver Management",
+        url: "/admin/driver-management",
+        component: DriverManagement,
       },
     ],
   },

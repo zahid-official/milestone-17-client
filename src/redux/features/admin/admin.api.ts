@@ -5,10 +5,28 @@ export const adminApi = baseApi.injectEndpoints({
     /*--------------------------
             Mutations
     --------------------------*/
-    // Ride request
+    // Approve driver
     approveDriver: builder.mutation({
       query: (id) => ({
         url: `/driver/approve/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["DRIVER"],
+    }),
+
+    // Suspend driver
+    suspendDriver: builder.mutation({
+      query: (id) => ({
+        url: `/driver/suspend/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["DRIVER"],
+    }),
+
+    // Unsuspend driver
+    unsuspendDriver: builder.mutation({
+      query: (id) => ({
+        url: `/driver/unsuspend/${id}`,
         method: "PATCH",
       }),
       invalidatesTags: ["DRIVER"],
@@ -31,8 +49,28 @@ export const adminApi = baseApi.injectEndpoints({
       },
       providesTags: ["DRIVER"],
     }),
+
+    // Driver Management
+    manageDrivers: builder.query({
+      query: ({ page = 1, limit = 10, sort, searchTerm }) => {
+        const sortQuery = sort ? `&sort=${sort}` : "";
+        const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
+
+        // ${sortQuery}${searchQuery}
+        return {
+          url: `/driver?page=${page}&limit=${limit}&applicationStatus=APPROVED${sortQuery}${searchQuery}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["DRIVER"],
+    }),
   }),
 });
 
-export const { useApproveDriverMutation, useDriverApplicationsQuery } =
-  adminApi;
+export const {
+  useApproveDriverMutation,
+  useSuspendDriverMutation,
+  useUnsuspendDriverMutation,
+  useDriverApplicationsQuery,
+  useManageDriversQuery,
+} = adminApi;

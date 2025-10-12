@@ -21,6 +21,9 @@ export type {
   IDriverApplication,
 } from "./user.types";
 
+// User types
+export type { ApplicationStatus, AccountStatus } from "./driver.types";
+
 // IResponse for baseApi queries and mutations
 export interface IResponse<T> {
   success: boolean;
