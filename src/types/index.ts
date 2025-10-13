@@ -2,9 +2,11 @@ import type { ComponentType } from "react";
 
 // Auth types
 export type {
-  RegisterResponse,
+  RiderRegisterResponse,
+  DriverRegisterResponse,
   LoginResponse,
-  IRegister,
+  IRiderRegister,
+  IDriverRegister,
   ILogin,
   ISendOtp,
   IVerifyOtp,

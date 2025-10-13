@@ -1,12 +1,14 @@
 import type {
   IChangePassword,
   ILogin,
-  IRegister,
+  IRiderRegister,
   IResponse,
   ISendOtp,
   IVerifyOtp,
   LoginResponse,
-  RegisterResponse,
+  RiderRegisterResponse,
+  IDriverRegister,
+  DriverRegisterResponse,
 } from "@/types";
 import baseApi from "../../baseApi";
 
@@ -17,7 +19,10 @@ const authApi = baseApi.injectEndpoints({
             Mutations
     --------------------------*/
     // Register user
-    register: builder.mutation<IResponse<RegisterResponse>, IRegister>({
+    riderRegister: builder.mutation<
+      IResponse<RiderRegisterResponse>,
+      IRiderRegister
+    >({
       query: (userInfo) => ({
         url: "/user/register",
         method: "POST",
@@ -25,7 +30,19 @@ const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    // Login user
+    // Register driver
+    driverRegister: builder.mutation<
+      IResponse<DriverRegisterResponse>,
+      IDriverRegister
+    >({
+      query: (userInfo) => ({
+        url: "/user/register",
+        method: "POST",
+        data: userInfo,
+      }),
+    }),
+
+    // Login
     login: builder.mutation<IResponse<LoginResponse>, ILogin>({
       query: (payload) => ({
         url: "/auth/login",
@@ -34,7 +51,7 @@ const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    // Logout user
+    // Logout
     logout: builder.mutation<IResponse<null>, null>({
       query: () => ({
         url: "/auth/logout",
@@ -74,7 +91,8 @@ const authApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useRegisterMutation,
+  useRiderRegisterMutation,
+  useDriverRegisterMutation,
   useLoginMutation,
   useLogoutMutation,
   useSendOtpMutation,
