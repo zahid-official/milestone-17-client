@@ -13,6 +13,7 @@ export const adminApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["DRIVER"],
     }),
+
     // Reject driver
     rejectDriver: builder.mutation({
       query: (id) => ({
@@ -40,6 +41,24 @@ export const adminApi = baseApi.injectEndpoints({
       invalidatesTags: ["DRIVER"],
     }),
 
+    // Block user
+    blockUser: builder.mutation({
+      query: (id) => ({
+        url: `/user/block/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["USER"],
+    }),
+
+    // Unlock driver
+    unblockUser: builder.mutation({
+      query: (id) => ({
+        url: `/user/unblock/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["USER"],
+    }),
+
     /*--------------------------
             Queries
     --------------------------*/
@@ -64,13 +83,25 @@ export const adminApi = baseApi.injectEndpoints({
         const sortQuery = sort ? `&sort=${sort}` : "";
         const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
 
-        // ${sortQuery}${searchQuery}
         return {
           url: `/driver?page=${page}&limit=${limit}&applicationStatus=APPROVED${sortQuery}${searchQuery}`,
           method: "GET",
         };
       },
       providesTags: ["DRIVER"],
+    }),
+
+    // User Management
+    manageUsers: builder.query({
+      query: ({ page = 1, limit = 10, sort, searchTerm }) => {
+        const sortQuery = sort ? `&sort=${sort}` : "";
+        const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
+        return {
+          url: `/user?page=${page}&limit=${limit}${sortQuery}${searchQuery}&role=DRIVER&role=RIDER`,
+          method: "GET",
+        };
+      },
+      providesTags: ["USER"],
     }),
   }),
 });
@@ -80,6 +111,9 @@ export const {
   useRejectDriverMutation,
   useSuspendDriverMutation,
   useUnsuspendDriverMutation,
+  useBlockUserMutation,
+  useUnblockUserMutation,
   useDriverApplicationsQuery,
   useManageDriversQuery,
+  useManageUsersQuery,
 } = adminApi;

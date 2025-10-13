@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/table";
 import accountStatus from "@/constants/accountStatus";
 import {
-  useSuspendDriverMutation,
+  useBlockUserMutation,
+  useUnblockUserMutation,
   useUnsuspendDriverMutation,
 } from "@/redux/features/admin/admin.api";
 import type { AccountStatus } from "@/types";
@@ -21,21 +22,13 @@ import type { AccountStatus } from "@/types";
 import { format } from "date-fns";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
 
-// Interfaces for IDriverManagement, Meta & IProps
-interface IDriverManagement {
+// Interfaces for IUserManagementTable, Meta & IProps
+interface IUserManagementTable {
   _id: string;
-  userId: {
-    _id: string;
-    name: string;
-    role: string;
-    accountStatus: AccountStatus;
-  };
-  licenseNumber: string;
-  vehicleInfo: {
-    vehicleType: string;
-    vehicleModel: string;
-    plateNumber: string;
-  };
+  name: string;
+  email: string;
+  role: string;
+  accountStatus: AccountStatus;
   createdAt: string;
 }
 
@@ -48,7 +41,7 @@ interface IMeta {
 
 interface IProps {
   data: {
-    data: IDriverManagement[];
+    data: IUserManagementTable[];
     meta: IMeta;
   };
   onPageChange: (page: number) => void;
@@ -59,8 +52,8 @@ interface IProps {
   onSearchChange: (value: string) => void;
 }
 
-// DriverManagementTable Component
-const DriverManagementTable = ({
+// UserManagementTable Component
+const UserManagementTable = ({
   data,
   onPageChange,
   currentPage,
@@ -70,22 +63,21 @@ const DriverManagementTable = ({
   onSearchChange,
 }: IProps) => {
   // RTK Query mutation hook
-  const [suspendDriver] = useSuspendDriverMutation();
-  const [unsuspendDriver] = useUnsuspendDriverMutation();
+  const [blockUser] = useBlockUserMutation();
+  const [unblockUser] = useUnblockUserMutation();
 
   // separate datas
   const managementData = data?.data;
   const paginationData = data?.meta;
 
+  console.log(managementData);
+
   // Columns title
   const columnsTitle = [
     { label: "No.", value: "index" },
     { label: "Name", value: "name" },
+    { label: "Email", value: "email" },
     { label: "Role", value: "role" },
-    { label: "License Number", value: "licenseNumber" },
-    { label: "Vehicle Type", value: "vehicleType" },
-    { label: "Vehicle Model", value: "vehicleModel" },
-    { label: "Plate Number", value: "plateNumber" },
     { label: "Account Status", value: "accountStatus" },
     { label: "Date", value: "date" },
     { label: "Actions", value: "actions" },
@@ -175,7 +167,7 @@ const DriverManagementTable = ({
           {/* table body */}
           <TableBody>
             {managementData?.map(
-              (management: IDriverManagement, index: number) => (
+              (management: IUserManagementTable, index: number) => (
                 <TableRow
                   key={management?._id}
                   className="border-b hover:bg-muted/50 cursor-pointer"
@@ -193,42 +185,21 @@ const DriverManagementTable = ({
                   {/* Name */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {management?.userId?.name}
+                      {management?.name}
+                    </div>
+                  </TableCell>
+
+                  {/* email */}
+                  <TableCell className="py-3">
+                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                      {management?.email}
                     </div>
                   </TableCell>
 
                   {/* Role */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {management?.userId?.role}
-                    </div>
-                  </TableCell>
-
-                  {/* License Number */}
-                  <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {management?.licenseNumber}
-                    </div>
-                  </TableCell>
-
-                  {/* Vehicle Type */}
-                  <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {management?.vehicleInfo?.vehicleType}
-                    </div>
-                  </TableCell>
-
-                  {/* Vehicle Model */}
-                  <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {management?.vehicleInfo?.vehicleModel}
-                    </div>
-                  </TableCell>
-
-                  {/* Plate Number */}
-                  <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {management?.vehicleInfo?.plateNumber}
+                      {management?.role}
                     </div>
                   </TableCell>
 
@@ -238,18 +209,18 @@ const DriverManagementTable = ({
                       <Badge
                         variant={"secondary"}
                         className={`${
-                          (management?.userId?.accountStatus ===
+                          (management?.accountStatus ===
                             accountStatus.BLOCKED ||
-                            management?.userId?.accountStatus ===
+                            management?.accountStatus ===
                               accountStatus.SUSPENDED) &&
                           "bg-destructive"
                         } ${
-                          management?.userId?.accountStatus ===
+                          management?.accountStatus ===
                             accountStatus.INACTIVE &&
                           "bg-muted-foreground/60 text-primary-foreground"
                         }`}
                       >
-                        {management?.userId?.accountStatus}
+                        {management?.accountStatus}
                       </Badge>
                     </div>
                   </TableCell>
@@ -263,27 +234,22 @@ const DriverManagementTable = ({
 
                   {/* Action */}
                   <TableCell className="py-3">
-                    {management?.userId?.accountStatus ===
-                    accountStatus.SUSPENDED ? (
-                      // Unsuspend btn
+                    {management?.accountStatus === accountStatus.BLOCKED ? (
+                      // Unblock btn
                       <Confirmation
-                        mutationFn={() =>
-                          unsuspendDriver(management?._id).unwrap()
-                        }
-                        successMessage="Driver unsuspended successfully"
+                        mutationFn={() => unblockUser(management?._id).unwrap()}
+                        successMessage="User unblocked successfully"
                       >
-                        <Button size="sm">Unsuspend</Button>
+                        <Button size="sm">Unblock</Button>
                       </Confirmation>
                     ) : (
-                      // Suspend btn
+                      // Block btn
                       <Confirmation
-                        mutationFn={() =>
-                          suspendDriver(management?._id).unwrap()
-                        }
-                        successMessage="Driver suspended successfully"
+                        mutationFn={() => blockUser(management?._id).unwrap()}
+                        successMessage="User blocked successfully"
                       >
                         <Button size="sm" variant={"destructive"}>
-                          Suspend
+                          Block
                         </Button>
                       </Confirmation>
                     )}
@@ -307,4 +273,4 @@ const DriverManagementTable = ({
   );
 };
 
-export default DriverManagementTable;
+export default UserManagementTable;

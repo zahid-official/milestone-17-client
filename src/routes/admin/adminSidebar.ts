@@ -7,6 +7,7 @@ const AllDriverApplications = lazy(
   () => import("@/pages/admin/AllDriverApplications")
 );
 const DriverManagement = lazy(() => import("@/pages/admin/DriverManagement"));
+const UserManagement = lazy(() => import("@/pages/admin/UserManagement"));
 
 // adminSidebarItems
 const adminSidebarItems: ISidebarItems[] = [
@@ -35,6 +36,11 @@ const adminSidebarItems: ISidebarItems[] = [
         title: "Driver Management",
         url: "/admin/driver-management",
         component: DriverManagement,
+      },
+      {
+        title: "User Management",
+        url: "/admin/user-management",
+        component: UserManagement,
       },
     ],
   },

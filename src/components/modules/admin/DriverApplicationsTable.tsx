@@ -259,7 +259,7 @@ const DriverApplicationsTable = ({
                     {/* Reject btn */}
                     <Confirmation
                       mutationFn={() => rejectDriver(application?._id).unwrap()}
-                      successMessage="Driver application approved successfully"
+                      successMessage="Driver application rejected successfully"
                     >
                       <Button size="sm" variant={"destructive"}>Reject</Button>
                     </Confirmation>
