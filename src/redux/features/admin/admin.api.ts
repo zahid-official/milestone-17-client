@@ -13,6 +13,14 @@ export const adminApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["DRIVER"],
     }),
+    // Reject driver
+    rejectDriver: builder.mutation({
+      query: (id) => ({
+        url: `/driver/reject/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["DRIVER"],
+    }),
 
     // Suspend driver
     suspendDriver: builder.mutation({
@@ -69,6 +77,7 @@ export const adminApi = baseApi.injectEndpoints({
 
 export const {
   useApproveDriverMutation,
+  useRejectDriverMutation,
   useSuspendDriverMutation,
   useUnsuspendDriverMutation,
   useDriverApplicationsQuery,

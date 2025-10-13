@@ -11,7 +11,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useApproveDriverMutation } from "@/redux/features/admin/admin.api";
+import {
+  useApproveDriverMutation,
+  useRejectDriverMutation,
+} from "@/redux/features/admin/admin.api";
 import { format } from "date-fns";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
 
@@ -65,6 +68,7 @@ const DriverApplicationsTable = ({
 }: IProps) => {
   // RTK Query mutation hook
   const [approveDriver] = useApproveDriverMutation();
+  const [rejectDriver] = useRejectDriverMutation();
 
   // separate datas
   const applicationData = data?.data;
@@ -241,16 +245,23 @@ const DriverApplicationsTable = ({
                   </TableCell>
 
                   {/* Action */}
-                  <TableCell className="py-3">
+                  <TableCell className="py-3 flex gap-2">
+                    {/* Approve btn */}
                     <Confirmation
                       mutationFn={() =>
                         approveDriver(application?._id).unwrap()
                       }
                       successMessage="Driver application approved successfully"
                     >
-                      <Button size="sm">
-                        Approve
-                      </Button>
+                      <Button size="sm">Approve</Button>
+                    </Confirmation>
+
+                    {/* Reject btn */}
+                    <Confirmation
+                      mutationFn={() => rejectDriver(application?._id).unwrap()}
+                      successMessage="Driver application approved successfully"
+                    >
+                      <Button size="sm" variant={"destructive"}>Reject</Button>
                     </Confirmation>
                   </TableCell>
                 </TableRow>

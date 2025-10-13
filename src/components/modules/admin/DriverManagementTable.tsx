@@ -282,7 +282,7 @@ const DriverManagementTable = ({
                         }
                         successMessage="Driver application approved successfully"
                       >
-                        <Button size="sm">Suspend</Button>
+                        <Button size="sm" variant={"destructive"}>Suspend</Button>
                       </Confirmation>
                     )}
                   </TableCell>
