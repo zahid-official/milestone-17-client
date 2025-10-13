@@ -8,6 +8,7 @@ const AllDriverApplications = lazy(
 );
 const DriverManagement = lazy(() => import("@/pages/admin/DriverManagement"));
 const UserManagement = lazy(() => import("@/pages/admin/UserManagement"));
+const RideOversight = lazy(() => import("@/pages/admin/RideOversight"));
 
 // adminSidebarItems
 const adminSidebarItems: ISidebarItems[] = [
@@ -41,6 +42,11 @@ const adminSidebarItems: ISidebarItems[] = [
         title: "User Management",
         url: "/admin/user-management",
         component: UserManagement,
+      },
+      {
+        title: "Ride Oversight",
+        url: "/admin/ride-oversight",
+        component: RideOversight,
       },
     ],
   },

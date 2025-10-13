@@ -12,6 +12,8 @@ export type RideStatus =
   | "IN_TRANSIT"
   | "COMPLETED";
 
+export type PaymentMethod = "CASH" | "ONLINE";
+
 export interface Timestamp {
   requestedAt?: string;
   acceptedAt?: string;

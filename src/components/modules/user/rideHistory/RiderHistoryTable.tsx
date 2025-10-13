@@ -71,7 +71,7 @@ interface IProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
 
-  // নতুন props for min max fare filter
+  // props for min max fare filter
   minFare?: number | undefined;
   maxFare?: number | undefined;
   onMinFareChange: (value: string) => void;

@@ -15,7 +15,6 @@ import accountStatus from "@/constants/accountStatus";
 import {
   useBlockUserMutation,
   useUnblockUserMutation,
-  useUnsuspendDriverMutation,
 } from "@/redux/features/admin/admin.api";
 import type { AccountStatus } from "@/types";
 
@@ -70,8 +69,6 @@ const UserManagementTable = ({
   const managementData = data?.data;
   const paginationData = data?.meta;
 
-  console.log(managementData);
-
   // Columns title
   const columnsTitle = [
     { label: "No.", value: "index" },
@@ -91,10 +88,11 @@ const UserManagementTable = ({
           {/* Title */}
           <div>
             <h1 className="text-3xl md:text-4xl font-bold mb-1 text-foreground">
-              Driver Management
+              User Management
             </h1>
             <p className="text-sm text-muted-foreground">
-              View detailed driver profiles and manage their status as needed
+              View user profiles and manage their access by blocking or
+              unblocking accounts as needed
             </p>
           </div>
 
@@ -106,7 +104,7 @@ const UserManagementTable = ({
                 type="text"
                 value={searchTerm}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Search license, vehicle type, model, plate"
+                placeholder="Search name, email"
                 className="pl-8 w-xs"
               />
             </div>

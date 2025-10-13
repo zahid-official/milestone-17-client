@@ -14,6 +14,8 @@ export type {
 // User types
 export type {
   RideStatus,
+  Timestamp,
+  PaymentMethod,
   RideRequestResponse,
   UpdateProfileResponse,
   IRideRequest,

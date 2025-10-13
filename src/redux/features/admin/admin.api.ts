@@ -103,6 +103,19 @@ export const adminApi = baseApi.injectEndpoints({
       },
       providesTags: ["USER"],
     }),
+
+    // Ride Oversight
+    manageRides: builder.query({
+      query: ({ page = 1, limit = 10, sort, searchTerm }) => {
+        const sortQuery = sort ? `&sort=${sort}` : "";
+        const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
+        return {
+          url: `/ride?page=${page}&limit=${limit}${sortQuery}${searchQuery}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["RIDE"],
+    }),
   }),
 });
 
@@ -116,4 +129,5 @@ export const {
   useDriverApplicationsQuery,
   useManageDriversQuery,
   useManageUsersQuery,
+  useManageRidesQuery,
 } = adminApi;

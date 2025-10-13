@@ -1,6 +1,5 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import Confirmation from "@/components/ui/confirmation";
 import CustomPagination from "@/components/ui/custom-pagination";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,29 +10,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  useApproveDriverMutation,
-  useRejectDriverMutation,
-} from "@/redux/features/admin/admin.api";
+import rideStatus from "@/constants/rideStatus";
+import type { PaymentMethod, RideStatus, Timestamp } from "@/types";
+
 import { format } from "date-fns";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
+import { Link } from "react-router";
 
-// Interfaces for IDriverApplications, IMeta & IProps
-interface IDriverApplications {
+// Interfaces for IRideOversightTable, Meta & IProps
+interface IRideOversightTable {
+  timestamps: Timestamp;
+  paymentMethod: PaymentMethod;
+
   _id: string;
   userId: {
     _id: string;
     name: string;
-    role: string;
   };
-  applicationStatus: string;
-  licenseNumber: string;
-  vehicleInfo: {
-    vehicleType: string;
-    vehicleModel: string;
-    plateNumber: string;
-  };
+  pickup: string;
+  destination: string;
+  fare: number;
+  distance: number;
+  status: RideStatus;
   createdAt: string;
+  driverInfo: null | {
+    _id: string;
+    userId: {
+      _id: string;
+      name: string;
+    };
+    licenseNumber: string;
+    vehicleInfo: {
+      vehicleType: string;
+      vehicleModel: string;
+      plateNumber: string;
+    };
+  };
 }
 
 interface IMeta {
@@ -45,7 +57,7 @@ interface IMeta {
 
 interface IProps {
   data: {
-    data: IDriverApplications[];
+    data: IRideOversightTable[];
     meta: IMeta;
   };
   onPageChange: (page: number) => void;
@@ -56,8 +68,8 @@ interface IProps {
   onSearchChange: (value: string) => void;
 }
 
-// DriverApplicationsTable Component
-const DriverApplicationsTable = ({
+// RideOversightTable Component
+const RideOversightTable = ({
   data,
   onPageChange,
   currentPage,
@@ -67,23 +79,23 @@ const DriverApplicationsTable = ({
   onSearchChange,
 }: IProps) => {
   // RTK Query mutation hook
-  const [approveDriver] = useApproveDriverMutation();
-  const [rejectDriver] = useRejectDriverMutation();
 
   // separate datas
-  const applicationData = data?.data;
+  const managementData = data?.data;
   const paginationData = data?.meta;
+
+  console.log(managementData);
 
   // Columns title
   const columnsTitle = [
     { label: "No.", value: "index" },
-    { label: "Name", value: "name" },
-    { label: "Role", value: "role" },
-    { label: "License Number", value: "licenseNumber" },
-    { label: "Vehicle Type", value: "vehicleType" },
-    { label: "Vehicle Model", value: "vehicleModel" },
-    { label: "Plate Number", value: "plateNumber" },
-    { label: "Application Status", value: "applicationStatus" },
+    { label: "Rider", value: "rider" },
+    { label: "Driver", value: "driver" },
+    { label: "Pickup", value: "pickup" },
+    { label: "Destination", value: "destination" },
+    { label: "Distance", value: "distance" },
+    { label: "Fare", value: "fare" },
+    { label: "Status", value: "status" },
     { label: "Date", value: "date" },
     { label: "Actions", value: "actions" },
   ];
@@ -96,11 +108,10 @@ const DriverApplicationsTable = ({
           {/* Title */}
           <div>
             <h1 className="text-3xl md:text-4xl font-bold mb-1 text-foreground">
-              Driver Applications
+              Ride Oversight
             </h1>
             <p className="text-sm text-muted-foreground">
-              Review driver applications, approve or reject requests based on
-              eligibility
+              Monitor and manage every ride across the platform in real time
             </p>
           </div>
 
@@ -112,7 +123,7 @@ const DriverApplicationsTable = ({
                 type="text"
                 value={searchTerm}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Search license, vehicle type, model, plate"
+                placeholder="Search name, email"
                 className="pl-8 w-xs"
               />
             </div>
@@ -172,10 +183,10 @@ const DriverApplicationsTable = ({
 
           {/* table body */}
           <TableBody>
-            {applicationData?.map(
-              (application: IDriverApplications, index: number) => (
+            {managementData?.map(
+              (management: IRideOversightTable, index: number) => (
                 <TableRow
-                  key={application?._id}
+                  key={management?._id}
                   className="border-b hover:bg-muted/50 cursor-pointer"
                   style={{
                     animationDelay: `${index * 120}ms`,
@@ -188,83 +199,75 @@ const DriverApplicationsTable = ({
                     <div className="text-sm">{index + 1}</div>
                   </TableCell>
 
-                  {/* Name */}
+                  {/* Rider */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {application?.userId?.name}
+                      {management?.userId?.name}
                     </div>
                   </TableCell>
 
-                  {/* Role */}
+                  {/* Driver */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {application?.userId?.role}
+                      {management?.driverInfo?.userId?.name || "Not assigned"}
                     </div>
                   </TableCell>
 
-                  {/* License Number */}
+                  {/* Pickup */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {application?.licenseNumber}
+                      {management?.pickup}
                     </div>
                   </TableCell>
 
-                  {/* Vehicle Type */}
+                  {/* Destination */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {application?.vehicleInfo?.vehicleType}
+                      {management?.destination}
                     </div>
                   </TableCell>
 
-                  {/* Vehicle Model */}
+                  {/* Distance */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {application?.vehicleInfo?.vehicleModel}
+                      {management?.distance} km
                     </div>
                   </TableCell>
 
-                  {/* Plate Number */}
+                  {/* Fare */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {application?.vehicleInfo?.plateNumber}
+                      ৳ {management?.fare}
                     </div>
                   </TableCell>
 
-                  {/* Application Status */}
+                  {/* Status */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      <Badge variant={"secondary"}>{application?.applicationStatus}</Badge>
+                      <Badge
+                        className={`${
+                          (management?.status === rideStatus.CANCELLED ||
+                            management?.status === rideStatus.REJECTED) &&
+                          "bg-muted-foreground/60 text-primary-foreground"
+                        }`}
+                      >
+                        {management?.status}
+                      </Badge>
                     </div>
                   </TableCell>
 
                   {/* Date */}
                   <TableCell className="py-3">
                     <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {format(new Date(application?.createdAt), "dd-MM-yyyy")}
+                      {format(new Date(management?.createdAt), "dd-MM-yyyy")}
                     </div>
                   </TableCell>
 
                   {/* Action */}
-                  <TableCell className="py-3 flex gap-2">
-                    {/* Approve btn */}
-                    <Confirmation
-                      mutationFn={() =>
-                        approveDriver(application?._id).unwrap()
-                      }
-                      successMessage="Driver application approved successfully"
-                    >
-                      <Button size="sm">Approve</Button>
-                    </Confirmation>
-
-                    {/* Reject btn */}
-                    <Confirmation
-                      mutationFn={() => rejectDriver(application?._id).unwrap()}
-                      successMessage="Driver application rejected successfully"
-                    >
-                      <Button size="sm" variant={"destructive"}>
-                        Reject
-                      </Button>
-                    </Confirmation>
+                  <TableCell className="py-3">
+                    <Link to={`/user/ride/${management?._id}`}>
+                      <Button size="sm">Details</Button>
+                    </Link>
                   </TableCell>
                 </TableRow>
               )
@@ -285,4 +288,4 @@ const DriverApplicationsTable = ({
   );
 };
 
-export default DriverApplicationsTable;
+export default RideOversightTable;
