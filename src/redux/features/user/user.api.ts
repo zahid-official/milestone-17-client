@@ -76,7 +76,7 @@ export const userApi = baseApi.injectEndpoints({
         const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
         const minFareQuery = minFare !== undefined ? `&minFare=${minFare}` : "";
         const maxFareQuery = maxFare !== undefined ? `&maxFare=${maxFare}` : "";
-        
+
         return {
           url: `/ride/history?page=${page}&limit=${limit}${statusQuery}${sortQuery}${searchQuery}${minFareQuery}${maxFareQuery}`,
           method: "GET",
