@@ -70,9 +70,9 @@ export interface IRideRequest {
 
 export interface IUpdateProfile {
   _id: string;
-  name: string;
-  phone: string;
-  address: string;
+  name?: string;
+  phone?: string;
+  address?: string;
 }
 
 export interface VehicleInfo {

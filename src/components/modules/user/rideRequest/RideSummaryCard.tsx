@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { MapPin, Navigation } from "lucide-react";
+import { Bike, MapPin, Navigation } from "lucide-react";
 
 interface RideSummaryCardProps {
   rideData: {
@@ -16,6 +16,7 @@ interface RideSummaryCardProps {
     distance: string;
     fare: string;
     paymentMethod: string;
+    vehicleType: string;
   };
   onConfirm: () => void;
   onBack: () => void;
@@ -57,9 +58,22 @@ const RideSummaryCard = ({
             <Navigation className="w-4 h-4" />
           </div>
           <div className="flex-1">
-            <p className="text-sm text-muted-foreground">destination</p>
+            <p className="text-sm text-muted-foreground">Destination</p>
             <p className="font-medium text-foreground leading-tight">
               {rideData?.destination}
+            </p>
+          </div>
+        </div>
+
+        {/* Vehicle type */}
+        <div className="flex items-start gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary mt-0.5">
+            <Bike className="w-4 h-4" />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm text-muted-foreground">Vehicle Type</p>
+            <p className="font-medium text-foreground leading-tight">
+              {rideData?.vehicleType}
             </p>
           </div>
         </div>

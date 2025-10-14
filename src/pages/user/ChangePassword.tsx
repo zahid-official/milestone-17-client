@@ -96,6 +96,11 @@ const ChangePassword = () => {
 
   // Handle onSubmit
   const onSubmit = async (data: z.infer<typeof changePasswordZodSchema>) => {
+    // Check if data has changed
+    if (data.oldPassword === data.newPassword) {
+      toast.error("You haven't made any changes.");
+      return;
+    }
     setIsloading(true);
     const { confirmPassword: _confirmPassword, ...userInfo } = data;
 
@@ -123,7 +128,9 @@ const ChangePassword = () => {
         <CardHeader className="space-y-1">
           <div className="flex justify-between">
             <div>
-              <CardTitle className="text-3xl font-bold">Change Password</CardTitle>
+              <CardTitle className="text-3xl font-bold">
+                Change Password
+              </CardTitle>
               <CardDescription className="text-sm mt-0.5">
                 Update your password information
               </CardDescription>

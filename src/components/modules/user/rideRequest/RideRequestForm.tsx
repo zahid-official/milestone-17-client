@@ -51,6 +51,11 @@ const rideRequestZodSchema = z.object({
   paymentMethod: z.enum(["Cash", "Online"], {
     error: "Please select a payment method.",
   }),
+
+  // Vehicle Type
+  vehicleType: z.enum(["CAR", "BIKE"], {
+    error: "Please select a vehicle type between Bike and Car.",
+  }),
 });
 
 const RideRequestForm = ({
@@ -80,7 +85,12 @@ const RideRequestForm = ({
   // useHook form
   const form = useForm<z.infer<typeof rideRequestZodSchema>>({
     resolver: zodResolver(rideRequestZodSchema),
-    defaultValues: { pickup: "", destination: "", paymentMethod: "Cash" },
+    defaultValues: {
+      pickup: "",
+      destination: "",
+      paymentMethod: "Cash",
+      vehicleType: "BIKE",
+    },
   });
 
   // Debounce for pickup
@@ -112,19 +122,25 @@ const RideRequestForm = ({
     setIsLoading(true);
 
     try {
+      // Distance calculation
       const pickupCoords = await getCoordinatesFromAddress(data.pickup);
       const destinationCoords = await getCoordinatesFromAddress(
         data.destination
       );
       const distance = calculateDistance(pickupCoords, destinationCoords);
-      const fare = (parseFloat(distance) * 15).toFixed(0);
 
+      // Fare calculation
+      const fareRate = data.vehicleType === "CAR" ? 25 : 15;
+      const fare = (parseFloat(distance) * fareRate).toFixed(0);
+
+      // Set rideData
       setRideData({
         pickup: data.pickup,
         destination: data.destination,
         distance: parseFloat(distance),
         fare: parseFloat(fare),
         paymentMethod: data.paymentMethod,
+        vehicleType: data.vehicleType,
       });
       setShowCard(true);
       setShowHeading(false);
@@ -139,6 +155,7 @@ const RideRequestForm = ({
     const confirmData = {
       ...rideData,
       paymentMethod: rideData.paymentMethod.toUpperCase(),
+      vehicleType: rideData.vehicleType.toUpperCase(),
       userId: userInfo.data._id,
     };
 
@@ -190,6 +207,7 @@ const RideRequestForm = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-6 relative"
         >
+          {/* Pickup */}
           <RideLocationField
             control={form.control}
             name="pickup"
@@ -204,6 +222,7 @@ const RideRequestForm = ({
             }}
           />
 
+          {/* Destination */}
           <RideLocationField
             control={form.control}
             name="destination"
@@ -218,32 +237,62 @@ const RideRequestForm = ({
             }}
           />
 
-          {/* Added payment method field with same design style */}
-          <FormField
-            control={form.control}
-            name="paymentMethod"
-            render={({ field }) => (
-              <FormItem className="relative">
-                <FormLabel className="text-base font-medium flex items-center gap-1.5">
-                  <CreditCard className="w-4 h-4 text-muted-foreground" />
-                  Payment method
-                </FormLabel>
-                <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="pl-5 py-5.5  bg-background border-2 focus-visible:ring-2 w-full">
-                      <SelectValue placeholder="Select payment method" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Cash">Cash</SelectItem>
-                      <SelectItem value="Online">Online</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {/* payment method & vehicle type */}
+          <div className="flex sm:flex-row flex-col sm:gap-3.5 gap-6">
+            {/* Payment method */}
+            <FormField
+              control={form.control}
+              name="paymentMethod"
+              render={({ field }) => (
+                <FormItem className="relative flex-1">
+                  <FormLabel className="text-base font-medium flex items-center gap-1.5">
+                    <CreditCard className="w-4 h-4 text-muted-foreground" />
+                    Payment method
+                  </FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="pl-5 py-5.5  bg-background border-2 focus-visible:ring-2 w-full">
+                        <SelectValue placeholder="Select payment method" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Cash">Cash</SelectItem>
+                        <SelectItem value="Online">Online</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
+            {/* Vehicle type */}
+            <FormField
+              control={form.control}
+              name="vehicleType"
+              render={({ field }) => (
+                <FormItem className="relative flex-1">
+                  <FormLabel className="text-base font-medium flex items-center gap-1.5">
+                    <CreditCard className="w-4 h-4 text-muted-foreground" />
+                    Vehicle Type
+                  </FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="pl-5 py-5.5  bg-background border-2 focus-visible:ring-2 w-full">
+                        <SelectValue placeholder="Select vehicle type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="BIKE">Bike</SelectItem>
+                        <SelectItem value="CAR">Car</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {/* Submit btn */}
           <ButtonSubmit
             isLoading={isLoading}
             value="Find ride"
