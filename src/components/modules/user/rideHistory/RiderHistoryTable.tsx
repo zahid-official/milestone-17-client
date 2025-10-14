@@ -72,11 +72,15 @@ interface IProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
 
-  // props for min max fare filter
+  // props for min max date filter
   minFare?: number | undefined;
   maxFare?: number | undefined;
   onMinFareChange: (value: string) => void;
   onMaxFareChange: (value: string) => void;
+  dateRange?: "today" | "week" | "month" | "year" | undefined;
+  onDateRangeChange: (
+    dateRange: "today" | "week" | "month" | "year" | undefined
+  ) => void;
 }
 
 // RiderHistoryTable Component
@@ -95,6 +99,8 @@ const RiderHistoryTable = ({
   maxFare,
   onMinFareChange,
   onMaxFareChange,
+  dateRange,
+  onDateRangeChange,
 }: IProps) => {
   const historyData = data?.data;
   const paginationData = data?.meta;
@@ -114,6 +120,18 @@ const RiderHistoryTable = ({
     { label: "Status", value: "status" },
     { label: "Date", value: "date" },
     { label: "Actions", value: "actions" },
+  ];
+
+  // Date range options
+  const dateRangeOptions: Array<{
+    label: string;
+    value: "today" | "week" | "month" | "year" | undefined;
+  }> = [
+    { label: "All Time", value: undefined },
+    { label: "Today", value: "today" },
+    { label: "This Week", value: "week" },
+    { label: "This Month", value: "month" },
+    { label: "This Year", value: "year" },
   ];
 
   return (
@@ -144,7 +162,7 @@ const RiderHistoryTable = ({
               />
             </div>
 
-            {/* Min-Max Fare Filter UI */}
+            {/* Filter by min-max*/}
             <div className="flex gap-2 items-center">
               <Input
                 type="number"
@@ -183,6 +201,31 @@ const RiderHistoryTable = ({
                       onClick={() => onStatusChange(status)}
                     >
                       {status}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            {/* Dropdown Filter by date range */}
+            <div className="w-40">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild className="w-full">
+                  <Button variant="outline">
+                    {dateRange
+                      ? dateRangeOptions.find((opt) => opt.value === dateRange)
+                          ?.label
+                      : "All Time"}
+                    <ChevronDownIcon className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {dateRangeOptions.map((option) => (
+                    <DropdownMenuItem
+                      key={option.label}
+                      onClick={() => onDateRangeChange(option.value)}
+                    >
+                      {option.label}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>

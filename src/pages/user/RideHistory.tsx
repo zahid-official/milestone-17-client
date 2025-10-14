@@ -11,6 +11,9 @@ const RideHistory = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [minFare, setMinFare] = useState<number | undefined>(undefined);
   const [maxFare, setMaxFare] = useState<number | undefined>(undefined);
+  const [dateRange, setDateRange] = useState<
+    "today" | "week" | "month" | "year" | undefined
+  >(undefined);
 
   const limit = 10;
 
@@ -23,6 +26,7 @@ const RideHistory = () => {
     searchTerm,
     minFare,
     maxFare,
+    dateRange,
   });
 
   // Handle pageChange
@@ -74,6 +78,14 @@ const RideHistory = () => {
     }
   };
 
+  // Handle date range change
+  const handleDateRangeChange = (
+    newDateRange: "today" | "week" | "month" | "year" | undefined
+  ) => {
+    setPage(1);
+    setDateRange(newDateRange);
+  };
+
   // Loader
   if (isLoading) {
     return (
@@ -99,6 +111,8 @@ const RideHistory = () => {
         maxFare={maxFare}
         onMinFareChange={handleMinFareChange}
         onMaxFareChange={handleMaxFareChange}
+        dateRange={dateRange} 
+        onDateRangeChange={handleDateRangeChange} 
       />
     </div>
   );

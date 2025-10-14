@@ -59,15 +59,17 @@ export const userApi = baseApi.injectEndpoints({
         searchTerm,
         minFare,
         maxFare,
+        dateRange,
       }) => {
         const statusQuery = status ? `&status=${status}` : "";
         const sortQuery = sort ? `&sort=${sort}` : "";
         const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
         const minFareQuery = minFare !== undefined ? `&minFare=${minFare}` : "";
         const maxFareQuery = maxFare !== undefined ? `&maxFare=${maxFare}` : "";
+        const dateRangeQuery = dateRange ? `&dateRange=${dateRange}` : "";
 
         return {
-          url: `/ride/history?page=${page}&limit=${limit}${statusQuery}${sortQuery}${searchQuery}${minFareQuery}${maxFareQuery}`,
+          url: `/ride/history?page=${page}&limit=${limit}${statusQuery}${sortQuery}${searchQuery}${minFareQuery}${maxFareQuery}${dateRangeQuery}`,
           method: "GET",
         };
       },
