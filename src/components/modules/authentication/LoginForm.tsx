@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import InputPassword from "@/components/ui/input-password";
+import accountStatus from "@/constants/accountStatus";
 import { cn } from "@/lib/utils";
 import { useLoginMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -79,11 +80,37 @@ const LoginForm = ({
       ) {
         navigate("/verify", { state: data.email });
       }
+
+      // Redirect to contact page if BLOCKED
+      if (
+        error.status === 401 &&
+        error.data.message ===
+          "User is BLOCKED. Please contact support for more information."
+      ) {
+        navigate("/contact", { state: accountStatus.BLOCKED });
+      }
+
+      // Redirect to contact page if SUSPENDED
+      if (
+        error.status === 401 &&
+        error.data.message ===
+          "User is SUSPENDED. Please contact support for more information."
+      ) {
+        navigate("/contact", { state: accountStatus.SUSPENDED });
+      }
+
+      // Redirect to contact page if INACTIVE
+      if (
+        error.status === 401 &&
+        error.data.message ===
+          "User is INACTIVE. Please contact support for more information."
+      ) {
+        navigate("/contact", { state: accountStatus.INACTIVE });
+      }
     } finally {
       setIsloading(false);
     }
   };
-
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

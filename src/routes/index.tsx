@@ -14,6 +14,7 @@ import adminSidebarItems from "./admin/adminSidebar";
 import driverSidebarItems from "./driver/driverSidebar";
 import userSidebarItems from "./user/userSidebar";
 import RideDetails from "@/components/modules/user/rideHistory/RideDetails";
+import Contact from "@/pages/public/Contact";
 
 const Router = createBrowserRouter([
   // Common layout
@@ -59,7 +60,7 @@ const Router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to={"/user/ride-request"} /> },
       ...generateRoutes(userSidebarItems),
-      
+
       {
         path: "ride/:id",
         Component: RideDetails,
@@ -80,9 +81,15 @@ const Router = createBrowserRouter([
     path: "verify",
     Component: Verify,
   },
+
+  // Handle errors
   {
     path: "unauthorized",
     Component: Unauthorized,
+  },
+  {
+    path: "contact",
+    Component: Contact,
   },
 ]);
 
