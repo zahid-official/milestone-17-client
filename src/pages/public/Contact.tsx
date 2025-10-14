@@ -97,7 +97,9 @@ const Contact = () => {
                 <div className="w-2 h-2 rounded-full bg-primary mt-2" />
                 <div>
                   <p className="font-semibold">Support email</p>
-                  <p className="text-sm text-muted-foreground">support@velocia.com</p>
+                  <p className="text-sm text-muted-foreground">
+                    support@velocia.com
+                  </p>
                 </div>
               </div>
 
@@ -105,12 +107,16 @@ const Contact = () => {
                 <div className="w-2 h-2 rounded-full bg-primary mt-2" />
                 <div>
                   <p className="font-semibold">Support phone</p>
-                  <p className="text-sm text-muted-foreground">(+880) 19960-66021</p>
+                  <p className="text-sm text-muted-foreground">
+                    (+880) 19960-66021
+                  </p>
                 </div>
               </div>
 
               <div className="text-sm text-muted-foreground">
-                When contacting support, please include your registered email and a brief description of the issue. This helps us resolve requests faster.
+                When contacting support, please include your registered email
+                and a brief description of the issue. This helps us resolve
+                requests faster.
               </div>
             </div>
           </div>
@@ -118,12 +124,16 @@ const Contact = () => {
 
         <CardFooter>
           <div className="w-full flex flex-col sm:flex-row gap-2">
-            <a href="mailto:support@velocia.com">
-              <Button>{info?.action ?? "Contact support"}</Button>
+            <a className="w-full" href="mailto:support@velocia.com">
+              <Button className="w-full">
+                {info?.action ?? "Contact support"}
+              </Button>
             </a>
 
-            <Link to="/">
-              <Button variant="outline">Back to home</Button>
+            <Link to="/" className="w-full">
+              <Button className="w-full" variant="outline">
+                Back to home
+              </Button>
             </Link>
           </div>
         </CardFooter>
