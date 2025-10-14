@@ -34,6 +34,7 @@ interface IRideHistory {
   fare: number;
   distance: number;
   status: RideStatus;
+  vehicleType: "BIKE" | "CAR";
   createdAt: string;
   driverInfo: null | {
     _id: string;
@@ -98,6 +99,8 @@ const RiderHistoryTable = ({
   const historyData = data?.data;
   const paginationData = data?.meta;
 
+  console.log(historyData);
+
   // Columns title
   const columnsTitle = [
     { label: "No.", value: "index" },
@@ -106,6 +109,7 @@ const RiderHistoryTable = ({
     { label: "Pickup", value: "pickup" },
     { label: "Destination", value: "destination" },
     { label: "Distance", value: "distance" },
+    { label: "Vehicle", value: "vehicle" },
     { label: "Fare", value: "fare" },
     { label: "Status", value: "status" },
     { label: "Date", value: "date" },
@@ -115,7 +119,7 @@ const RiderHistoryTable = ({
   return (
     <>
       {/* Header Section */}
-      <div className="max-w-7xl mx-auto mt-10 pb-5">
+      <div className="max-w-7xl mx-auto mt-8 pb-3">
         <div className="flex items-center justify-between flex-wrap gap-4">
           {/* Title */}
           <div>
@@ -135,7 +139,7 @@ const RiderHistoryTable = ({
                 type="text"
                 value={searchTerm}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Search pickup, destination & status"
+                placeholder="Search pickup, destination & vehicle type"
                 className="pl-8 w-68"
               />
             </div>
@@ -160,28 +164,30 @@ const RiderHistoryTable = ({
               />
             </div>
 
-            {/* Dropdown Filter */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline">
-                  {currentStatus ? currentStatus : "All Status"}
-                  <ChevronDownIcon className="ml-2 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => onStatusChange(undefined)}>
-                  All Status
-                </DropdownMenuItem>
-                {Object.values(rideStatus).map((status) => (
-                  <DropdownMenuItem
-                    key={status}
-                    onClick={() => onStatusChange(status)}
-                  >
-                    {status}
+            {/* Dropdown Filter by status */}
+            <div className="w-36">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild className="w-full">
+                  <Button variant="outline">
+                    {currentStatus ? currentStatus : "All Status"}
+                    <ChevronDownIcon className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={() => onStatusChange(undefined)}>
+                    All Status
                   </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  {Object.values(rideStatus).map((status) => (
+                    <DropdownMenuItem
+                      key={status}
+                      onClick={() => onStatusChange(status)}
+                    >
+                      {status}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
         </div>
       </div>
@@ -283,21 +289,28 @@ const RiderHistoryTable = ({
 
                 {/* Distance */}
                 <TableCell className="py-3">
-                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis text-center">
                     {history?.distance} km
+                  </div>
+                </TableCell>
+
+                {/* Vehicle */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis text-center">
+                    {history?.vehicleType}
                   </div>
                 </TableCell>
 
                 {/* Fare */}
                 <TableCell className="py-3">
-                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis text-center">
                     ৳ {history?.fare}
                   </div>
                 </TableCell>
 
                 {/* Status */}
                 <TableCell className="py-3">
-                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis text-center">
                     <Badge
                       className={`${
                         (history.status === rideStatus.CANCELLED ||
@@ -312,14 +325,17 @@ const RiderHistoryTable = ({
 
                 {/* Date */}
                 <TableCell className="py-3">
-                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis text-center">
                     {format(new Date(history?.createdAt), "dd-MM-yyyy")}
                   </div>
                 </TableCell>
 
                 {/* Action */}
                 <TableCell className="py-3">
-                  <Link to={`/user/ride/${history?._id}`}>
+                  <Link
+                    to={`/user/ride/${history?._id}`}
+                    className=" text-center"
+                  >
                     <Button size="sm">Details</Button>
                   </Link>
                 </TableCell>

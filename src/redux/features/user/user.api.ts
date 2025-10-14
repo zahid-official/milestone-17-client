@@ -1,5 +1,4 @@
 import type {
-  IDriverApplication,
   IResponse,
   IRideRequest,
   IUpdateProfile,
@@ -42,16 +41,6 @@ export const userApi = baseApi.injectEndpoints({
       query: (payload) => ({
         url: `/user/update/${payload._id}`,
         method: "PATCH",
-        data: payload,
-      }),
-      invalidatesTags: ["USER"],
-    }),
-
-    // Driver Application
-    driverApplication: builder.mutation<IResponse<null>, IDriverApplication>({
-      query: (payload) => ({
-        url: `/driver/apply`,
-        method: "POST",
         data: payload,
       }),
       invalidatesTags: ["USER"],
@@ -118,7 +107,6 @@ export const {
   useRequestRideMutation,
   useCancelRideMutation,
   useUpdateProfileMutation,
-  useDriverApplicationMutation,
   useRideHistoryQuery,
   useSingleRideDetailsQuery,
   useActiveRideDetailsQuery,

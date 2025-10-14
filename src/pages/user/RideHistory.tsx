@@ -51,22 +51,26 @@ const RideHistory = () => {
   // Handle minFare change
   const handleMinFareChange = (value: string) => {
     setPage(1);
-    const parsed = Number(value);
-    if (!isNaN(parsed) && parsed >= 0) {
-      setMinFare(parsed);
-    } else if (value === "") {
+    if (value === "" || value === null) {
       setMinFare(undefined);
+    } else {
+      const parsed = Number(value);
+      if (!isNaN(parsed) && parsed >= 0) {
+        setMinFare(parsed);
+      }
     }
   };
 
   // Handle maxFare change
   const handleMaxFareChange = (value: string) => {
     setPage(1);
-    const parsed = Number(value);
-    if (!isNaN(parsed) && parsed >= 0) {
-      setMaxFare(parsed);
-    } else if (value === "") {
+    if (value === "" || value === null) {
       setMaxFare(undefined);
+    } else {
+      const parsed = Number(value);
+      if (!isNaN(parsed) && parsed >= 0) {
+        setMaxFare(parsed);
+      }
     }
   };
 

@@ -2,31 +2,30 @@ import type { ComponentType } from "react";
 
 // Auth types
 export type {
-  RiderRegisterResponse,
   DriverRegisterResponse,
-  LoginResponse,
-  IRiderRegister,
+  IChangePassword,
   IDriverRegister,
   ILogin,
+  IRiderRegister,
   ISendOtp,
   IVerifyOtp,
-  IChangePassword,
+  LoginResponse,
+  RiderRegisterResponse,
 } from "./auth.types";
 
 // User types
 export type {
-  RideStatus,
-  Timestamp,
-  PaymentMethod,
-  RideRequestResponse,
-  UpdateProfileResponse,
   IRideRequest,
   IUpdateProfile,
-  IDriverApplication,
+  PaymentMethod,
+  RideRequestResponse,
+  RideStatus,
+  Timestamp,
+  UpdateProfileResponse,
 } from "./user.types";
 
 // User types
-export type { ApplicationStatus, AccountStatus } from "./driver.types";
+export type { AccountStatus, ApplicationStatus } from "./driver.types";
 
 // IResponse for baseApi queries and mutations
 export interface IResponse<T> {

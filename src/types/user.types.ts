@@ -80,9 +80,3 @@ export interface VehicleInfo {
   vehicleModel: string;
   plateNumber: string;
 }
-
-export interface IDriverApplication {
-  userId: string;
-  licenseNumber: string;
-  vehicleInfo: VehicleInfo;
-}
