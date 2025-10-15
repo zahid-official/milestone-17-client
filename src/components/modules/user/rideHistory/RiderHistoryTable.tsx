@@ -36,12 +36,11 @@ interface IRideHistory {
   status: RideStatus;
   vehicleType: "BIKE" | "CAR";
   createdAt: string;
-  driverInfo: null | {
-    _id: string;
-    userId: {
-      _id: string;
-      name: string;
-    };
+  driverInfo?: null | {
+    name: string;
+    email: string;
+    accountStatus: string;
+    role: string;
     licenseNumber: string;
     vehicleInfo: {
       vehicleType: string;
@@ -83,6 +82,33 @@ interface IProps {
   ) => void;
 }
 
+// Columns title
+const columnsTitle = [
+  { label: "No.", value: "index" },
+  { label: "Rider", value: "rider" },
+  { label: "Driver", value: "driver" },
+  { label: "Pickup", value: "pickup" },
+  { label: "Destination", value: "destination" },
+  { label: "Distance", value: "distance" },
+  { label: "Vehicle", value: "vehicle" },
+  { label: "Fare", value: "fare" },
+  { label: "Status", value: "status" },
+  { label: "Date", value: "date" },
+  { label: "Actions", value: "actions" },
+];
+
+// Date range options
+const dateRangeOptions: Array<{
+  label: string;
+  value: "today" | "week" | "month" | "year" | undefined;
+}> = [
+  { label: "All Time", value: undefined },
+  { label: "Today", value: "today" },
+  { label: "This Week", value: "week" },
+  { label: "This Month", value: "month" },
+  { label: "This Year", value: "year" },
+];
+
 // RiderHistoryTable Component
 const RiderHistoryTable = ({
   data,
@@ -104,35 +130,6 @@ const RiderHistoryTable = ({
 }: IProps) => {
   const historyData = data?.data;
   const paginationData = data?.meta;
-
-  console.log(historyData);
-
-  // Columns title
-  const columnsTitle = [
-    { label: "No.", value: "index" },
-    { label: "Rider", value: "rider" },
-    { label: "Driver", value: "driver" },
-    { label: "Pickup", value: "pickup" },
-    { label: "Destination", value: "destination" },
-    { label: "Distance", value: "distance" },
-    { label: "Vehicle", value: "vehicle" },
-    { label: "Fare", value: "fare" },
-    { label: "Status", value: "status" },
-    { label: "Date", value: "date" },
-    { label: "Actions", value: "actions" },
-  ];
-
-  // Date range options
-  const dateRangeOptions: Array<{
-    label: string;
-    value: "today" | "week" | "month" | "year" | undefined;
-  }> = [
-    { label: "All Time", value: undefined },
-    { label: "Today", value: "today" },
-    { label: "This Week", value: "week" },
-    { label: "This Month", value: "month" },
-    { label: "This Year", value: "year" },
-  ];
 
   return (
     <>
@@ -312,7 +309,7 @@ const RiderHistoryTable = ({
                 {/* Driver */}
                 <TableCell className="py-3">
                   <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                    {history?.driverInfo?.userId?.name || "Not assigned"}
+                    {history?.driverInfo?.name || "Not assigned"}
                   </div>
                 </TableCell>
 

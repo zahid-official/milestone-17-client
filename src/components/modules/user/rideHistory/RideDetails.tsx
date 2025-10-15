@@ -20,7 +20,6 @@ const RideDetails = () => {
     );
   }
 
-  console.log(data);
   return (
     <div className="grid xl:grid-cols-2 gap-7 mt-20 xl:max-w-5xl max-w-lg w-full mx-auto">
       {/* Ride details */}
@@ -275,7 +274,7 @@ const RideDetails = () => {
                 <div className="flex-1">
                   <p className="text-sm text-muted-foreground">Name</p>
                   <p className="font-medium text-foreground leading-tight">
-                    {rideData?.driverInfo?.userId?.name}
+                    {rideData?.driverInfo?.name}
                   </p>
                 </div>
 
@@ -283,8 +282,8 @@ const RideDetails = () => {
                 <div className="flex-1">
                   <p className="text-sm text-muted-foreground">Phone</p>
                   <p className="font-medium text-foreground leading-tight">
-                    {rideData?.driverInfo?.userId?.phone
-                      ? rideData?.driverInfo?.userId?.phone
+                    {rideData?.driverInfo?.phone
+                      ? rideData?.driverInfo?.phone
                       : "Not Provided"}
                   </p>
                 </div>
