@@ -1,58 +1,38 @@
-import { Link, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardHeader,
-    CardTitle,
-    CardDescription,
-    CardContent,
-    CardFooter,
-} from "@/components/ui/card";
-import { AlertTriangle } from "lucide-react";
+import { Link } from "react-router";
 
 const Error = () => {
-    const navigate = useNavigate();
-
-    return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-            <Card className="max-w-md w-full text-center">
-                <CardHeader>
-                    <div className="flex items-center justify-center">
-                        <div className="rounded-full bg-destructive/10 p-3">
-                            <AlertTriangle className="h-6 w-6 text-destructive" />
-                        </div>
-                    </div>
-                    <CardTitle className="text-2xl mt-4">Unexpected Application Error!</CardTitle>
-                    <CardDescription className="text-sm mt-0.5">
-                        Something went wrong while loading the application. Try refreshing
-                        the page or contact support if the problem persists.
-                    </CardDescription>
-                </CardHeader>
-
-                <CardContent>
-                    <div className="text-sm text-muted-foreground">
-                        If you recently performed an action, it might not have completed.
-                        You can try again or reach out to support with details about what
-                        happened.
-                    </div>
-                </CardContent>
-
-                <CardFooter>
-                    <div className="w-full flex flex-col sm:flex-row gap-2">
-                        <Button className="flex-1" onClick={() => navigate(0)}>Refresh</Button>
-
-                        <Link to="/" className="flex-1">
-                            <Button className="w-full" variant="outline">Back to home</Button>
-                        </Link>
-
-                        <a className="flex-1" href="mailto:support@velocia.com">
-                            <Button className="w-full" variant="outline">Contact support</Button>
-                        </a>
-                    </div>
-                </CardFooter>
-            </Card>
+  return (
+    <div className="h-screen w-full flex flex-col items-center justify-center bg-background">
+      <div className="container px-5 py-24 mx-auto flex flex-col items-center">
+        {/* Error Code and Message */}
+        <div className="text-center mb-8">
+          <h1 className="text-9xl font-bold text-primary mb-4">404</h1>
+          <h2 className="text-3xl font-semibold text-foreground mb-3">
+            Page Not Found
+          </h2>
+          <p className="text-muted-foreground max-w-md mx-auto">
+            Oops! The page you're looking for seems to have taken a wrong turn.
+            Don't worry, let's get you back on track.
+          </p>
         </div>
-    );
+
+        {/* Navigation Options */}
+        <div className="flex flex-wrap gap-4 justify-center">
+          <Button
+            onClick={() => window.history.back()}
+            variant="outline"
+            className="min-w-[150px]"
+          >
+            Go Back
+          </Button>
+          <Link to="/">
+            <Button className="min-w-[150px]">Return Home</Button>
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Error;

@@ -9,6 +9,7 @@ const RideHistory = lazy(() => import("@/pages/user/RideHistory"));
 const Profile = lazy(() => import("@/pages/user/Profile"));
 
 const userSidebarItems: ISidebarItems[] = [
+  // Ride Services
   {
     title: "Ride Services",
     items: [
@@ -29,6 +30,8 @@ const userSidebarItems: ISidebarItems[] = [
       },
     ],
   },
+
+  // Profile Management
   {
     title: "Profile Management",
     items: [
