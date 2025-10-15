@@ -14,6 +14,15 @@ export const driverApi = baseApi.injectEndpoints({
       invalidatesTags: ["RIDE"],
     }),
 
+    // Reject ride
+    rejectRide: builder.mutation({
+      query: (id) => ({
+        url: `/ride/reject/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["RIDE"],
+    }),
+
     /*--------------------------
             Queries
     --------------------------*/
@@ -33,4 +42,8 @@ export const driverApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useAllIncomingRequestsQuery, useAcceptRideMutation } = driverApi;
+export const {
+  useAcceptRideMutation,
+  useRejectRideMutation,
+  useAllIncomingRequestsQuery,
+} = driverApi;

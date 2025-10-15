@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Confirmation from "@/components/ui/confirmation";
 import CustomPagination from "@/components/ui/custom-pagination";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,7 +13,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import rideStatus from "@/constants/rideStatus";
-import { useAcceptRideMutation } from "@/redux/features/driver/driver.api";
+import {
+  useAcceptRideMutation,
+  useRejectRideMutation,
+} from "@/redux/features/driver/driver.api";
 import type { RideStatus } from "@/types";
 import { format } from "date-fns";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
@@ -94,6 +98,7 @@ const IncomingRequestsTable = ({
 }: IProps) => {
   // RTK Query mutation hook
   const [acceptRide] = useAcceptRideMutation();
+  const [rejectRide] = useRejectRideMutation();
 
   // separate datas
   const requestData = data?.data;
@@ -283,13 +288,21 @@ const IncomingRequestsTable = ({
                 </TableCell>
 
                 {/* Action */}
-                <TableCell className="py-3 space-x-2">
-                  <Button size="sm" onClick={() => handleAccept(request._id)}>
+                <TableCell className="py-3 flex gap-2">
+                  {/* Ride Accept btn */}
+                  <Button size="sm" onClick={() => handleAccept(request?._id)}>
                     Accept
                   </Button>
-                  <Button variant={"secondary"} size="sm">
-                    Reject
-                  </Button>
+
+                  {/* Ride Reject btn */}
+                  <Confirmation
+                    mutationFn={() => rejectRide(request?._id).unwrap()}
+                    successMessage="Ride rejected successfully"
+                  >
+                    <Button size="sm" variant={"destructive"}>
+                      Reject
+                    </Button>
+                  </Confirmation>
                 </TableCell>
               </TableRow>
             ))}
