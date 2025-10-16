@@ -6,13 +6,32 @@ export interface Auth {
   providerId: string;
 }
 
-export interface RegisterResponse {
+export interface RiderRegisterResponse {
   name: string;
   email: string;
   accountStatus: string;
   isDeleted: boolean;
   isVerified: boolean;
   role: string;
+  auths: Auth[];
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DriverRegisterResponse {
+  name: string;
+  email: string;
+  accountStatus: string;
+  isDeleted: boolean;
+  isVerified: boolean;
+  role: string;
+  licenseNumber: string;
+  vehicleInfo: {
+    vehicleType: string;
+    vehicleModel: string;
+    plateNumber: string;
+  };
   auths: Auth[];
   _id: string;
   createdAt: string;
@@ -36,10 +55,22 @@ export interface LoginResponse {
 /*--------------------------
       QueryArg Types
 --------------------------*/
-export interface IRegister {
+export interface IRiderRegister {
   name: string;
   email: string;
   password: string;
+}
+
+export interface IDriverRegister {
+  name: string;
+  email: string;
+  password: string;
+  licenseNumber: string;
+  vehicleInfo: {
+    vehicleType: string;
+    vehicleModel: string;
+    plateNumber: string;
+  };
 }
 
 export interface ILogin {
@@ -54,4 +85,9 @@ export interface ISendOtp {
 export interface IVerifyOtp {
   email: string;
   otp: string;
+}
+
+export interface IChangePassword {
+  oldPassword: string;
+  newPassword: string;
 }

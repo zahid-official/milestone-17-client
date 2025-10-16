@@ -12,6 +12,8 @@ export type RideStatus =
   | "IN_TRANSIT"
   | "COMPLETED";
 
+export type PaymentMethod = "CASH" | "ONLINE";
+
 export interface Timestamp {
   requestedAt?: string;
   acceptedAt?: string;
@@ -68,7 +70,13 @@ export interface IRideRequest {
 
 export interface IUpdateProfile {
   _id: string;
-  name: string;
-  phone: string;
-  address: string;
+  name?: string;
+  phone?: string;
+  address?: string;
+}
+
+export interface VehicleInfo {
+  vehicleType: string;
+  vehicleModel: string;
+  plateNumber: string;
 }

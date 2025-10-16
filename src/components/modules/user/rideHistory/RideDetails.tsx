@@ -20,9 +20,8 @@ const RideDetails = () => {
     );
   }
 
-  console.log(data);
   return (
-    <div className="grid lg:grid-cols-2 gap-7 mt-20 max-w-5xl w-full mx-auto">
+    <div className="grid xl:grid-cols-2 gap-7 mt-20 xl:max-w-5xl max-w-lg w-full mx-auto">
       {/* Ride details */}
       <Card className="max-w-lg w-full border border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 rounded-2xl shadow-lg transition-colors">
         {/* Card header */}
@@ -275,7 +274,7 @@ const RideDetails = () => {
                 <div className="flex-1">
                   <p className="text-sm text-muted-foreground">Name</p>
                   <p className="font-medium text-foreground leading-tight">
-                    {rideData?.driverInfo?.userId?.name}
+                    {rideData?.driverInfo?.name}
                   </p>
                 </div>
 
@@ -283,8 +282,8 @@ const RideDetails = () => {
                 <div className="flex-1">
                   <p className="text-sm text-muted-foreground">Phone</p>
                   <p className="font-medium text-foreground leading-tight">
-                    {rideData?.driverInfo?.userId?.phone
-                      ? rideData?.driverInfo?.userId?.phone
+                    {rideData?.driverInfo?.phone
+                      ? rideData?.driverInfo?.phone
                       : "Not Provided"}
                   </p>
                 </div>

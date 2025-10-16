@@ -11,6 +11,9 @@ const RideHistory = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [minFare, setMinFare] = useState<number | undefined>(undefined);
   const [maxFare, setMaxFare] = useState<number | undefined>(undefined);
+  const [dateRange, setDateRange] = useState<
+    "today" | "week" | "month" | "year" | undefined
+  >(undefined);
 
   const limit = 10;
 
@@ -23,6 +26,7 @@ const RideHistory = () => {
     searchTerm,
     minFare,
     maxFare,
+    dateRange,
   });
 
   // Handle pageChange
@@ -51,23 +55,35 @@ const RideHistory = () => {
   // Handle minFare change
   const handleMinFareChange = (value: string) => {
     setPage(1);
-    const parsed = Number(value);
-    if (!isNaN(parsed) && parsed >= 0) {
-      setMinFare(parsed);
-    } else if (value === "") {
+    if (value === "" || value === null) {
       setMinFare(undefined);
+    } else {
+      const parsed = Number(value);
+      if (!isNaN(parsed) && parsed >= 0) {
+        setMinFare(parsed);
+      }
     }
   };
 
   // Handle maxFare change
   const handleMaxFareChange = (value: string) => {
     setPage(1);
-    const parsed = Number(value);
-    if (!isNaN(parsed) && parsed >= 0) {
-      setMaxFare(parsed);
-    } else if (value === "") {
+    if (value === "" || value === null) {
       setMaxFare(undefined);
+    } else {
+      const parsed = Number(value);
+      if (!isNaN(parsed) && parsed >= 0) {
+        setMaxFare(parsed);
+      }
     }
+  };
+
+  // Handle date range change
+  const handleDateRangeChange = (
+    newDateRange: "today" | "week" | "month" | "year" | undefined
+  ) => {
+    setPage(1);
+    setDateRange(newDateRange);
   };
 
   // Loader
@@ -95,6 +111,8 @@ const RideHistory = () => {
         maxFare={maxFare}
         onMinFareChange={handleMinFareChange}
         onMaxFareChange={handleMaxFareChange}
+        dateRange={dateRange} 
+        onDateRangeChange={handleDateRangeChange} 
       />
     </div>
   );

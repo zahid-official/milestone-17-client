@@ -37,27 +37,30 @@ const profileZodSchema = z.object({
 
   // Phone
   phone: z
-    .string({ error: "Phone Number must be string" })
-    .regex(/^(?:\+8801\d{9}|01\d{9})$/, {
-      error:
+    .string()
+    .trim()
+    .transform((val) => (val === "" ? undefined : val))
+    .refine((val) => !val || /^(?:\+8801\d{9}|01\d{9})$/.test(val), {
+      message:
         "Phone number must be valid for Bangladesh. Format: +8801XXXXXXXXX or 01XXXXXXXXX",
     })
-    .trim(),
+    .optional(),
 
   // Address
   address: z
     .string({ error: "Address must be string" })
     .max(200, { error: "Address cannot exceed 200 characters." })
-    .trim(),
+    .trim()
+    .optional(),
 });
 
 // IProps
 interface IProps {
   userInfo: {
     _id: string;
-    name: string;
-    phone: string;
-    address: string;
+    name?: string;
+    phone?: string;
+    address?: string;
   };
   handleCancel: () => void;
 }
