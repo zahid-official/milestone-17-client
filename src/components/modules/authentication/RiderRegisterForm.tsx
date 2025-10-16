@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import InputPassword from "@/components/ui/input-password";
 import { cn } from "@/lib/utils";
-import { useRegisterMutation } from "@/redux/features/auth/auth.api";
+import { useRiderRegisterMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -21,7 +21,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 // Zod schema
-const registerZodSchema = z
+const riderRegisterZodSchema = z
   .object({
     // Name
     name: z
@@ -76,7 +76,7 @@ const registerZodSchema = z
     path: ["confirmPassword"],
   });
 
-const RegisterForm = ({
+const RiderRegisterForm = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => {
@@ -87,11 +87,11 @@ const RegisterForm = ({
   const navigate = useNavigate();
 
   // RTK Query mutation hook
-  const [register] = useRegisterMutation();
+  const [riderRegister] = useRiderRegisterMutation();
 
   // useForm hook
-  const form = useForm<z.infer<typeof registerZodSchema>>({
-    resolver: zodResolver(registerZodSchema),
+  const form = useForm<z.infer<typeof riderRegisterZodSchema>>({
+    resolver: zodResolver(riderRegisterZodSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -101,20 +101,24 @@ const RegisterForm = ({
   });
 
   // Handle onSubmit
-  const onSubmit = async (data: z.infer<typeof registerZodSchema>) => {
+  const onSubmit = async (data: z.infer<typeof riderRegisterZodSchema>) => {
     setIsloading(true);
     const { confirmPassword: _confirmPassword, ...userInfo } = data;
 
     try {
-      const result = await register(userInfo).unwrap();
+      const result = await riderRegister(userInfo).unwrap();
       console.log(result);
-      toast.success("Account created successfully");
+      toast.success(result.message || "Rider has been registered successfully");
       if (result.data.email) {
         navigate("/verify", { state: result.data.email });
       }
     } catch (error: any) {
       console.log(error);
-      toast.error(error.data.message || "Something went wrong!");
+      toast.error(
+        error?.data?.error[0]?.message ||
+          error?.data?.message ||
+          "Something went wrong!"
+      );
     } finally {
       setIsloading(false);
     }
@@ -122,14 +126,6 @@ const RegisterForm = ({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      {/* Heading */}
-      <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Register new account</h1>
-        <p className="text-muted-foreground text-sm text-balance">
-          Enter your details below to create new account
-        </p>
-      </div>
-
       {/* Form body */}
       <div className="grid gap-6">
         <Form {...form}>
@@ -227,4 +223,4 @@ const RegisterForm = ({
   );
 };
 
-export default RegisterForm;
+export default RiderRegisterForm;

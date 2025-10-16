@@ -29,7 +29,7 @@ const RideRequest = () => {
       </div>
 
       {/* Banner */}
-      <div className="bg-muted h-2/3 rounded-2xl relative hidden xl:block">
+      <div className="bg-muted h-7/10 rounded-2xl relative hidden xl:block">
         <img
           src="/images/map.jpg"
           alt="Image"

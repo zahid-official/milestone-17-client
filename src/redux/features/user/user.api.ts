@@ -9,6 +9,9 @@ import baseApi from "../../baseApi";
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    /*--------------------------
+            Mutations
+    --------------------------*/
     // Ride request
     requestRide: builder.mutation<IResponse<RideRequestResponse>, IRideRequest>(
       {
@@ -20,6 +23,15 @@ export const userApi = baseApi.injectEndpoints({
         invalidatesTags: ["RIDE"],
       }
     ),
+
+    // Cancel ride
+    cancelRide: builder.mutation({
+      query: (id) => ({
+        url: `ride/cancel/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["RIDE"],
+    }),
 
     // Update profile
     updateProfile: builder.mutation<
@@ -34,6 +46,9 @@ export const userApi = baseApi.injectEndpoints({
       invalidatesTags: ["USER"],
     }),
 
+    /*--------------------------
+            Queries
+    --------------------------*/
     // Ride History
     rideHistory: builder.query({
       query: ({
@@ -44,18 +59,38 @@ export const userApi = baseApi.injectEndpoints({
         searchTerm,
         minFare,
         maxFare,
+        dateRange,
       }) => {
         const statusQuery = status ? `&status=${status}` : "";
         const sortQuery = sort ? `&sort=${sort}` : "";
         const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
         const minFareQuery = minFare !== undefined ? `&minFare=${minFare}` : "";
         const maxFareQuery = maxFare !== undefined ? `&maxFare=${maxFare}` : "";
+        const dateRangeQuery = dateRange ? `&dateRange=${dateRange}` : "";
 
         return {
-          url: `/ride/history?page=${page}&limit=${limit}${statusQuery}${sortQuery}${searchQuery}${minFareQuery}${maxFareQuery}`,
+          url: `/ride/history?page=${page}&limit=${limit}${statusQuery}${sortQuery}${searchQuery}${minFareQuery}${maxFareQuery}${dateRangeQuery}`,
           method: "GET",
         };
       },
+      providesTags: ["RIDE"],
+    }),
+
+    // Single Ride Details
+    singleRideDetails: builder.query({
+      query: (id) => ({
+        url: `/ride/singleRide/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["RIDE"],
+    }),
+
+    // Active Ride Details
+    activeRideDetails: builder.query({
+      query: () => ({
+        url: "ride/activeRide",
+        method: "GET",
+      }),
       providesTags: ["RIDE"],
     }),
 
@@ -72,7 +107,10 @@ export const userApi = baseApi.injectEndpoints({
 
 export const {
   useRequestRideMutation,
+  useCancelRideMutation,
   useUpdateProfileMutation,
   useRideHistoryQuery,
+  useSingleRideDetailsQuery,
+  useActiveRideDetailsQuery,
   useProfileInfoQuery,
 } = userApi;

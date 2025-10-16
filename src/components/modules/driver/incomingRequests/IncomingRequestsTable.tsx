@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Confirmation from "@/components/ui/confirmation";
 import CustomPagination from "@/components/ui/custom-pagination";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -9,21 +12,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { ChevronDownIcon, ChevronUp, ChevronDown, Search } from "lucide-react";
 import rideStatus from "@/constants/rideStatus";
+import {
+  useAcceptRideMutation,
+  useRejectRideMutation,
+} from "@/redux/features/driver/driver.api";
 import type { RideStatus } from "@/types";
-import { Link } from "react-router";
 import { format } from "date-fns";
-import { Input } from "@/components/ui/input";
+import { ChevronDown, ChevronUp, Search } from "lucide-react";
+import { toast } from "sonner";
 
-// Interfaces for IRideHistory, Meta & IProps
-interface IRideHistory {
+// Interfaces for IRideRequest, Meta & IProps
+interface IRideRequest {
   _id: string;
   userId: {
     _id: string;
@@ -36,11 +36,12 @@ interface IRideHistory {
   status: RideStatus;
   vehicleType: "BIKE" | "CAR";
   createdAt: string;
-  driverInfo?: null | {
-    name: string;
-    email: string;
-    accountStatus: string;
-    role: string;
+  driverInfo: null | {
+    _id: string;
+    userId: {
+      _id: string;
+      name: string;
+    };
     licenseNumber: string;
     vehicleInfo: {
       vehicleType: string;
@@ -59,27 +60,15 @@ interface IMeta {
 
 interface IProps {
   data: {
-    data: IRideHistory[];
+    data: IRideRequest[];
     meta: IMeta;
   };
   onPageChange: (page: number) => void;
   currentPage: number;
-  onStatusChange: (status: string | undefined) => void;
-  currentStatus: string | undefined;
   onSortOrderChange: () => void;
   currentSortOrder: "asc" | "desc";
   searchTerm: string;
   onSearchChange: (value: string) => void;
-
-  // props for min max date filter
-  minFare?: number | undefined;
-  maxFare?: number | undefined;
-  onMinFareChange: (value: string) => void;
-  onMaxFareChange: (value: string) => void;
-  dateRange?: "today" | "week" | "month" | "year" | undefined;
-  onDateRangeChange: (
-    dateRange: "today" | "week" | "month" | "year" | undefined
-  ) => void;
 }
 
 // Columns title
@@ -97,39 +86,37 @@ const columnsTitle = [
   { label: "Actions", value: "actions" },
 ];
 
-// Date range options
-const dateRangeOptions: Array<{
-  label: string;
-  value: "today" | "week" | "month" | "year" | undefined;
-}> = [
-  { label: "All Time", value: undefined },
-  { label: "Today", value: "today" },
-  { label: "This Week", value: "week" },
-  { label: "This Month", value: "month" },
-  { label: "This Year", value: "year" },
-];
-
-// RiderHistoryTable Component
-const RiderHistoryTable = ({
+// IncomingRequestsTable Component
+const IncomingRequestsTable = ({
   data,
   onPageChange,
   currentPage,
-  onStatusChange,
-  currentStatus,
   onSortOrderChange,
   currentSortOrder,
   searchTerm,
   onSearchChange,
-
-  minFare,
-  maxFare,
-  onMinFareChange,
-  onMaxFareChange,
-  dateRange,
-  onDateRangeChange,
 }: IProps) => {
-  const historyData = data?.data;
+  // RTK Query mutation hook
+  const [acceptRide] = useAcceptRideMutation();
+  const [rejectRide] = useRejectRideMutation();
+
+  // separate datas
+  const requestData = data?.data;
   const paginationData = data?.meta;
+
+  // handle accept ride request
+  const handleAccept = async (id: string) => {
+    try {
+      const result = await acceptRide(id).unwrap();
+      console.log(result);
+      if (result.success) {
+        toast.success(result.message || "Ride accepted successfully");
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.data.message || "Something went wrong!");
+    }
+  };
 
   return (
     <>
@@ -139,10 +126,10 @@ const RiderHistoryTable = ({
           {/* Title */}
           <div>
             <h1 className="text-3xl md:text-4xl font-bold mb-1 text-foreground">
-              Ride Histories
+              Incoming Requests
             </h1>
             <p className="text-sm text-muted-foreground">
-              Browse your ride history with filtering and search options
+              Manage and respond to incoming ride requests in real-time
             </p>
           </div>
 
@@ -157,76 +144,6 @@ const RiderHistoryTable = ({
                 placeholder="Search pickup, destination & vehicle type"
                 className="pl-8 w-68"
               />
-            </div>
-
-            {/* Filter by min-max*/}
-            <div className="flex gap-2 items-center">
-              <Input
-                type="number"
-                placeholder="Min Fare"
-                value={minFare !== undefined ? minFare : ""}
-                onChange={(e) => onMinFareChange(e.target.value)}
-                min={0}
-                className="w-24"
-              />
-              <Input
-                type="number"
-                placeholder="Max Fare"
-                value={maxFare !== undefined ? maxFare : ""}
-                onChange={(e) => onMaxFareChange(e.target.value)}
-                min={0}
-                className="w-24"
-              />
-            </div>
-
-            {/* Dropdown Filter by status */}
-            <div className="w-36">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild className="w-full">
-                  <Button variant="outline">
-                    {currentStatus ? currentStatus : "All Status"}
-                    <ChevronDownIcon className="ml-2 h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => onStatusChange(undefined)}>
-                    All Status
-                  </DropdownMenuItem>
-                  {Object.values(rideStatus).map((status) => (
-                    <DropdownMenuItem
-                      key={status}
-                      onClick={() => onStatusChange(status)}
-                    >
-                      {status}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-
-            {/* Dropdown Filter by date range */}
-            <div className="w-40">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild className="w-full">
-                  <Button variant="outline">
-                    {dateRange
-                      ? dateRangeOptions.find((opt) => opt.value === dateRange)
-                          ?.label
-                      : "All Time"}
-                    <ChevronDownIcon className="ml-2 h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  {dateRangeOptions.map((option) => (
-                    <DropdownMenuItem
-                      key={option.label}
-                      onClick={() => onDateRangeChange(option.value)}
-                    >
-                      {option.label}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
             </div>
           </div>
         </div>
@@ -284,9 +201,9 @@ const RiderHistoryTable = ({
 
           {/* table body */}
           <TableBody>
-            {historyData?.map((history: IRideHistory, index: number) => (
+            {requestData?.map((request: IRideRequest, index: number) => (
               <TableRow
-                key={history?._id}
+                key={request?._id}
                 className="border-b hover:bg-muted/50 cursor-pointer"
                 style={{
                   animationDelay: `${index * 120}ms`,
@@ -301,83 +218,91 @@ const RiderHistoryTable = ({
 
                 {/* Rider */}
                 <TableCell className="py-3">
-                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                    {history?.userId?.name}
+                  <div className="text-sm max-w-52 overflow-hidden whitespace-nowrap text-ellipsis">
+                    {request?.userId?.name}
                   </div>
                 </TableCell>
 
                 {/* Driver */}
                 <TableCell className="py-3">
-                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                    {history?.driverInfo?.name || "Not assigned"}
+                  <div className="text-sm max-w-52 overflow-hidden whitespace-nowrap text-ellipsis">
+                    {request?.driverInfo?.userId?.name || "Not assigned"}
                   </div>
                 </TableCell>
 
                 {/* Pickup */}
                 <TableCell className="py-3">
-                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                    {history?.pickup}
+                  <div className="text-sm max-w-52 overflow-hidden whitespace-nowrap text-ellipsis">
+                    {request?.pickup}
                   </div>
                 </TableCell>
 
                 {/* Destination */}
                 <TableCell className="py-3">
-                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                    {history?.destination}
+                  <div className="text-sm max-w-52 overflow-hidden whitespace-nowrap text-ellipsis">
+                    {request?.destination}
                   </div>
                 </TableCell>
 
                 {/* Distance */}
                 <TableCell className="py-3">
-                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis text-center">
-                    {history?.distance} km
+                  <div className="text-sm max-w-52 overflow-hidden whitespace-nowrap text-ellipsis text-center">
+                    {request?.distance} km
                   </div>
                 </TableCell>
 
                 {/* Vehicle */}
                 <TableCell className="py-3">
-                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis text-center">
-                    {history?.vehicleType}
+                  <div className="text-sm max-w-52 overflow-hidden whitespace-nowrap text-ellipsis text-center">
+                    {request?.vehicleType}
                   </div>
                 </TableCell>
 
                 {/* Fare */}
                 <TableCell className="py-3">
-                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis text-center">
-                    ৳ {history?.fare}
+                  <div className="text-sm max-w-52 overflow-hidden whitespace-nowrap text-ellipsis text-center">
+                    ৳ {request?.fare}
                   </div>
                 </TableCell>
 
                 {/* Status */}
                 <TableCell className="py-3">
-                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis text-center">
+                  <div className="text-sm max-w-52 overflow-hidden whitespace-nowrap text-ellipsis text-center">
                     <Badge
                       className={`${
-                        (history.status === rideStatus.CANCELLED ||
-                          history.status === rideStatus.REJECTED) &&
+                        (request.status === rideStatus.CANCELLED ||
+                          request.status === rideStatus.REJECTED) &&
                         "bg-muted-foreground/60 text-primary-foreground"
                       }`}
                     >
-                      {history.status}
+                      {request.status}
                     </Badge>
                   </div>
                 </TableCell>
 
                 {/* Date */}
                 <TableCell className="py-3">
-                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis text-center">
-                    {format(new Date(history?.createdAt), "dd-MM-yyyy")}
+                  <div className="text-sm max-w-52 overflow-hidden whitespace-nowrap text-ellipsis text-center">
+                    {format(new Date(request?.createdAt), "dd-MM-yyyy")}
                   </div>
                 </TableCell>
 
                 {/* Action */}
-                <TableCell className="py-3">
-                  <Link
-                    to={`/user/ride/${history?._id}`}
-                    className=" text-center"
+                <TableCell className="py-3 flex gap-2">
+                  {/* Ride Accept btn */}
+                  <Button size="sm" onClick={() => handleAccept(request?._id)}>
+                    Accept
+                  </Button>
+
+                  {/* Ride Reject btn */}
+                  <Confirmation
+                    mutationFn={() => rejectRide(request?._id).unwrap()}
+                    successMessage="Ride rejected successfully"
                   >
-                    <Button size="sm">Details</Button>
-                  </Link>
+                    <Button size="sm" variant={"destructive"}>
+                      Reject
+                    </Button>
+                  </Confirmation>
                 </TableCell>
               </TableRow>
             ))}
@@ -397,4 +322,4 @@ const RiderHistoryTable = ({
   );
 };
 
-export default RiderHistoryTable;
+export default IncomingRequestsTable;
