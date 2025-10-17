@@ -11,7 +11,7 @@ import { toast } from "sonner";
 // ToggleAvailability Component
 const ToggleAvailability = () => {
   // RTK Query hook
-  const { data } = useProfileInfoQuery(undefined);
+  const { data, refetch } = useProfileInfoQuery(undefined);
   const [setAvailability] = useAvailableDriverMutation();
   const isAvailable = data?.data?.availability === availability.ONLINE;
 
@@ -30,6 +30,14 @@ const ToggleAvailability = () => {
         availability: availabilityStatus,
       }).unwrap();
       console.log(result);
+      // ensure profile info is refetched so other parts of the UI update
+      // immediately (e.g., IncomingRequests reading availability)
+      try {
+        await refetch();
+      } catch (e) {
+        // ignore refetch errors — mutation succeeded and UI toggle already updated
+        console.warn("Failed to refetch profile after availability change", e);
+      }
       toast.success(
         result.message || "Driver availability updated successfully"
       );

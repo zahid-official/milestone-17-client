@@ -69,6 +69,7 @@ interface IProps {
   currentSortOrder: "asc" | "desc";
   searchTerm: string;
   onSearchChange: (value: string) => void;
+  isAvailable?: boolean;
 }
 
 // Columns title
@@ -95,6 +96,7 @@ const IncomingRequestsTable = ({
   currentSortOrder,
   searchTerm,
   onSearchChange,
+  isAvailable = true,
 }: IProps) => {
   // RTK Query mutation hook
   const [acceptRide] = useAcceptRideMutation();
@@ -289,10 +291,12 @@ const IncomingRequestsTable = ({
 
                 {/* Action */}
                 <TableCell className="py-3 flex gap-2">
-                  {/* Ride Accept btn */}
-                  <Button size="sm" onClick={() => handleAccept(request?._id)}>
-                    Accept
-                  </Button>
+                    {/* Ride Accept btn - hidden when driver is offline */}
+                    {isAvailable && (
+                      <Button size="sm" onClick={() => handleAccept(request?._id)}>
+                        Accept
+                      </Button>
+                    )}
 
                   {/* Ride Reject btn */}
                   <Confirmation

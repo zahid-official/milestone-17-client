@@ -12,7 +12,7 @@ export const driverApi = baseApi.injectEndpoints({
         method: "PATCH",
         data: payload,
       }),
-      invalidatesTags: ["DRIVER"],
+      invalidatesTags: ["DRIVER", "RIDE", "USER"],
     }),
 
     // Accept ride
