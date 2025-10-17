@@ -20,6 +20,7 @@ import {
 import type { RideStatus } from "@/types";
 import { format } from "date-fns";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
 // Interfaces for IRideRequest, Meta & IProps
@@ -102,6 +103,9 @@ const IncomingRequestsTable = ({
   const [acceptRide] = useAcceptRideMutation();
   const [rejectRide] = useRejectRideMutation();
 
+  // Navigation hook
+  const navigate = useNavigate();
+
   // separate datas
   const requestData = data?.data;
   const paginationData = data?.meta;
@@ -111,6 +115,7 @@ const IncomingRequestsTable = ({
     try {
       const result = await acceptRide(id).unwrap();
       console.log(result);
+      navigate(`/driver/current-ride`);
       if (result.success) {
         toast.success(result.message || "Ride accepted successfully");
       }
@@ -291,12 +296,15 @@ const IncomingRequestsTable = ({
 
                 {/* Action */}
                 <TableCell className="py-3 flex gap-2">
-                    {/* Ride Accept btn - hidden when driver is offline */}
-                    {isAvailable && (
-                      <Button size="sm" onClick={() => handleAccept(request?._id)}>
-                        Accept
-                      </Button>
-                    )}
+                  {/* Ride Accept btn - hidden when driver is offline */}
+                  {isAvailable && (
+                    <Button
+                      size="sm"
+                      onClick={() => handleAccept(request?._id)}
+                    >
+                      Accept
+                    </Button>
+                  )}
 
                   {/* Ride Reject btn */}
                   <Confirmation

@@ -76,6 +76,15 @@ export const driverApi = baseApi.injectEndpoints({
       },
       providesTags: ["RIDE"],
     }),
+
+    // Curring active ride
+    currentRide: builder.query({
+      query: () => ({
+        url: `/ride/driverCurrentRide`,
+        method: "GET",
+      }),
+      providesTags: ["RIDE"],
+    }),
   }),
 });
 
@@ -87,4 +96,5 @@ export const {
   useInTransitRideMutation,
   useCompleteRideMutation,
   useAllIncomingRequestsQuery,
+  useCurrentRideQuery,
 } = driverApi;
