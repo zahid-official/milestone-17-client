@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Circle, MapPin, Navigation } from "lucide-react";
+import { Circle, MapPin, Navigation, WifiOff } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import ButtonSubmit from "@/components/ui/button-submit";
 import { useState } from "react";
@@ -20,10 +20,19 @@ import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import rideStatus from "@/constants/rideStatus";
+import ToggleAvailability from "./ToggleAvailability";
+import { useProfileInfoQuery } from "@/redux/features/user/user.api";
+import availability from "@/constants/availability";
 
 const CurrentRide = () => {
   // States from react
   const [loading, setLoading] = useState(false);
+
+  // profile info to check availability
+  const { data: profileData } = useProfileInfoQuery(undefined);
+  const isAvailable = profileData
+    ? profileData.data?.availability === availability.ONLINE
+    : true;
 
   // RTK Query mutation hooks
   const { data, isLoading } = useCurrentRideQuery(undefined);
@@ -85,6 +94,36 @@ const CurrentRide = () => {
     return (
       <div className="flex justify-center items-center py-6">
         <div className="w-8 h-8 border-5 border-black/30 border-t-black dark:border-white/30 dark:border-t-white rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  // If driver is offline, show themed notice with toggle to go online
+  if (!isAvailable) {
+    return (
+      <div className="max-w-3xl mx-auto mt-8">
+        <Card className="border-2 border-muted-foreground/10 bg-surface px-6 py-8">
+          <div className="flex items-center gap-4">
+            <div className="flex-shrink-0">
+              <div className="w-14 h-14 rounded-lg bg-red-50 dark:bg-red-900/40 flex items-center justify-center">
+                <WifiOff className="w-7 h-7 text-red-600 dark:text-red-300" />
+              </div>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-foreground">
+                You're Offline
+              </h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                You won't be able to view or manage ride while
+                you're offline. Toggle your availability to get back on the road
+                and manage your rides.
+              </p>
+            </div>
+            <div className="flex items-center">
+              <ToggleAvailability />
+            </div>
+          </div>
+        </Card>
       </div>
     );
   }
