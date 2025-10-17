@@ -4,6 +4,7 @@ import { lazy } from "react";
 
 // Lazy loading
 const IncomingRequests = lazy(() => import("@/pages/driver/IncomingRequests"));
+const CurrentRide = lazy(() => import("@/pages/driver/CurrentRide"));
 const Earnings = lazy(() => import("@/pages/driver/Earnings"));
 const Profile = lazy(() => import("@/pages/user/Profile"));
 
@@ -16,6 +17,11 @@ const driverSidebarItems: ISidebarItems[] = [
         title: "Incoming Requests",
         url: "/driver/incoming-requests",
         component: IncomingRequests,
+      },
+      {
+        title: "Current Ride",
+        url: "/driver/current-ride",
+        component: CurrentRide,
       },
       {
         title: "Earnings",

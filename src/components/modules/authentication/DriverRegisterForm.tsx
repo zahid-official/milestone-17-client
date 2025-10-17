@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import availability from "@/constants/availability";
 import { cn } from "@/lib/utils";
 import { useDriverRegisterMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -150,6 +151,7 @@ const DriverRegisterForm = ({
         vehicleModel: data.vehicleModel,
         plateNumber: data.plateNumber,
       },
+      availability: availability.ONLINE,
     };
 
     try {

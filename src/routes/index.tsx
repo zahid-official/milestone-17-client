@@ -16,6 +16,7 @@ import driverSidebarItems from "./driver/driverSidebar";
 import userSidebarItems from "./user/userSidebar";
 import RideDetails from "@/components/modules/user/rideHistory/RideDetails";
 import Contact from "@/pages/public/Contact";
+import NotFound from "@/pages/public/NotFound";
 
 const Router = createBrowserRouter([
   // Common layout
@@ -103,7 +104,7 @@ const Router = createBrowserRouter([
   // Catch-all: render Error for any unmatched route (404)
   {
     path: "*",
-    Component: Error,
+    Component: NotFound,
   },
 ]);
 
