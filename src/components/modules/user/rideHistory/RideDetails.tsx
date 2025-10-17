@@ -116,6 +116,22 @@ const RideDetails = () => {
             </div>
           )}
 
+          {/* Cancelled */}
+          {rideData?.timestamps?.cancelledAt && (
+            <div className="flex items-start gap-2">
+              <div className="flex h-2.5 w-2.5 items-center justify-center rounded-full bg-primary mt-[5px]"></div>
+              <div className="flex-1 flex justify-between items-center gap-1.5">
+                <p className="text-sm text-muted-foreground">Cancelled</p>
+                <p className="text-sm font-medium text-foreground leading-tight mt-[3px]">
+                  {format(
+                    new Date(rideData?.timestamps?.cancelledAt),
+                    "dd-MM-yyyy hh:mm a"
+                  )}
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Accepted */}
           {rideData?.timestamps?.acceptedAt && (
             <div className="flex items-start gap-2">
@@ -141,22 +157,6 @@ const RideDetails = () => {
                 <p className="text-sm font-medium text-foreground leading-tight mt-[3px]">
                   {format(
                     new Date(rideData?.timestamps?.rejectedAt),
-                    "dd-MM-yyyy hh:mm a"
-                  )}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Cancelled */}
-          {rideData?.timestamps?.cancelledAt && (
-            <div className="flex items-start gap-2">
-              <div className="flex h-2.5 w-2.5 items-center justify-center rounded-full bg-primary mt-[5px]"></div>
-              <div className="flex-1 flex justify-between items-center gap-1.5">
-                <p className="text-sm text-muted-foreground">Cancelled</p>
-                <p className="text-sm font-medium text-foreground leading-tight mt-[3px]">
-                  {format(
-                    new Date(rideData?.timestamps?.cancelledAt),
                     "dd-MM-yyyy hh:mm a"
                   )}
                 </p>

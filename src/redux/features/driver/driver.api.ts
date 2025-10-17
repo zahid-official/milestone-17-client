@@ -85,6 +85,29 @@ export const driverApi = baseApi.injectEndpoints({
       }),
       providesTags: ["RIDE"],
     }),
+
+    // Driver rides history
+    driverRidesHistory: builder.query({
+      query: ({
+        page = 1,
+        limit = 10,
+        status,
+        sort,
+        searchTerm,
+        dateRange,
+      }) => {
+        const statusQuery = status ? `&status=${status}` : "";
+        const sortQuery = sort ? `&sort=${sort}` : "";
+        const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
+        const dateRangeQuery = dateRange ? `&dateRange=${dateRange}` : "";
+
+        return {
+          url: `/driver/ridesHistory?page=${page}&limit=${limit}${statusQuery}${sortQuery}${searchQuery}${dateRangeQuery}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["RIDE"],
+    }),
   }),
 });
 
@@ -97,4 +120,5 @@ export const {
   useCompleteRideMutation,
   useAllIncomingRequestsQuery,
   useCurrentRideQuery,
+  useDriverRidesHistoryQuery,
 } = driverApi;

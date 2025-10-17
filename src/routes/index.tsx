@@ -56,6 +56,10 @@ const Router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to={"/driver/earnings"} /> },
       ...generateRoutes(driverSidebarItems),
+      {
+        path: "ride/:id",
+        Component: RideDetails,
+      },
     ],
   },
 
