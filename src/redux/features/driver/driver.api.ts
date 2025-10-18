@@ -108,6 +108,15 @@ export const driverApi = baseApi.injectEndpoints({
       },
       providesTags: ["RIDE"],
     }),
+
+    // Earning details
+    earningDetails: builder.query({
+      query: () => ({
+        url: `/driver/earning`,
+        method: "GET",
+      }),
+      providesTags: ["RIDE"],
+    }),
   }),
 });
 
@@ -121,4 +130,5 @@ export const {
   useAllIncomingRequestsQuery,
   useCurrentRideQuery,
   useDriverRidesHistoryQuery,
+  useEarningDetailsQuery,
 } = driverApi;
