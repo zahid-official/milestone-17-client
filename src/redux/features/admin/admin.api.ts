@@ -11,7 +11,7 @@ export const adminApi = baseApi.injectEndpoints({
         url: `/driver/suspend/${id}`,
         method: "PATCH",
       }),
-      invalidatesTags: ["DRIVER"],
+      invalidatesTags: ["USER"],
     }),
 
     // Unsuspend driver
@@ -20,7 +20,7 @@ export const adminApi = baseApi.injectEndpoints({
         url: `/driver/unsuspend/${id}`,
         method: "PATCH",
       }),
-      invalidatesTags: ["DRIVER"],
+      invalidatesTags: ["USER"],
     }),
 
     // Block user
@@ -44,14 +44,14 @@ export const adminApi = baseApi.injectEndpoints({
     /*--------------------------
             Queries
     --------------------------*/
-    // Driver applications
     // User Management
     manageUsers: builder.query({
-      query: ({ page = 1, limit = 10, sort, searchTerm }) => {
+      query: ({ page = 1, limit = 10, status, sort, searchTerm }) => {
+        const statusQuery = status ? `&accountStatus=${status}` : "";
         const sortQuery = sort ? `&sort=${sort}` : "";
         const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
         return {
-          url: `/user?page=${page}&limit=${limit}${sortQuery}${searchQuery}&role=DRIVER&role=RIDER`,
+          url: `/user?page=${page}&limit=${limit}${statusQuery}${sortQuery}${searchQuery}&role=DRIVER&role=RIDER`,
           method: "GET",
         };
       },

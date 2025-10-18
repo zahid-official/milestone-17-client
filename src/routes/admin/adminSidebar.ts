@@ -3,6 +3,7 @@ import { lazy } from "react";
 
 // Lazy loading
 const Analytics = lazy(() => import("@/pages/admin/Analytics"));
+const UserManagement = lazy(() => import("@/pages/admin/UserManagement"));
 
 // adminSidebarItems
 const adminSidebarItems: ISidebarItems[] = [
@@ -14,6 +15,11 @@ const adminSidebarItems: ISidebarItems[] = [
         title: "Analytics",
         url: "/admin/analytics",
         component: Analytics,
+      },
+      {
+        title: "User Management",
+        url: "/admin/user-management",
+        component: UserManagement,
       },
     ],
   },
