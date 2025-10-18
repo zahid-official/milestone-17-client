@@ -1,4 +1,4 @@
-import ProfileForm from "@/components/modules/user/profile/ProfileForm";
+import VehicleInfoForm from "@/components/modules/driver/vechleInfo/VehicleInfoForm";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -10,22 +10,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useProfileInfoQuery } from "@/redux/features/user/user.api";
-import { format } from "date-fns";
 import {
   Bike,
-  Calendar,
+  Car,
   CheckCircle2,
   Edit2,
-  Mail,
-  MapPin,
-  Phone,
-  ShieldUser,
+  IdCard,
+  NotepadTextDashed,
   User,
 } from "lucide-react";
 import { useState } from "react";
 
-// Profile Component
-const Profile = () => {
+// VehicleInfo Component
+const VehicleInfo = () => {
   // State form react
   const [isEditing, setIsEditing] = useState(false);
 
@@ -35,44 +32,33 @@ const Profile = () => {
 
   // Display data
   const display = [
-    { icon: Mail, label: "Email", value: userInfo?.email },
     {
-      icon: Phone,
-      label: "Phone",
-      value: userInfo?.phone ? userInfo?.phone : "Not provided",
+      icon: IdCard,
+      label: "License Number",
+      value: userInfo?.licenseNumber,
     },
     {
-      icon: MapPin,
-      label: "Address",
-      value: userInfo?.address ? userInfo.address : "Not provided",
+      icon: NotepadTextDashed,
+      label: "Vehicle Plate Number",
+      value: userInfo?.vehicleInfo?.plateNumber,
     },
     {
-      icon: ShieldUser,
-      label: "Status",
-      value: userInfo?.accountStatus,
+      icon: Car,
+      label: "Vehicle Type",
+      value: userInfo?.vehicleInfo?.vehicleType,
     },
     {
-      icon: Calendar,
-      label: "Created",
-      value:
-        userInfo?.createdAt &&
-        format(new Date(userInfo?.createdAt), "dd-MM-yyyy hh:mm a"),
-    },
-    {
-      icon: Calendar,
-      label: "Last Updated",
-      value: userInfo?.updatedAt
-        ? format(new Date(userInfo?.updatedAt), "dd-MM-yyyy hh:mm a")
-        : "Not updated yet",
+      icon: Bike,
+      label: "Vehicle Model",
+      value: userInfo?.vehicleInfo?.vehicleModel,
     },
   ];
-  console.log(userInfo);
 
   if (isEditing) {
     return (
       //
       <div className="w-full max-w-lg mx-auto transition-all ease-out duration-300 min-h-[80vh] place-content-center">
-        <ProfileForm
+        <VehicleInfoForm
           userInfo={userInfo}
           handleCancel={() => {
             setIsEditing(false);
@@ -89,9 +75,11 @@ const Profile = () => {
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <CardTitle className="text-3xl font-bold">Profile Details</CardTitle>
+              <CardTitle className="text-3xl font-bold">
+                Vehicle Details
+              </CardTitle>
               <CardDescription className="text-sm mt-0.5">
-                Detailed information about the your profile
+                Detailed information about the your vehicle
               </CardDescription>
             </div>
             <Button
@@ -101,7 +89,7 @@ const Profile = () => {
               className="gap-1.5 h-8 transition-all ease-out duration-200 hover:bg-primary hover:text-white"
             >
               <Edit2 className="h-3.5 w-3.5" />
-              Edit Profile
+              Edit Info
             </Button>
           </div>
         </CardHeader>
@@ -165,4 +153,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default VehicleInfo;

@@ -10,6 +10,7 @@ const DriverRidesHistory = lazy(
 );
 const Earnings = lazy(() => import("@/pages/driver/Earnings"));
 const Profile = lazy(() => import("@/pages/user/Profile"));
+const VehicleInfo = lazy(() => import("@/pages/driver/VehicleInfo"));
 
 const driverSidebarItems: ISidebarItems[] = [
   // Driver Services
@@ -52,6 +53,11 @@ const driverSidebarItems: ISidebarItems[] = [
         title: "Security",
         url: "/driver/chanege-password",
         component: ChangePassword,
+      },
+      {
+        title: "Vehicle Info",
+        url: "/driver/vehicle-info",
+        component: VehicleInfo,
       },
     ],
   },

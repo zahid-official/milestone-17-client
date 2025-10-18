@@ -1,4 +1,4 @@
-import CompletedRidesHistoryTable from "@/components/modules/driver/DriverRidesHistory/DriverRidesHistoryTable";
+import CompletedRidesHistoryTable from "@/components/modules/driver/driverRidesHistory/DriverRidesHistoryTable";
 import { useDriverRidesHistoryQuery } from "@/redux/features/driver/driver.api";
 import { useState } from "react";
 
