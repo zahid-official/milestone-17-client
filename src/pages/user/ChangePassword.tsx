@@ -107,7 +107,7 @@ const ChangePassword = () => {
       const result = await passwordChange(userInfo).unwrap();
       console.log(result);
       toast.success(result.message || "Password changed successfully");
-      navigate("/user/ride-request");
+      navigate("/driver/profile");
     } catch (error: any) {
       console.log(error);
       toast.error(

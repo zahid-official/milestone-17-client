@@ -27,12 +27,12 @@ const driverSidebarItems: ISidebarItems[] = [
         component: CurrentRide,
       },
       {
-        title: "Rides History",
+        title: "Ride History",
         url: "/driver/completed-ride",
         component: DriverRidesHistory,
       },
       {
-        title: "Earnings",
+        title: "Earning Details",
         url: "/driver/earnings",
         component: Earnings,
       },
