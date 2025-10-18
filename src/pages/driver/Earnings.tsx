@@ -1,5 +1,5 @@
-import { ChartAreaInteractive } from "@/components/chart-area-interactive";
-import { SectionCards } from "@/components/section-cards";
+import { DriverInteractiveChart } from "@/components/ui/driver-interactive-chart";
+import { DriverSectionCards } from "@/components/ui/driver-section-cards";
 import { useEarningDetailsQuery } from "@/redux/features/driver/driver.api";
 import { format, startOfWeek } from "date-fns";
 import { useMemo, useState } from "react";
@@ -58,7 +58,7 @@ const Earnings = () => {
 
   const grouped = useMemo(() => groupByTimeframe(items, tf), [items, tf]);
 
-  // prepare chartData for ChartAreaInteractive (expecting {date, value})
+  // prepare chartData for DriverInteractiveChart (expecting {date, value})
   const chartData = useMemo(() => {
     return grouped.labels.map((k, i) => ({
       date: k,
@@ -79,7 +79,7 @@ const Earnings = () => {
     <div className="flex flex-1 flex-col">
       <div className="@container/main flex flex-1 flex-col gap-2">
         <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-          <SectionCards
+          <DriverSectionCards
             totalRevenue={total}
             totalRides={rides}
             avgFare={avg}
@@ -89,7 +89,7 @@ const Earnings = () => {
             onTimeframeChange={(v) => setTf(v)}
           />
           <div className="px-4 lg:px-6">
-            <ChartAreaInteractive
+            <DriverInteractiveChart
               data={chartData}
               timeframe={tf}
               onTimeframeChange={(v) => setTf(v)}

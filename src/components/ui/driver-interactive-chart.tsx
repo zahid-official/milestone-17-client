@@ -38,7 +38,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function ChartAreaInteractive({
+export function DriverInteractiveChart({
   data,
   timeframe,
   onTimeframeChange,
@@ -48,7 +48,8 @@ export function ChartAreaInteractive({
   onTimeframeChange?: (v: "daily" | "weekly" | "monthly") => void;
 }) {
   const isMobile = useIsMobile();
-  const isControlled = timeframe !== undefined && onTimeframeChange !== undefined;
+  const isControlled =
+    timeframe !== undefined && onTimeframeChange !== undefined;
 
   const [tfState, setTfState] = React.useState<"daily" | "weekly" | "monthly">(
     (isControlled ? timeframe : undefined) ?? (isMobile ? "daily" : "weekly")
@@ -73,7 +74,9 @@ export function ChartAreaInteractive({
       <CardHeader>
         <CardTitle>Total Earnings</CardTitle>
         <CardDescription>
-          <span className="hidden @[540px]/card:block">Summary for timeframe</span>
+          <span className="hidden @[540px]/card:block">
+            Summary for timeframe
+          </span>
           <span className="@[540px]/card:hidden">Summary</span>
         </CardDescription>
         <CardAction>
@@ -93,11 +96,14 @@ export function ChartAreaInteractive({
             <ToggleGroupItem value="weekly">Week</ToggleGroupItem>
             <ToggleGroupItem value="monthly">Month</ToggleGroupItem>
           </ToggleGroup>
-          <Select value={currentTf} onValueChange={(v) => {
-            const val = v as "daily" | "weekly" | "monthly";
-            if (isControlled) onTimeframeChange?.(val);
-            else setTfState(val);
-          }}>
+          <Select
+            value={currentTf}
+            onValueChange={(v) => {
+              const val = v as "daily" | "weekly" | "monthly";
+              if (isControlled) onTimeframeChange?.(val);
+              else setTfState(val);
+            }}
+          >
             <SelectTrigger
               className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
               size="sm"
@@ -106,20 +112,37 @@ export function ChartAreaInteractive({
               <SelectValue placeholder="Select timeframe" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
-              <SelectItem value="daily" className="rounded-lg">Day</SelectItem>
-              <SelectItem value="weekly" className="rounded-lg">Week</SelectItem>
-              <SelectItem value="monthly" className="rounded-lg">Month</SelectItem>
+              <SelectItem value="daily" className="rounded-lg">
+                Day
+              </SelectItem>
+              <SelectItem value="weekly" className="rounded-lg">
+                Week
+              </SelectItem>
+              <SelectItem value="monthly" className="rounded-lg">
+                Month
+              </SelectItem>
             </SelectContent>
           </Select>
         </CardAction>
       </CardHeader>
       <CardContent className="px-2 pt-4  sm:px-6 sm:pt-6">
-        <ChartContainer config={chartConfig} className="aspect-auto h-[280px] w-full">
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-auto h-[280px] w-full"
+        >
           <AreaChart data={chartPoints}>
             <defs>
               <linearGradient id="fillValue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.9} />
-                <stop offset="95%" stopColor="var(--primary)" stopOpacity={0.05} />
+                <stop
+                  offset="5%"
+                  stopColor="var(--primary)"
+                  stopOpacity={0.9}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--primary)"
+                  stopOpacity={0.05}
+                />
               </linearGradient>
             </defs>
             <CartesianGrid vertical={false} />
@@ -150,11 +173,16 @@ export function ChartAreaInteractive({
                   }}
                   indicator="dot"
                   formatter={(val, _name, props) => {
-                    const amount = typeof val === "number" ? val : Number(val) || 0;
+                    const amount =
+                      typeof val === "number" ? val : Number(val) || 0;
                     // extract ride count from the original payload
                     let rideCount: number | undefined = undefined;
-                    if (props && typeof props === "object" && "payload" in props) {
-                      const p = (props as unknown) as { payload?: unknown };
+                    if (
+                      props &&
+                      typeof props === "object" &&
+                      "payload" in props
+                    ) {
+                      const p = props as unknown as { payload?: unknown };
                       if (p.payload && typeof p.payload === "object") {
                         const pp = p.payload as { count?: unknown };
                         if (typeof pp.count === "number") rideCount = pp.count;
@@ -165,16 +193,22 @@ export function ChartAreaInteractive({
                       <div className="grid gap-1 w-full">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <span className="text-muted-foreground">Amount</span>
+                            <span className="text-muted-foreground">
+                              Amount
+                            </span>
                           </div>
-                          <div className="text-foreground font-mono font-medium tabular-nums">৳ {amount.toLocaleString()}</div>
+                          <div className="text-foreground font-mono font-medium tabular-nums">
+                            ৳ {amount.toLocaleString()}
+                          </div>
                         </div>
 
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <span className="text-muted-foreground">Ride</span>
                           </div>
-                          <div className="text-muted-foreground text-sm">{rideCount ?? 0}</div>
+                          <div className="text-muted-foreground text-sm">
+                            {rideCount ?? 0}
+                          </div>
                         </div>
                       </div>
                     );
@@ -182,7 +216,12 @@ export function ChartAreaInteractive({
                 />
               }
             />
-            <Area dataKey="value" type="natural" fill="url(#fillValue)" stroke="var(--primary)" />
+            <Area
+              dataKey="value"
+              type="natural"
+              fill="url(#fillValue)"
+              stroke="var(--primary)"
+            />
           </AreaChart>
         </ChartContainer>
       </CardContent>

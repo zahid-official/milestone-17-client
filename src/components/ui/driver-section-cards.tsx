@@ -13,7 +13,7 @@ interface SectionCardsProps {
   onTimeframeChange?: (v: "daily" | "weekly" | "monthly") => void;
 }
 
-export function SectionCards({
+export function DriverSectionCards({
   totalRevenue = 0,
   totalRides = 0,
   avgFare = 0,
