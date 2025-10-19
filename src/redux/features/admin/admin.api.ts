@@ -44,7 +44,7 @@ export const adminApi = baseApi.injectEndpoints({
     /*--------------------------
             Queries
     --------------------------*/
-    // User Management
+    // User management
     manageUsers: builder.query({
       query: ({ page = 1, limit = 10, status, sort, searchTerm }) => {
         const statusQuery = status ? `&accountStatus=${status}` : "";
@@ -57,6 +57,29 @@ export const adminApi = baseApi.injectEndpoints({
       },
       providesTags: ["USER"],
     }),
+
+    // Ride oversight
+    rideOversight: builder.query({
+      query: ({
+        page = 1,
+        limit = 10,
+        status,
+        sort,
+        searchTerm,
+        dateRange,
+      }) => {
+        const statusQuery = status ? `&status=${status}` : "";
+        const sortQuery = sort ? `&sort=${sort}` : "";
+        const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
+        const dateRangeQuery = dateRange ? `&dateRange=${dateRange}` : "";
+
+        return {
+          url: `/ride?page=${page}&limit=${limit}${statusQuery}${sortQuery}${searchQuery}${dateRangeQuery}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["RIDE"],
+    }),
   }),
 });
 
@@ -66,4 +89,5 @@ export const {
   useBlockUserMutation,
   useUnblockUserMutation,
   useManageUsersQuery,
+  useRideOversightQuery,
 } = adminApi;

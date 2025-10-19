@@ -4,6 +4,7 @@ import { lazy } from "react";
 // Lazy loading
 const Analytics = lazy(() => import("@/pages/admin/Analytics"));
 const UserManagement = lazy(() => import("@/pages/admin/UserManagement"));
+const RideOversight = lazy(() => import("@/pages/admin/RideOversight"));
 
 // adminSidebarItems
 const adminSidebarItems: ISidebarItems[] = [
@@ -20,6 +21,11 @@ const adminSidebarItems: ISidebarItems[] = [
         title: "User Management",
         url: "/admin/user-management",
         component: UserManagement,
+      },
+      {
+        title: "Ride Oversight",
+        url: "/admin/ride-oversight",
+        component: RideOversight,
       },
     ],
   },

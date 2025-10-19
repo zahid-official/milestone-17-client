@@ -45,6 +45,10 @@ const Router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to={"/admin/analytics"} /> },
       ...generateRoutes(adminSidebarItems),
+      {
+        path: "ride/:id",
+        Component: RideDetails,
+      },
     ],
   },
 
