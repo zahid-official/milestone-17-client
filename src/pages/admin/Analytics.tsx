@@ -1,7 +1,7 @@
-import AdminChartAreaInteractive from "@/components/admin-chart-area-interactive";
-import AdminSectionCards from "@/components/admin-section-cards";
-import AdminDriverBar from "@/components/admin-driver-bar";
-import { AdminChartBarHorizontal } from "@/components/admin-chart-bar-horizontal";
+import AdminChartAreaInteractive from "@/components/ui/admin-chart-area-interactive";
+import AdminSectionCards from "@/components/ui/admin-section-cards";
+import AdminDriverBar from "@/components/ui/admin-driver-bar";
+import { AdminChartBarHorizontal } from "@/components/ui/admin-chart-bar-horizontal";
 import { useAnalyticsQuery } from "@/redux/features/admin/admin.api";
 
 type Ride = {

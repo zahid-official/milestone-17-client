@@ -77,9 +77,6 @@ const ChangePassword = () => {
   // State for loading
   const [isLoading, setIsloading] = useState(false);
 
-  // Navigation hook
-  const navigate = useNavigate();
-
   // RTK Query mutation hook
   const [passwordChange] = usePasswordChangeMutation();
 
@@ -107,7 +104,7 @@ const ChangePassword = () => {
       const result = await passwordChange(userInfo).unwrap();
       console.log(result);
       toast.success(result.message || "Password changed successfully");
-      navigate("/driver/profile");
+      form.reset();
     } catch (error: any) {
       console.log(error);
       toast.error(
