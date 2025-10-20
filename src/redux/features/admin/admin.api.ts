@@ -44,6 +44,15 @@ export const adminApi = baseApi.injectEndpoints({
     /*--------------------------
             Queries
     --------------------------*/
+    // Analytics
+    analytics: builder.query({
+      query: () => ({
+        url: `/ride/analytics?status=COMPLETED`,
+        method: "GET",
+      }),
+      providesTags: ["RIDE"],
+    }),
+
     // User management
     manageUsers: builder.query({
       query: ({ page = 1, limit = 10, status, sort, searchTerm }) => {
@@ -88,6 +97,7 @@ export const {
   useUnsuspendDriverMutation,
   useBlockUserMutation,
   useUnblockUserMutation,
+  useAnalyticsQuery,
   useManageUsersQuery,
   useRideOversightQuery,
 } = adminApi;
