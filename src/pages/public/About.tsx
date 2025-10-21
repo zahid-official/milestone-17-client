@@ -1,5 +1,6 @@
 import Approch from "@/components/modules/Public/About/Approch";
 import Heading from "@/components/modules/Public/About/Heading";
+import Team from "@/components/modules/Public/About/Team";
 import Vission from "@/components/modules/Public/About/Vission";
 
 const About = () => {
@@ -9,6 +10,7 @@ const About = () => {
         <Heading />
         <Vission />
         <Approch />
+        <Team />
       </div>
     </section>
   );
