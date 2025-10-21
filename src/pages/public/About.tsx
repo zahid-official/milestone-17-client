@@ -1,13 +1,12 @@
+import Heading from "@/components/modules/Public/About/Heading";
+
 const About = () => {
   return (
-    <div>
-      <h2>About Page</h2>
-      <p>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magnam tenetur
-        est earum autem unde saepe dolore vitae, pariatur mollitia ea blanditiis
-        totam. Voluptate impedit fugiat est id, rerum placeat doloribus.
-      </p>
-    </div>
+    <section className="container mx-auto bg-background py-16 md:py-24">
+      <div className="flex flex-col gap-16 md:gap-24">
+        <Heading />
+      </div>
+    </section>
   );
 };
 
