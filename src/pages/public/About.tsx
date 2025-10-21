@@ -1,3 +1,4 @@
+import Approch from "@/components/modules/Public/About/Approch";
 import Heading from "@/components/modules/Public/About/Heading";
 import Vission from "@/components/modules/Public/About/Vission";
 
@@ -7,6 +8,7 @@ const About = () => {
       <div className="flex flex-col gap-16 md:gap-24">
         <Heading />
         <Vission />
+        <Approch />
       </div>
     </section>
   );
