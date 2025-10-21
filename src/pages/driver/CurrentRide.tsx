@@ -23,6 +23,7 @@ import rideStatus from "@/constants/rideStatus";
 import ToggleAvailability from "./ToggleAvailability";
 import { useProfileInfoQuery } from "@/redux/features/user/user.api";
 import availability from "@/constants/availability";
+import EmergencyButton from "@/components/modules/user/activeRide/EmergencyButton";
 
 const CurrentRide = () => {
   // States from react
@@ -114,9 +115,9 @@ const CurrentRide = () => {
                 You're Offline
               </h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                You won't be able to view or manage ride while
-                you're offline. Toggle your availability to get back on the road
-                and manage your rides.
+                You won't be able to view or manage ride while you're offline.
+                Toggle your availability to get back on the road and manage your
+                rides.
               </p>
             </div>
             <div className="flex items-center">
@@ -131,7 +132,7 @@ const CurrentRide = () => {
   return (
     <>
       {rideData ? (
-        <div className="flex justify-center items-center min-h-[85vh]">
+        <div className="flex justify-center items-center min-h-[85vh] relative">
           <Card className="border max-w-lg w-full mx-auto border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 rounded-2xl shadow-lg transition-colors">
             {/* Card header */}
             <CardHeader className="">
@@ -248,6 +249,11 @@ const CurrentRide = () => {
               )}
             </CardFooter>
           </Card>
+
+          {/* Emergency / SOS btn */}
+          <div className="sm:absolute sm:bottom-0 sm:right-10 w-full flex justify-end items-center">
+            <EmergencyButton />
+          </div>
         </div>
       ) : (
         <div className="flex justify-center items-center min-h-[85vh]">

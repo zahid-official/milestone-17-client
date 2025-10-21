@@ -1,4 +1,5 @@
 import ChangePassword from "@/pages/user/ChangePassword";
+import EmergencyContact from "@/pages/user/EmergencyContact";
 import type { ISidebarItems } from "@/types";
 import { lazy } from "react";
 
@@ -58,6 +59,11 @@ const driverSidebarItems: ISidebarItems[] = [
         title: "Vehicle Info",
         url: "/driver/vehicle-info",
         component: VehicleInfo,
+      },
+      {
+        title: "Emergency Contact",
+        url: "/driver/emergency-contact",
+        component: EmergencyContact,
       },
     ],
   },

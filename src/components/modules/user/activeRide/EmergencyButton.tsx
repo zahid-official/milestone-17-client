@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useProfileInfoQuery } from "@/redux/features/user/user.api";
-import { Navigation, Phone, ShieldUser, Users } from "lucide-react";
+import { Navigation, ShieldUser, Siren, Users } from "lucide-react";
 import { toast } from "sonner";
 
 //  Format phone number to WhatsApp-compatible format
@@ -120,7 +120,7 @@ const EmergencyButton = () => {
         <form>
           <DialogTrigger asChild>
             <button className="border p-3 rounded-full bg-red-700 cursor-pointer">
-              <Phone />
+              <Siren />
             </button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-sm">
