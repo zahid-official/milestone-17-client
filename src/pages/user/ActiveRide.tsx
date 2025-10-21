@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import EmergencyButton from "@/components/modules/user/activeRide/EmergencyButton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import ButtonSubmit from "@/components/ui/button-submit";
@@ -47,8 +48,6 @@ const ActiveRide = () => {
     }
   };
 
-  console.log(rideData);
-
   // Loader
   if (isLoading) {
     return (
@@ -61,7 +60,7 @@ const ActiveRide = () => {
   return (
     <>
       {rideData ? (
-        <div className="flex justify-center items-center min-h-[85vh]">
+        <div className="flex flex-col gap-5 justify-center items-center min-h-[85vh] relative">
           <Card className="border max-w-lg w-full mx-auto border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 rounded-2xl shadow-lg transition-colors">
             {/* Card header */}
             <CardHeader className="">
@@ -151,6 +150,11 @@ const ActiveRide = () => {
               </div>
             </CardFooter>
           </Card>
+
+          {/* Emergency / SOS btn */}
+          <div className="sm:absolute sm:bottom-0 sm:right-10 w-full flex justify-end items-center">
+            <EmergencyButton />
+          </div>
         </div>
       ) : (
         <div className="flex justify-center items-center min-h-[85vh]">

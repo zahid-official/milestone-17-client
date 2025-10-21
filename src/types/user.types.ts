@@ -73,6 +73,8 @@ export interface IUpdateProfile {
   name?: string;
   phone?: string;
   address?: string;
+  emergencyContact?: string;
+  emergencyContact2?: string;
 }
 
 export interface VehicleInfo {
