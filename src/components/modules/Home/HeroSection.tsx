@@ -1,9 +1,10 @@
 import Icon from "@/components/layout/Icon";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router";
 
 const HeroSection = () => {
   return (
-    <section className="relative sm:py-36 py-24 overflow-hidden">
+    <section className="relative sm:py-40 py-24 overflow-hidden">
       <div className="absolute inset-x-0 top-0 flex h-full w-full items-center justify-center opacity-100">
         <img
           alt="background"
@@ -14,7 +15,7 @@ const HeroSection = () => {
       <div className="relative z-10 container px-4 mx-auto">
         <div className="mx-auto flex max-w-5xl flex-col items-center">
           <div className="flex flex-col items-center text-center">
-            <div className="rounded-xl bg-background/30 pt-4 -mb-2.5 shadow-sm backdrop-blur-sm">
+            <div className="rounded-xl bg-background/30 pt-4 -mb-2 shadow-sm backdrop-blur-sm">
               <Icon />
             </div>
             <div>
@@ -28,17 +29,15 @@ const HeroSection = () => {
                 schedule.
               </p>
             </div>
-            <div className="mt-9 flex justify-center gap-4">
-              <Button className="shadow-sm transition-shadow hover:shadow">
-                Request a ride
-              </Button>
-
-              <Button
-                variant={"outline"}
-                className="shadow-sm transition-shadow hover:shadow"
-              >
-                Become a driver
-              </Button>
+            <div className="mt-7 flex justify-center gap-4">
+              <Link to={"/login"}>
+                <Button
+                  size={"lg"}
+                  className="shadow-sm transition-shadow hover:shadow"
+                >
+                  Get Started
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

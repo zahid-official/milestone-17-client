@@ -53,7 +53,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="border-b py-3">
+    <header className="border-b py-3 ">
       <div className="flex h-16 items-center justify-between sm:gap-4">
         {/* Left side */}
         <div className="flex items-center sm:gap-2">
