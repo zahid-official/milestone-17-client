@@ -17,6 +17,7 @@ import userSidebarItems from "./user/userSidebar";
 import RideDetails from "@/components/modules/user/rideHistory/RideDetails";
 import Contact from "@/pages/public/Contact";
 import NotFound from "@/pages/public/NotFound";
+import Features from "@/pages/public/Features";
 
 const Router = createBrowserRouter([
   // Common layout
@@ -33,6 +34,10 @@ const Router = createBrowserRouter([
       {
         path: "about",
         Component: About,
+      },
+      {
+        path: "features",
+        Component: Features,
       },
     ],
   },
