@@ -10,15 +10,15 @@ const Footer = () => {
             <Logo />
           </div>
 
-          <p className="mt-4 max-w-xs">
-            Explore, connect, and discover the world with ease. Start your
-            journey today, adventures await wherever you go.
+          <p className="mt-3 max-w-xs">
+            Explore, connect and discover the world with ease. Start your
+            journey today with Velocia. Adventures await wherever you go.
           </p>
 
-          <ul className="mt-8 flex gap-6">
+          <ul className="mt-5 flex gap-6">
             <li>
               <Link
-                to="#"
+                to="https://www.facebook.com/"
                 rel="noreferrer"
                 target="_blank"
                 className="transition hover:opacity-75"
@@ -42,7 +42,7 @@ const Footer = () => {
 
             <li>
               <Link
-                to="#"
+                to="https://www.instagram.com/"
                 rel="noreferrer"
                 target="_blank"
                 className="transition hover:opacity-75"
@@ -66,7 +66,7 @@ const Footer = () => {
 
             <li>
               <Link
-                to="#"
+                to="https://x.com/"
                 rel="noreferrer"
                 target="_blank"
                 className="transition hover:opacity-75"
@@ -86,7 +86,7 @@ const Footer = () => {
 
             <li>
               <Link
-                to="#"
+                to="https://github.com/"
                 rel="noreferrer"
                 target="_blank"
                 className="transition hover:opacity-75"
@@ -110,7 +110,7 @@ const Footer = () => {
 
             <li>
               <Link
-                to="#"
+                to="https://dribbble.com/"
                 rel="noreferrer"
                 target="_blank"
                 className="transition hover:opacity-75"
@@ -137,22 +137,27 @@ const Footer = () => {
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-4">
           <div>
             <p className="font-medium">Services</p>
-
             <ul className="mt-6 space-y-4 text-sm">
               <li>
-                <Link to="#" className="transition hover:opacity-75">
-                  1on1 Coaching
+                <Link
+                  to="/user/ride-request"
+                  className="transition hover:opacity-75"
+                >
+                  Book a Ride
                 </Link>
               </li>
 
               <li>
-                <Link to="#" className="transition hover:opacity-75">
-                  Company Review
+                <Link to="/features" className="transition hover:opacity-75">
+                  Exclusive Deals
                 </Link>
               </li>
 
               <li>
-                <Link to="#" className="transition hover:opacity-75">
+                <Link
+                  to="/user/profile"
+                  className="transition hover:opacity-75"
+                >
                   Accounts Review
                 </Link>
               </li>
@@ -161,23 +166,22 @@ const Footer = () => {
 
           <div>
             <p className="font-medium">Company</p>
-
             <ul className="mt-6 space-y-4 text-sm">
               <li>
-                <Link to="#" className="transition hover:opacity-75">
+                <Link to="/about" className="transition hover:opacity-75">
                   About
                 </Link>
               </li>
 
               <li>
-                <Link to="#" className="transition hover:opacity-75">
-                  Meet the Team
+                <Link to="/about" className="transition hover:opacity-75">
+                  Our Story
                 </Link>
               </li>
 
               <li>
-                <Link to="#" className="transition hover:opacity-75">
-                  Accounts Review
+                <Link to="/about" className="transition hover:opacity-75">
+                  Meet the Team
                 </Link>
               </li>
             </ul>
@@ -188,19 +192,22 @@ const Footer = () => {
 
             <ul className="mt-6 space-y-4 text-sm">
               <li>
-                <Link to="#" className="transition hover:opacity-75">
+                <Link to="/contact-us" className="transition hover:opacity-75">
                   Contact
                 </Link>
               </li>
 
               <li>
-                <Link to="#" className="transition hover:opacity-75">
+                <Link to="/faq" className="transition hover:opacity-75">
                   FAQs
                 </Link>
               </li>
 
               <li>
-                <Link to="#" className="transition hover:opacity-75">
+                <Link
+                  to="mailto:support@velocia.com"
+                  className="transition hover:opacity-75"
+                >
                   Live Chat
                 </Link>
               </li>
@@ -212,19 +219,13 @@ const Footer = () => {
 
             <ul className="mt-6 space-y-4 text-sm">
               <li>
-                <Link to="#" className="transition hover:opacity-75">
-                  Accessibility
-                </Link>
-              </li>
-
-              <li>
-                <Link to="#" className="transition hover:opacity-75">
+                <Link to="/faq" className="transition hover:opacity-75">
                   Returns Policy
                 </Link>
               </li>
 
               <li>
-                <Link to="#" className="transition hover:opacity-75">
+                <Link to="/faq" className="transition hover:opacity-75">
                   Refund Policy
                 </Link>
               </li>
