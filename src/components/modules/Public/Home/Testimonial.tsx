@@ -19,7 +19,7 @@ const testimonials = [
     company: "Vancouver, BC",
     testimonial:
       "Velocia changed the way I think about ride sharing. It’s reliable, cost-effective, and it feels good knowing I’m contributing to fewer cars on the road.",
-    avatar: "/public/images/testimonial-1.jpg",
+    avatar: "/images/testimonial-1.jpg",
   },
   {
     id: 2,
@@ -28,7 +28,7 @@ const testimonials = [
     company: "Design Pro",
     testimonial:
       "As a designer, I really appreciate how intuitive and well-thought-out Velocia’s app is. Everything from route selection to ride matching feels seamless. It’s clear that user experience was a top priority—and it shows every time I use it.",
-    avatar: "/public/images/testimonial-3.jpg",
+    avatar: "/images/testimonial-3.jpg",
   },
   {
     id: 3,
@@ -37,7 +37,7 @@ const testimonials = [
     company: "InnovateX",
     testimonial:
       "Velocia has completely changed my daily commute. As a busy professional, being able to schedule rides, share costs, and connect with other commuters has made my mornings smoother and more efficient. It’s reliable, safe, and fits perfectly into my routine.",
-    avatar: "/public/images/testimonial-2.jpg",
+    avatar: "/images/testimonial-2.jpg",
   },
   {
     id: 4,
@@ -46,7 +46,7 @@ const testimonials = [
     company: "Montreal, QC",
     testimonial:
       "I love the flexibility Velocia offers. I can share rides with other creatives going to co-working spaces or events, and it feels way more connected than taking a cab.",
-    avatar: "/public/images/testimonial-4.jpg",
+    avatar: "/images/testimonial-4.jpg",
   },
   {
     id: 5,
@@ -55,7 +55,7 @@ const testimonials = [
     company: "Toronto, ON",
     testimonial:
       "Velocia makes commuting to campus so easy and affordable. I’ve saved a ton on transit passes and met some great people along the way. Highly recommend to any student!",
-    avatar: "/public/images/testimonial-6.jpg",
+    avatar: "/images/testimonial-6.jpg",
   },
   {
     id: 6,
@@ -64,7 +64,7 @@ const testimonials = [
     company: "Code Crafters",
     testimonial:
       "Velocia just works. As a developer, I value platforms that are stable, secure, and easy to use—and Velocia nails all three. The app is fast, the ride-matching is smart, and the in-app communication is a nice bonus. It’s become part of my daily workflow.",
-    avatar: "/public/images/testimonial-5.jpg",
+    avatar: "/images/testimonial-5.jpg",
   },
 ];
 

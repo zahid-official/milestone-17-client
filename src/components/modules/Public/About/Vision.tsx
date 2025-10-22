@@ -7,7 +7,7 @@ const Vission = () => {
       <div className="group flex flex-col justify-between gap-6 rounded-lg bg-muted p-6 shadow-sm transition-all duration-300 hover:shadow-md md:p-8">
         <div className="overflow-hidden rounded-md">
           <img
-            src="/public/images/about-1.jpg"
+            src="/images/about-1.jpg"
             width={500}
             height={300}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -28,7 +28,7 @@ const Vission = () => {
       {/* Mission */}
       <div className="relative overflow-hidden rounded-lg shadow-sm">
         <img
-          src="/public/images/about-2.jpg"
+          src="/images/about-2.jpg"
           width={500}
           height={300}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"

@@ -10,7 +10,7 @@ function FeatureCard({ rotate = "", translate = "" }) {
       <div className={`absolute inset-0 bg-gradient-to-br`} />
       <img
         alt="Feature"
-        src="/public/images/ride.jpg"
+        src="/images/ride.jpg"
         className="h-full w-full object-cover opacity-90"
         loading="lazy"
       />

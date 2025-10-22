@@ -1,8 +1,8 @@
-import Approch from "@/components/modules/Public/about/Approch";
-import Heading from "@/components/modules/Public/about/Heading";
-import JoinTeam from "@/components/modules/Public/about/JoinTeam";
-import Team from "@/components/modules/Public/about/Team";
-import Vission from "@/components/modules/Public/about/Vission";
+import Approch from "@/components/modules/public/about/Approch";
+import Heading from "@/components/modules/public/about/Heading";
+import JoinTeam from "@/components/modules/public/about/JoinTeam";
+import Team from "@/components/modules/public/about/Team";
+import Vission from "@/components/modules/public/about/Vision";
 
 const About = () => {
   return (

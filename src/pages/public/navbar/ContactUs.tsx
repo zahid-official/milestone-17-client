@@ -1,4 +1,4 @@
-import ContactSection from "@/components/modules/Public/contactUs/ContactSection";
+import ContactSection from "@/components/modules/public/contactUs/ContactSection";
 
 const ContactUs = () => {
   return (

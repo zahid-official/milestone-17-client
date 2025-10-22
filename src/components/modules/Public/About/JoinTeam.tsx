@@ -27,7 +27,7 @@ const JoinTeam = () => {
         <div className="relative">
           <div className="relative">
             <img
-              src="/public/images/about-3.jpg"
+              src="/images/about-3.jpg"
               width={500}
               height={300}
               className="h-full rounded-2xl w-full object-cover transition-transform duration-500 group-hover:scale-105"

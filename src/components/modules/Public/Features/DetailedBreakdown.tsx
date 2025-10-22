@@ -11,7 +11,7 @@ const features = [
       • In-app support and ride history access
       • Ratings and feedback to improve every trip
     `,
-    url: "/public/images/feature-1.jpg",
+    url: "/images/feature-1.jpg",
   },
   {
     category: "Driver",
@@ -23,7 +23,7 @@ const features = [
       • Driver ratings, reviews, and performance stats
       • 24/7 support and training resources
     `,
-    url: "/public/images/feature-2.jpg",
+    url: "/images/feature-2.jpg",
   },
   {
     category: "Admin",
@@ -35,7 +35,7 @@ const features = [
       • Trip analytics, revenue reports, and KPIs
       • Dispute handling and compliance tools
     `,
-    url: "/public/images/feature-3.jpg",
+    url: "/images/feature-3.jpg",
   },
 ];
 

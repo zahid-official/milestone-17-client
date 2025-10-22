@@ -14,7 +14,7 @@ const features = [
     title: "Set Your Route",
     description:
       "Enter your pickup and destination to find available rides or passengers nearby.",
-    image: "/public/images/route.jpg",
+    image: "/images/route.jpg",
     alt: "set your route image",
   },
   {
@@ -22,7 +22,7 @@ const features = [
     title: "Match Instantly",
     description:
       "Our smart algorithm instantly pairs drivers and riders heading the same way.",
-    image: "/public/images/driver.jpg",
+    image: "/images/driver.jpg",
     alt: "driver matching image",
   },
   {
@@ -30,7 +30,7 @@ const features = [
     title: "Connect & Ride",
     description:
       "Communicate securely within the app, plan your ride, and travel together safely.",
-    image: "/public/images/connect-rider.jpg",
+    image: "/images/connect-rider.jpg",
     alt: "connect and ride image",
   },
   {
@@ -38,7 +38,7 @@ const features = [
     title: "Ride With Confidence",
     description:
       "All profiles are verified and rated by the community for a safe and trusted experience.",
-    image: "/public/images/ride.jpg",
+    image: "/images/ride.jpg",
     alt: "ride with confidence image",
   },
   {
@@ -46,7 +46,7 @@ const features = [
     title: "Split Costs",
     description:
       "Easily share ride costs through secure payments — making travel affordable for everyone.",
-    image: "/public/images/cost.jpg",
+    image: "/images/cost.jpg",
     alt: "cost splitting image",
   },
   {
@@ -54,7 +54,7 @@ const features = [
     title: "Save Time & Emissions",
     description:
       "Get where you're going faster while reducing carbon emissions. Smart mobility for all.",
-    image: "/public/images/save.jpg",
+    image: "/images/save.jpg",
     alt: "save time and emissions image",
   },
 ];
