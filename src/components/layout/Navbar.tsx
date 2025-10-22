@@ -45,7 +45,6 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       const result = await logout(null).unwrap();
-
       // reset api state
       dispatch(userApi.util.resetApiState());
       toast.success(result.message || "Logged out successfully");

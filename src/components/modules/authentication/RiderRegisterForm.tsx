@@ -107,13 +107,11 @@ const RiderRegisterForm = ({
 
     try {
       const result = await riderRegister(userInfo).unwrap();
-      console.log(result);
       toast.success(result.message || "Rider has been registered successfully");
       if (result.data.email) {
         navigate("/verify", { state: result.data.email });
       }
     } catch (error: any) {
-      console.log(error);
       toast.error(
         error?.data?.error[0]?.message ||
           error?.data?.message ||

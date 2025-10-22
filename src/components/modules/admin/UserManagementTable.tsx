@@ -93,8 +93,6 @@ const UserManagementTable = ({
   const userData = data?.data;
   const paginationData = data?.meta;
 
-  console.log(userData);
-
   return (
     <>
       {/* Header Section */}

@@ -29,7 +29,6 @@ const ToggleAvailability = () => {
       const result = await setAvailability({
         availability: availabilityStatus,
       }).unwrap();
-      console.log(result);
       // ensure profile info is refetched so other parts of the UI update
       // immediately (e.g., IncomingRequests reading availability)
       try {
@@ -42,7 +41,6 @@ const ToggleAvailability = () => {
         result.message || "Driver availability updated successfully"
       );
     } catch (error: any) {
-      console.log(error);
       toast.error(error?.data?.message || "Something went wrong!");
     }
   };

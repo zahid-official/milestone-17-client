@@ -62,8 +62,6 @@ const EmergencyContact = () => {
   const [updateProfile] = useUpdateProfileMutation();
   const userInfo = data?.data;
 
-  console.log(userInfo);
-
   // useForm hook
   const form = useForm<z.infer<typeof emergencyContactZodSchema>>({
     resolver: zodResolver(emergencyContactZodSchema),
@@ -75,7 +73,9 @@ const EmergencyContact = () => {
 
   // Handle onSubmit
   const onSubmit = async (data: z.infer<typeof emergencyContactZodSchema>) => {
-    const isMyContact = data.emergencyContact === userInfo.phone || data.emergencyContact2 === userInfo.phone;
+    const isMyContact =
+      data.emergencyContact === userInfo.phone ||
+      data.emergencyContact2 === userInfo.phone;
     if (isMyContact) {
       toast.error("You cannot set your own number as emergency contact");
       return;
@@ -93,25 +93,20 @@ const EmergencyContact = () => {
 
     // Check if data are same
     const isSame = data.emergencyContact === data.emergencyContact2;
-
     if (isSame) {
       toast.error("Emergency contacts must be different");
       return;
     }
-
     const contactInfo = { ...data, _id: userInfo._id };
-    console.log(contactInfo);
 
     setIsloading(true);
     try {
       const result = await updateProfile(contactInfo).unwrap();
-      console.log(result);
       toast.success(
         result.message || "Emergency contacts updated successfully"
       );
       form.reset();
     } catch (error: any) {
-      console.log(error);
       toast.error(
         error?.data?.error[0]?.message ||
           error?.data?.message ||

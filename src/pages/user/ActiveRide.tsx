@@ -26,7 +26,7 @@ const ActiveRide = () => {
   // Navigation hook
   const navigate = useNavigate();
 
-  // RTK Query mutation hook
+  // RTK Query mutation hooke
   const { data, isLoading } = useActiveRideDetailsQuery(undefined);
   const [cancelRide] = useCancelRideMutation();
   const rideData = data?.data;
@@ -37,11 +37,9 @@ const ActiveRide = () => {
 
     try {
       const result = await cancelRide(rideData._id).unwrap();
-      console.log(result);
       toast.success(result.message || "Ride cancelled successfully");
       navigate("/user/ride-request");
     } catch (error: any) {
-      console.log(error);
       toast.error(error?.data?.message || "Something went wrong!");
     } finally {
       setCancelLoading(false);

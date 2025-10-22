@@ -114,13 +114,11 @@ const IncomingRequestsTable = ({
   const handleAccept = async (id: string) => {
     try {
       const result = await acceptRide(id).unwrap();
-      console.log(result);
       navigate(`/driver/current-ride`);
       if (result.success) {
         toast.success(result.message || "Ride accepted successfully");
       }
     } catch (error: any) {
-      console.log(error);
       toast.error(error.data.message || "Something went wrong!");
     }
   };

@@ -166,11 +166,9 @@ const RideRequestForm = ({
 
     try {
       const result = await requestRide(confirmData).unwrap();
-      console.log(result);
       toast.success(result.message || "Ride requested successfully");
       navigate("/user/history");
     } catch (error: any) {
-      console.log(error);
       toast.error(
         error?.data?.error[0]?.message ||
           error?.data?.message ||

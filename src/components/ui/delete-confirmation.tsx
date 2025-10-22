@@ -28,12 +28,10 @@ const DeleteConfirmation = ({
   const handleDelete = async () => {
     try {
       const result = await mutationFn();
-      console.log(result);
       if (result.success) {
         toast.success(result.message || successMessage);
       }
     } catch (error: any) {
-      console.log(error);
       toast.error(error.data.message || "Something went wrong!");
     }
   };

@@ -156,7 +156,6 @@ const DriverRegisterForm = ({
 
     try {
       const result = await driverRegister(userInfo).unwrap();
-      console.log(result);
       toast.success(
         result.message || "Driver has been registered successfully"
       );
@@ -164,7 +163,6 @@ const DriverRegisterForm = ({
         navigate("/verify", { state: result.data.email });
       }
     } catch (error: any) {
-      console.log(error);
       toast.error(
         error?.data?.error[0]?.message ||
           error?.data?.message ||

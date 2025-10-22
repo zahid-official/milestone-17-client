@@ -101,11 +101,9 @@ const ChangePassword = () => {
 
     try {
       const result = await passwordChange(userInfo).unwrap();
-      console.log(result);
       toast.success(result.message || "Password changed successfully");
       form.reset();
     } catch (error: any) {
-      console.log(error);
       toast.error(
         error?.data?.error[0]?.message ||
           error?.data?.message ||

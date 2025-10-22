@@ -65,11 +65,9 @@ const LoginForm = ({
 
     try {
       const result = await login(data).unwrap();
-      console.log(result);
       toast.success(result.message || "Logged in successfully");
       navigate("/");
     } catch (error: any) {
-      console.log(error);
       toast.error(error.data.message || "Something went wrong!");
 
       // Redirect to verify if not verified

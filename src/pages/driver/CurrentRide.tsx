@@ -48,10 +48,8 @@ const CurrentRide = () => {
 
     try {
       const result = await pickupRide(rideData?._id).unwrap();
-      console.log(result);
       toast.success(result.message || "Rider picked up successfully");
     } catch (error: any) {
-      console.log(error);
       toast.error(error?.data?.message || "Something went wrong!");
     } finally {
       setLoading(false);
@@ -64,10 +62,8 @@ const CurrentRide = () => {
 
     try {
       const result = await inTransitRide(rideData?._id).unwrap();
-      console.log(result);
       toast.success(result.message || "Ride is now in transit");
     } catch (error: any) {
-      console.log(error);
       toast.error(error?.data?.message || "Something went wrong!");
     } finally {
       setLoading(false);
@@ -80,10 +76,8 @@ const CurrentRide = () => {
 
     try {
       const result = await completeRide(rideData?._id).unwrap();
-      console.log(result);
       toast.success(result.message || "Ride completed successfully");
     } catch (error: any) {
-      console.log(error);
       toast.error(error?.data?.message || "Something went wrong!");
     } finally {
       setLoading(false);

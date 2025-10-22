@@ -2,6 +2,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import CustomPagination from "@/components/ui/custom-pagination";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
   Table,
   TableBody,
   TableCell,
@@ -9,18 +16,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { ChevronDownIcon, ChevronUp, ChevronDown, Search } from "lucide-react";
 import rideStatus from "@/constants/rideStatus";
 import type { RideStatus } from "@/types";
-import { Link } from "react-router";
 import { format } from "date-fns";
-import { Input } from "@/components/ui/input";
+import { ChevronDown, ChevronDownIcon, ChevronUp, Search } from "lucide-react";
+import { Link } from "react-router";
 
 // Interfaces for IRideOversight, Meta & IProps
 interface IRideOversight {
@@ -121,8 +121,6 @@ const RideOversightTable = ({
 }: IProps) => {
   const historyData = data?.data;
   const paginationData = data?.meta;
-
-  console.log(historyData);
 
   return (
     <>

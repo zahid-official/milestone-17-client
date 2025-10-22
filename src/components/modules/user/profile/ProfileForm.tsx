@@ -100,11 +100,9 @@ const ProfileForm = ({ userInfo, handleCancel }: IProps) => {
 
     try {
       const result = await updateProfile(updatedData).unwrap();
-      console.log(result);
       toast.success(result.message || "User details updated successfully");
       handleCancel()
     } catch (error: any) {
-      console.log(error);
       toast.error(
         error?.data?.error[0]?.message ||
           error?.data?.message ||
