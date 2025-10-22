@@ -24,13 +24,13 @@ const approach = [
 
 const Approch = () => {
   return (
-    <div className="flex flex-col sm:pt-14 gap-10 md:gap-12">
+    <div className="flex flex-col sm:pt-14 pt-4 gap-10 md:gap-12">
       <div className="max-w-2xl">
         <Badge variant="outline" className="w-max py-1 rounded-full px-3">
           Our Approach
           <ArrowDownRight className="size-4" />
         </Badge>
-        <h2 className="mb-3 mt-6 text-3xl font-bold md:text-4xl">
+        <h2 className="mb-3 mt-4 text-3xl font-bold sm:text-4xl">
           Making Shared Mobility Effortless
         </h2>
         <p className="text-muted-foreground">

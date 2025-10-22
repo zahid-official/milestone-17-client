@@ -52,12 +52,12 @@ const teamMembers = [
 // Team Component
 const Team = () => {
   return (
-    <div className="flex flex-col items-center justify-center py-14 px-4 sm:px-6 lg:px-8">
+    <div className="flex flex-col items-center justify-center sm:py-14 py-4 px-4 sm:px-6 lg:px-8">
       <div className="text-center max-w-xl mx-auto">
         <b className="text-center text-muted-foreground font-semibold text-sm uppercase">
           Team Velocia!
         </b>
-        <h2 className="mt-4 text-4xl sm:text-5xl font-semibold tracking-tighter">
+        <h2 className="tracking-tighter mb-3 mt-2 text-3xl font-bold sm:text-4xl">
           Meet Our Team
         </h2>
         <p className="mt-4 text-base sm:text-lg text-muted-foreground">
@@ -67,7 +67,7 @@ const Team = () => {
         </p>
       </div>
 
-      <div className="mt-20 w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-12 max-w-(--breakpoint-lg) mx-auto">
+      <div className="sm:mt-20 mt-14 w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-12 max-w-(--breakpoint-lg) mx-auto">
         {teamMembers.map((member) => (
           <div key={member.name} className="text-center">
             <img

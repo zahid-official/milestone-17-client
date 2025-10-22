@@ -5,12 +5,12 @@ const Heading = () => {
   return (
     <div>
       {/* Title */}
-      <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
+      <div className="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
         <Badge variant="outline" className="w-max py-1 rounded-full px-3">
           About Velocia
           <ArrowDownRight className="size-4" />
         </Badge>
-        <h1 className="text-pretty text-4xl font-bold tracking-tight lg:text-6xl">
+        <h1 className="text-pretty text-5xl font-bold tracking-tight lg:text-6xl">
           Revolutionizing the{" "}
           <span className="relative text-primary">Future of Mobility</span>
         </h1>

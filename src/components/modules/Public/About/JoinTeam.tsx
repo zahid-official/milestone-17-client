@@ -5,9 +5,9 @@ import { Link } from "react-router";
 const JoinTeam = () => {
   return (
     <div className="overflow-hidden rounded-3xl bg-gradient-to-tr from-background/80 to-muted/40 p-6 md:p-10">
-      <div className="grid items-center gap-8 md:grid-cols-2 md:gap-10">
-        <div>
-          <Badge className="mb-6">JOIN THE MOVEMENT</Badge>
+      <div className="grid items-center md:grid-cols-2 gap-10">
+        <div className="md:pt-0 pt-6 ">
+          <Badge className="mb-3">JOIN THE MOVEMENT</Badge>
           <h2 className="mb-3 text-3xl font-bold md:text-4xl">
             Be a Part of Velocia’s Journey
           </h2>
