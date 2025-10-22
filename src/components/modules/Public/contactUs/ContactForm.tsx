@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { promise, z } from "zod";
+import { z } from "zod";
 
 // Zod schema
 const contactZodSchema = z.object({
@@ -60,6 +60,7 @@ const ContactForm = () => {
     setIsloading(true);
 
     try {
+      console.log(data);
       await new Promise((resolve) => setTimeout(resolve, 2000));
       form.reset();
       toast.success("Message sent successfully");
