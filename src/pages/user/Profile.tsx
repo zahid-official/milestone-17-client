@@ -66,7 +66,6 @@ const Profile = () => {
         : "Not updated yet",
     },
   ];
-  console.log(userInfo);
 
   if (isEditing) {
     return (
@@ -89,9 +88,11 @@ const Profile = () => {
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <CardTitle className="text-3xl font-bold">User Profile</CardTitle>
+              <CardTitle className="text-3xl font-bold">
+                Profile Details
+              </CardTitle>
               <CardDescription className="text-sm mt-0.5">
-                Detailed information about the user
+                Detailed information about the your profile
               </CardDescription>
             </div>
             <Button

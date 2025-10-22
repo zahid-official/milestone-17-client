@@ -5,31 +5,13 @@ export const adminApi = baseApi.injectEndpoints({
     /*--------------------------
             Mutations
     --------------------------*/
-    // Approve driver
-    approveDriver: builder.mutation({
-      query: (id) => ({
-        url: `/driver/approve/${id}`,
-        method: "PATCH",
-      }),
-      invalidatesTags: ["DRIVER"],
-    }),
-
-    // Reject driver
-    rejectDriver: builder.mutation({
-      query: (id) => ({
-        url: `/driver/reject/${id}`,
-        method: "PATCH",
-      }),
-      invalidatesTags: ["DRIVER"],
-    }),
-
     // Suspend driver
     suspendDriver: builder.mutation({
       query: (id) => ({
         url: `/driver/suspend/${id}`,
         method: "PATCH",
       }),
-      invalidatesTags: ["DRIVER"],
+      invalidatesTags: ["USER"],
     }),
 
     // Unsuspend driver
@@ -38,7 +20,7 @@ export const adminApi = baseApi.injectEndpoints({
         url: `/driver/unsuspend/${id}`,
         method: "PATCH",
       }),
-      invalidatesTags: ["DRIVER"],
+      invalidatesTags: ["USER"],
     }),
 
     // Block user
@@ -62,55 +44,46 @@ export const adminApi = baseApi.injectEndpoints({
     /*--------------------------
             Queries
     --------------------------*/
-    // Driver applications
-    driverApplications: builder.query({
-      query: ({ page = 1, limit = 10, sort, searchTerm }) => {
-        const status = "PENDING";
-        const sortQuery = sort ? `&sort=${sort}` : "";
-        const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
-
-        return {
-          url: `/driver?page=${page}&limit=${limit}&applicationStatus=${status}${sortQuery}${searchQuery}`,
-          method: "GET",
-        };
-      },
-      providesTags: ["DRIVER"],
+    // Analytics
+    analytics: builder.query({
+      query: () => ({
+        url: `/ride/analytics?status=COMPLETED`,
+        method: "GET",
+      }),
+      providesTags: ["RIDE"],
     }),
 
-    // Driver Management
-    manageDrivers: builder.query({
-      query: ({ page = 1, limit = 10, sort, searchTerm }) => {
-        const sortQuery = sort ? `&sort=${sort}` : "";
-        const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
-
-        return {
-          url: `/driver?page=${page}&limit=${limit}&applicationStatus=APPROVED${sortQuery}${searchQuery}`,
-          method: "GET",
-        };
-      },
-      providesTags: ["DRIVER"],
-    }),
-
-    // User Management
+    // User management
     manageUsers: builder.query({
-      query: ({ page = 1, limit = 10, sort, searchTerm }) => {
+      query: ({ page = 1, limit = 10, status, sort, searchTerm }) => {
+        const statusQuery = status ? `&accountStatus=${status}` : "";
         const sortQuery = sort ? `&sort=${sort}` : "";
         const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
         return {
-          url: `/user?page=${page}&limit=${limit}${sortQuery}${searchQuery}&role=DRIVER&role=RIDER`,
+          url: `/user?page=${page}&limit=${limit}${statusQuery}${sortQuery}${searchQuery}&role=DRIVER&role=RIDER`,
           method: "GET",
         };
       },
       providesTags: ["USER"],
     }),
 
-    // Ride Oversight
-    manageRides: builder.query({
-      query: ({ page = 1, limit = 10, sort, searchTerm }) => {
+    // Ride oversight
+    rideOversight: builder.query({
+      query: ({
+        page = 1,
+        limit = 10,
+        status,
+        sort,
+        searchTerm,
+        dateRange,
+      }) => {
+        const statusQuery = status ? `&status=${status}` : "";
         const sortQuery = sort ? `&sort=${sort}` : "";
         const searchQuery = searchTerm ? `&searchTerm=${searchTerm}` : "";
+        const dateRangeQuery = dateRange ? `&dateRange=${dateRange}` : "";
+
         return {
-          url: `/ride?page=${page}&limit=${limit}${sortQuery}${searchQuery}`,
+          url: `/ride?page=${page}&limit=${limit}${statusQuery}${sortQuery}${searchQuery}${dateRangeQuery}`,
           method: "GET",
         };
       },
@@ -120,14 +93,11 @@ export const adminApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useApproveDriverMutation,
-  useRejectDriverMutation,
   useSuspendDriverMutation,
   useUnsuspendDriverMutation,
   useBlockUserMutation,
   useUnblockUserMutation,
-  useDriverApplicationsQuery,
-  useManageDriversQuery,
+  useAnalyticsQuery,
   useManageUsersQuery,
-  useManageRidesQuery,
+  useRideOversightQuery,
 } = adminApi;

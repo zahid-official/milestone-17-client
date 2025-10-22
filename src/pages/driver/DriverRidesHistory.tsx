@@ -1,26 +1,39 @@
-import DriverApplicationsTable from "@/components/modules/admin/DriverApplicationsTable";
-import { useDriverApplicationsQuery } from "@/redux/features/admin/admin.api";
+import CompletedRidesHistoryTable from "@/components/modules/driver/driverRidesHistory/DriverRidesHistoryTable";
+import { useDriverRidesHistoryQuery } from "@/redux/features/driver/driver.api";
 import { useState } from "react";
 
-// AllDriverApplications Component
-const AllDriverApplications = () => {
+// DriverRidesHistory Component
+const DriverRidesHistory = () => {
   // State from react
   const [page, setPage] = useState(1);
+  const [status, setStatus] = useState<string | undefined>(undefined);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [searchTerm, setSearchTerm] = useState("");
+  const [dateRange, setDateRange] = useState<
+    "today" | "week" | "month" | "year" | undefined
+  >(undefined);
+
   const limit = 10;
 
   // RTK Query mutation hooks
-  const { data, isLoading } = useDriverApplicationsQuery({
+  const { data, isLoading } = useDriverRidesHistoryQuery({
     page,
     limit,
+    status,
     sort: sortOrder === "desc" ? "-createdAt" : "createdAt",
     searchTerm,
+    dateRange,
   });
 
   // Handle pageChange
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
+  };
+
+  // Handle statusChange
+  const handleStatusChange = (newStatus: string | undefined) => {
+    setPage(1);
+    setStatus(newStatus);
   };
 
   // Handle sortOrderChange
@@ -35,6 +48,14 @@ const AllDriverApplications = () => {
     setSearchTerm(value);
   };
 
+  // Handle date range change
+  const handleDateRangeChange = (
+    newDateRange: "today" | "week" | "month" | "year" | undefined
+  ) => {
+    setPage(1);
+    setDateRange(newDateRange);
+  };
+
   // Loader
   if (isLoading) {
     return (
@@ -46,17 +67,21 @@ const AllDriverApplications = () => {
 
   return (
     <div>
-      <DriverApplicationsTable
+      <CompletedRidesHistoryTable
         data={data}
         onPageChange={handlePageChange}
         currentPage={page}
+        onStatusChange={handleStatusChange}
+        currentStatus={status}
         onSortOrderChange={handleSortOrderChange}
         currentSortOrder={sortOrder}
         searchTerm={searchTerm}
         onSearchChange={handleSearchChange}
+        dateRange={dateRange}
+        onDateRangeChange={handleDateRangeChange}
       />
     </div>
   );
 };
 
-export default AllDriverApplications;
+export default DriverRidesHistory;

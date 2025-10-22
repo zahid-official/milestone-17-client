@@ -2,6 +2,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Confirmation from "@/components/ui/confirmation";
 import CustomPagination from "@/components/ui/custom-pagination";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -12,22 +18,24 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import accountStatus from "@/constants/accountStatus";
+import role from "@/constants/role";
 import {
   useBlockUserMutation,
+  useSuspendDriverMutation,
   useUnblockUserMutation,
+  useUnsuspendDriverMutation,
 } from "@/redux/features/admin/admin.api";
-import type { AccountStatus } from "@/types";
-
 import { format } from "date-fns";
-import { ChevronDown, ChevronUp, Search } from "lucide-react";
+import { ChevronDown, ChevronDownIcon, ChevronUp, Search } from "lucide-react";
 
-// Interfaces for IUserManagementTable, Meta & IProps
-interface IUserManagementTable {
+// Interfaces for IUserManagement, Meta & IProps
+interface IUserManagement {
   _id: string;
   name: string;
   email: string;
+  accountStatus: string;
   role: string;
-  accountStatus: AccountStatus;
+  availability: string;
   createdAt: string;
 }
 
@@ -40,59 +48,63 @@ interface IMeta {
 
 interface IProps {
   data: {
-    data: IUserManagementTable[];
+    data: IUserManagement[];
     meta: IMeta;
   };
   onPageChange: (page: number) => void;
   currentPage: number;
+  onStatusChange: (status: string | undefined) => void;
+  currentStatus: string | undefined;
   onSortOrderChange: () => void;
   currentSortOrder: "asc" | "desc";
   searchTerm: string;
   onSearchChange: (value: string) => void;
 }
 
+// Columns title
+const columnsTitle = [
+  { label: "No.", value: "index" },
+  { label: "Name", value: "name" },
+  { label: "Email", value: "email" },
+  { label: "Role", value: "role" },
+  { label: "Status", value: "status" },
+  { label: "Date", value: "date" },
+  { label: "Actions", value: "actions" },
+];
+
 // UserManagementTable Component
 const UserManagementTable = ({
   data,
   onPageChange,
   currentPage,
+  onStatusChange,
+  currentStatus,
   onSortOrderChange,
   currentSortOrder,
   searchTerm,
   onSearchChange,
 }: IProps) => {
-  // RTK Query mutation hook
+  // RTK Query hooks
   const [blockUser] = useBlockUserMutation();
   const [unblockUser] = useUnblockUserMutation();
+  const [suspendDriver] = useSuspendDriverMutation();
+  const [unsuspendDriver] = useUnsuspendDriverMutation();
 
-  // separate datas
-  const managementData = data?.data;
+  const userData = data?.data;
   const paginationData = data?.meta;
-
-  // Columns title
-  const columnsTitle = [
-    { label: "No.", value: "index" },
-    { label: "Name", value: "name" },
-    { label: "Email", value: "email" },
-    { label: "Role", value: "role" },
-    { label: "Account Status", value: "accountStatus" },
-    { label: "Date", value: "date" },
-    { label: "Actions", value: "actions" },
-  ];
 
   return (
     <>
       {/* Header Section */}
-      <div className="max-w-7xl mx-auto mt-10 pb-5">
+      <div className="max-w-7xl mx-auto mt-8 pb-3">
         <div className="flex items-center justify-between flex-wrap gap-4">
           {/* Title */}
           <div>
             <h1 className="text-3xl md:text-4xl font-bold mb-1 text-foreground">
-              User Management
+              Manage Users
             </h1>
             <p className="text-sm text-muted-foreground">
-              View user profiles and manage their access by blocking or
-              unblocking accounts as needed
+              Manage and oversee platform users efficiently
             </p>
           </div>
 
@@ -104,9 +116,34 @@ const UserManagementTable = ({
                 type="text"
                 value={searchTerm}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Search name, email"
-                className="pl-8 w-xs"
+                placeholder="Search name, email & role"
+                className="pl-8 w-68"
               />
+            </div>
+
+            {/* Dropdown Filter by status */}
+            <div className="w-36">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild className="w-full">
+                  <Button variant="outline">
+                    {currentStatus ? currentStatus : "All Status"}
+                    <ChevronDownIcon className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={() => onStatusChange(undefined)}>
+                    All Status
+                  </DropdownMenuItem>
+                  {Object.values(accountStatus).map((status) => (
+                    <DropdownMenuItem
+                      key={status}
+                      onClick={() => onStatusChange(status)}
+                    >
+                      {status}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
@@ -164,97 +201,141 @@ const UserManagementTable = ({
 
           {/* table body */}
           <TableBody>
-            {managementData?.map(
-              (management: IUserManagementTable, index: number) => (
-                <TableRow
-                  key={management?._id}
-                  className="border-b hover:bg-muted/50 cursor-pointer"
-                  style={{
-                    animationDelay: `${index * 120}ms`,
-                    animationDuration: "400ms",
-                    animationFillMode: "both",
-                  }}
-                >
-                  {/* No */}
-                  <TableCell className="pl-3">
-                    <div className="text-sm">{index + 1}</div>
-                  </TableCell>
+            {userData?.map((user: IUserManagement, index: number) => (
+              <TableRow
+                key={user?._id}
+                className="border-b hover:bg-muted/50 cursor-pointer"
+                style={{
+                  animationDelay: `${index * 120}ms`,
+                  animationDuration: "400ms",
+                  animationFillMode: "both",
+                }}
+              >
+                {/* No */}
+                <TableCell className="pl-3">
+                  <div className="text-sm">{index + 1}</div>
+                </TableCell>
 
-                  {/* Name */}
-                  <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {management?.name}
-                    </div>
-                  </TableCell>
+                {/* Name */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                    {user?.name}
+                  </div>
+                </TableCell>
 
-                  {/* email */}
-                  <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {management?.email}
-                    </div>
-                  </TableCell>
+                {/* Email */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                    {user?.email}
+                  </div>
+                </TableCell>
 
-                  {/* Role */}
-                  <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {management?.role}
-                    </div>
-                  </TableCell>
+                {/* Role */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                    {user?.role}
+                  </div>
+                </TableCell>
 
-                  {/* Account Status */}
-                  <TableCell className="py-3">
-                    <div className="text-sm text-center max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      <Badge
-                        variant={"secondary"}
-                        className={`${
-                          (management?.accountStatus ===
-                            accountStatus.BLOCKED ||
-                            management?.accountStatus ===
-                              accountStatus.SUSPENDED) &&
-                          "bg-destructive"
-                        } ${
-                          management?.accountStatus ===
-                            accountStatus.INACTIVE &&
-                          "bg-muted-foreground/60 text-primary-foreground"
-                        }`}
-                      >
-                        {management?.accountStatus}
-                      </Badge>
-                    </div>
-                  </TableCell>
+                {/* Status */}
+                <TableCell className="py-3  w-44">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                    <Badge
+                      variant={
+                        user.accountStatus === accountStatus.BLOCKED ||
+                        user.accountStatus === accountStatus.SUSPENDED
+                          ? "destructive"
+                          : "secondary"
+                      }
+                      className={`${
+                        user.accountStatus === accountStatus.INACTIVE &&
+                        "bg-muted-foreground/60 text-primary-foreground"
+                      }`}
+                    >
+                      {user.accountStatus}
+                    </Badge>
+                  </div>
+                </TableCell>
 
-                  {/* Date */}
-                  <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {format(new Date(management?.createdAt), "dd-MM-yyyy")}
-                    </div>
-                  </TableCell>
+                {/* Date */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                    {format(new Date(user?.createdAt), "dd-MM-yyyy")}
+                  </div>
+                </TableCell>
 
-                  {/* Action */}
-                  <TableCell className="py-3">
-                    {management?.accountStatus === accountStatus.BLOCKED ? (
-                      // Unblock btn
+                {/* Action */}
+                <TableCell className="py-3 w-44">
+                  {/* Block btn */}
+                  {user.role === role.RIDER &&
+                    user.accountStatus === accountStatus.ACTIVE && (
                       <Confirmation
-                        mutationFn={() => unblockUser(management?._id).unwrap()}
-                        successMessage="User unblocked successfully"
+                        mutationFn={() => blockUser(user?._id).unwrap()}
+                        successMessage="Rider blocked successfully"
                       >
-                        <Button size="sm">Unblock</Button>
-                      </Confirmation>
-                    ) : (
-                      // Block btn
-                      <Confirmation
-                        mutationFn={() => blockUser(management?._id).unwrap()}
-                        successMessage="User blocked successfully"
-                      >
-                        <Button size="sm" variant={"destructive"}>
+                        <Button
+                          variant={"secondary"}
+                          size="sm"
+                          className="w-full max-w-24"
+                        >
                           Block
                         </Button>
                       </Confirmation>
                     )}
-                  </TableCell>
-                </TableRow>
-              )
-            )}
+
+                  {/* Unblock btn */}
+                  {user.role === role.RIDER &&
+                    user.accountStatus === accountStatus.BLOCKED && (
+                      <Confirmation
+                        mutationFn={() => unblockUser(user?._id).unwrap()}
+                        successMessage="Rider unblocked  successfully"
+                      >
+                        <Button
+                          variant={"default"}
+                          size="sm"
+                          className="w-full max-w-24"
+                        >
+                          Unblock
+                        </Button>
+                      </Confirmation>
+                    )}
+
+                  {/* Suspend btn */}
+                  {user.role === role.DRIVER &&
+                    user.accountStatus === accountStatus.ACTIVE && (
+                      <Confirmation
+                        mutationFn={() => suspendDriver(user?._id).unwrap()}
+                        successMessage="Driver suspended successfully"
+                      >
+                        <Button
+                          variant={"outline"}
+                          size="sm"
+                          className="w-full max-w-24"
+                        >
+                          Suspend
+                        </Button>
+                      </Confirmation>
+                    )}
+
+                  {/* Unblock btn */}
+                  {user.role === role.DRIVER &&
+                    user.accountStatus === accountStatus.SUSPENDED && (
+                      <Confirmation
+                        mutationFn={() => unsuspendDriver(user?._id).unwrap()}
+                        successMessage="Driver unsuspended  successfully"
+                      >
+                        <Button
+                          variant={"default"}
+                          size="sm"
+                          className="w-full max-w-24"
+                        >
+                          Unsuspend
+                        </Button>
+                      </Confirmation>
+                    )}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
 

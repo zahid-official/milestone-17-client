@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
 
-const Error = () => {
+const NotFound = () => {
   return (
     <div className="h-screen w-full flex flex-col items-center justify-center bg-background">
       <div className="container px-5 py-24 mx-auto flex flex-col items-center">
@@ -35,4 +35,4 @@ const Error = () => {
   );
 };
 
-export default Error;
+export default NotFound;

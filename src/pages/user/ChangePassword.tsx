@@ -20,7 +20,6 @@ import { usePasswordChangeMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -77,9 +76,6 @@ const ChangePassword = () => {
   // State for loading
   const [isLoading, setIsloading] = useState(false);
 
-  // Navigation hook
-  const navigate = useNavigate();
-
   // RTK Query mutation hook
   const [passwordChange] = usePasswordChangeMutation();
 
@@ -105,11 +101,9 @@ const ChangePassword = () => {
 
     try {
       const result = await passwordChange(userInfo).unwrap();
-      console.log(result);
       toast.success(result.message || "Password changed successfully");
-      navigate("/user/ride-request");
+      form.reset();
     } catch (error: any) {
-      console.log(error);
       toast.error(
         error?.data?.error[0]?.message ||
           error?.data?.message ||

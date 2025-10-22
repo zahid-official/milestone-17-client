@@ -11,6 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import role from "@/constants/role";
 import { useLogoutMutation } from "@/redux/features/auth/auth.api";
 import { useProfileInfoQuery, userApi } from "@/redux/features/user/user.api";
 import { useAppDispatch } from "@/redux/hooks";
@@ -18,12 +19,14 @@ import { Link } from "react-router";
 import { toast } from "sonner";
 import Logo from "./Logo";
 import ThemeToggler from "./ThemeToggler";
-import role from "@/constants/role";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
   { href: "/", label: "Home", role: "PUBLIC" },
   { href: "/about", label: "About", role: "PUBLIC" },
+  { href: "/features", label: "Features", role: "PUBLIC" },
+  { href: "/contact-us", label: "Contact", role: "PUBLIC" },
+  { href: "/faq", label: "FAQ", role: "PUBLIC" },
   { href: "/admin", label: "Dashboard", role: role.ADMIN },
   { href: "/driver", label: "Dashboard", role: role.DRIVER },
   { href: "/user", label: "Dashboard", role: role.RIDER },
@@ -42,7 +45,6 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       const result = await logout(null).unwrap();
-
       // reset api state
       dispatch(userApi.util.resetApiState());
       toast.success(result.message || "Logged out successfully");
@@ -53,7 +55,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="border-b py-3">
+    <header className="border-b py-3 ">
       <div className="flex h-16 items-center justify-between sm:gap-4">
         {/* Left side */}
         <div className="flex items-center sm:gap-2">
@@ -98,11 +100,31 @@ const Navbar = () => {
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link, index) => (
-                    <NavigationMenuItem key={index} className="w-full">
-                      <NavigationMenuLink className="py-1.5" asChild>
-                        <Link to={link.href}>{link.label}</Link>
-                      </NavigationMenuLink>
-                    </NavigationMenuItem>
+                    <div key={index}>
+                      {/* Public routes */}
+                      {link.role === "PUBLIC" && (
+                        <NavigationMenuItem key={index}>
+                          <NavigationMenuLink
+                            className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                            asChild
+                          >
+                            <Link to={link.href}>{link.label}</Link>
+                          </NavigationMenuLink>
+                        </NavigationMenuItem>
+                      )}
+
+                      {/* Logged users routes */}
+                      {link.role === userRole && (
+                        <NavigationMenuItem key={index}>
+                          <NavigationMenuLink
+                            className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                            asChild
+                          >
+                            <Link to={link.href}>{link.label}</Link>
+                          </NavigationMenuLink>
+                        </NavigationMenuItem>
+                      )}
+                    </div>
                   ))}
                 </NavigationMenuList>
               </NavigationMenu>

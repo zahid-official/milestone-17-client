@@ -1,11 +1,17 @@
 import ChangePassword from "@/pages/user/ChangePassword";
+import EmergencyContact from "@/pages/user/EmergencyContact";
 import type { ISidebarItems } from "@/types";
 import { lazy } from "react";
 
 // Lazy loading
 const IncomingRequests = lazy(() => import("@/pages/driver/IncomingRequests"));
+const CurrentRide = lazy(() => import("@/pages/driver/CurrentRide"));
+const DriverRidesHistory = lazy(
+  () => import("@/pages/driver/DriverRidesHistory")
+);
 const Earnings = lazy(() => import("@/pages/driver/Earnings"));
 const Profile = lazy(() => import("@/pages/user/Profile"));
+const VehicleInfo = lazy(() => import("@/pages/driver/VehicleInfo"));
 
 const driverSidebarItems: ISidebarItems[] = [
   // Driver Services
@@ -18,7 +24,17 @@ const driverSidebarItems: ISidebarItems[] = [
         component: IncomingRequests,
       },
       {
-        title: "Earnings",
+        title: "Current Ride",
+        url: "/driver/current-ride",
+        component: CurrentRide,
+      },
+      {
+        title: "Ride History",
+        url: "/driver/completed-ride",
+        component: DriverRidesHistory,
+      },
+      {
+        title: "Earning Details",
         url: "/driver/earnings",
         component: Earnings,
       },
@@ -38,6 +54,16 @@ const driverSidebarItems: ISidebarItems[] = [
         title: "Security",
         url: "/driver/chanege-password",
         component: ChangePassword,
+      },
+      {
+        title: "Vehicle Info",
+        url: "/driver/vehicle-info",
+        component: VehicleInfo,
+      },
+      {
+        title: "Emergency Contact",
+        url: "/driver/emergency-contact",
+        component: EmergencyContact,
       },
     ],
   },

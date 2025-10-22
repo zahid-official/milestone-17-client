@@ -1,6 +1,12 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import CustomPagination from "@/components/ui/custom-pagination";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -11,17 +17,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import rideStatus from "@/constants/rideStatus";
-import type { PaymentMethod, RideStatus, Timestamp } from "@/types";
-
+import type { RideStatus } from "@/types";
 import { format } from "date-fns";
-import { ChevronDown, ChevronUp, Search } from "lucide-react";
+import { ChevronDown, ChevronDownIcon, ChevronUp, Search } from "lucide-react";
 import { Link } from "react-router";
 
-// Interfaces for IRideOversightTable, Meta & IProps
-interface IRideOversightTable {
-  timestamps: Timestamp;
-  paymentMethod: PaymentMethod;
-
+// Interfaces for IRideOversight, Meta & IProps
+interface IRideOversight {
   _id: string;
   userId: {
     _id: string;
@@ -32,13 +34,13 @@ interface IRideOversightTable {
   fare: number;
   distance: number;
   status: RideStatus;
+  vehicleType: "BIKE" | "CAR";
   createdAt: string;
-  driverInfo: null | {
-    _id: string;
-    userId: {
-      _id: string;
-      name: string;
-    };
+  driverInfo?: null | {
+    name: string;
+    email: string;
+    accountStatus: string;
+    role: string;
     licenseNumber: string;
     vehicleInfo: {
       vehicleType: string;
@@ -57,53 +59,73 @@ interface IMeta {
 
 interface IProps {
   data: {
-    data: IRideOversightTable[];
+    data: IRideOversight[];
     meta: IMeta;
   };
   onPageChange: (page: number) => void;
   currentPage: number;
+  onStatusChange: (status: string | undefined) => void;
+  currentStatus: string | undefined;
   onSortOrderChange: () => void;
   currentSortOrder: "asc" | "desc";
   searchTerm: string;
   onSearchChange: (value: string) => void;
+
+  // props for date filter
+  dateRange?: "today" | "week" | "month" | "year" | undefined;
+  onDateRangeChange: (
+    dateRange: "today" | "week" | "month" | "year" | undefined
+  ) => void;
 }
+
+// Columns title
+const columnsTitle = [
+  { label: "No.", value: "index" },
+  { label: "Rider", value: "rider" },
+  { label: "Driver", value: "driver" },
+  { label: "Pickup", value: "pickup" },
+  { label: "Destination", value: "destination" },
+  { label: "Distance", value: "distance" },
+  { label: "Vehicle", value: "vehicle" },
+  { label: "Fare", value: "fare" },
+  { label: "Status", value: "status" },
+  { label: "Date", value: "date" },
+  { label: "Actions", value: "actions" },
+];
+
+// Date range options
+const dateRangeOptions: Array<{
+  label: string;
+  value: "today" | "week" | "month" | "year" | undefined;
+}> = [
+  { label: "All Time", value: undefined },
+  { label: "Today", value: "today" },
+  { label: "This Week", value: "week" },
+  { label: "This Month", value: "month" },
+  { label: "This Year", value: "year" },
+];
 
 // RideOversightTable Component
 const RideOversightTable = ({
   data,
   onPageChange,
   currentPage,
+  onStatusChange,
+  currentStatus,
   onSortOrderChange,
   currentSortOrder,
   searchTerm,
   onSearchChange,
+  dateRange,
+  onDateRangeChange,
 }: IProps) => {
-  // RTK Query mutation hook
-
-  // separate datas
-  const managementData = data?.data;
+  const historyData = data?.data;
   const paginationData = data?.meta;
-
-  console.log(managementData);
-
-  // Columns title
-  const columnsTitle = [
-    { label: "No.", value: "index" },
-    { label: "Rider", value: "rider" },
-    { label: "Driver", value: "driver" },
-    { label: "Pickup", value: "pickup" },
-    { label: "Destination", value: "destination" },
-    { label: "Distance", value: "distance" },
-    { label: "Fare", value: "fare" },
-    { label: "Status", value: "status" },
-    { label: "Date", value: "date" },
-    { label: "Actions", value: "actions" },
-  ];
 
   return (
     <>
       {/* Header Section */}
-      <div className="max-w-7xl mx-auto mt-10 pb-5">
+      <div className="max-w-7xl mx-auto mt-8 pb-3">
         <div className="flex items-center justify-between flex-wrap gap-4">
           {/* Title */}
           <div>
@@ -111,7 +133,7 @@ const RideOversightTable = ({
               Ride Oversight
             </h1>
             <p className="text-sm text-muted-foreground">
-              Monitor and manage every ride across the platform in real time
+              Monitor and manage all ride activities on the platform
             </p>
           </div>
 
@@ -123,9 +145,59 @@ const RideOversightTable = ({
                 type="text"
                 value={searchTerm}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Search name, email"
-                className="pl-8 w-xs"
+                placeholder="Search pickup, destination & vehicle type"
+                className="pl-8 w-68"
               />
+            </div>
+
+            {/* Dropdown Filter by status */}
+            <div className="w-36">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild className="w-full">
+                  <Button variant="outline">
+                    {currentStatus ? currentStatus : "All Status"}
+                    <ChevronDownIcon className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={() => onStatusChange(undefined)}>
+                    All Status
+                  </DropdownMenuItem>
+                  {Object.values(rideStatus).map((status) => (
+                    <DropdownMenuItem
+                      key={status}
+                      onClick={() => onStatusChange(status)}
+                    >
+                      {status}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            {/* Dropdown Filter by date range */}
+            <div className="w-40">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild className="w-full">
+                  <Button variant="outline">
+                    {dateRange
+                      ? dateRangeOptions.find((opt) => opt.value === dateRange)
+                          ?.label
+                      : "All Time"}
+                    <ChevronDownIcon className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {dateRangeOptions.map((option) => (
+                    <DropdownMenuItem
+                      key={option.label}
+                      onClick={() => onDateRangeChange(option.value)}
+                    >
+                      {option.label}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
@@ -183,95 +255,103 @@ const RideOversightTable = ({
 
           {/* table body */}
           <TableBody>
-            {managementData?.map(
-              (management: IRideOversightTable, index: number) => (
-                <TableRow
-                  key={management?._id}
-                  className="border-b hover:bg-muted/50 cursor-pointer"
-                  style={{
-                    animationDelay: `${index * 120}ms`,
-                    animationDuration: "400ms",
-                    animationFillMode: "both",
-                  }}
-                >
-                  {/* No */}
-                  <TableCell className="pl-3">
-                    <div className="text-sm">{index + 1}</div>
-                  </TableCell>
+            {historyData?.map((history: IRideOversight, index: number) => (
+              <TableRow
+                key={history?._id}
+                className="border-b hover:bg-muted/50 cursor-pointer"
+                style={{
+                  animationDelay: `${index * 120}ms`,
+                  animationDuration: "400ms",
+                  animationFillMode: "both",
+                }}
+              >
+                {/* No */}
+                <TableCell className="pl-3">
+                  <div className="text-sm">{index + 1}</div>
+                </TableCell>
 
-                  {/* Rider */}
-                  <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {management?.userId?.name}
-                    </div>
-                  </TableCell>
+                {/* Rider */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                    {history?.userId?.name}
+                  </div>
+                </TableCell>
 
-                  {/* Driver */}
-                  <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {management?.driverInfo?.userId?.name || "Not assigned"}
-                    </div>
-                  </TableCell>
+                {/* Driver */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                    {history?.driverInfo?.name || "Not assigned"}
+                  </div>
+                </TableCell>
 
-                  {/* Pickup */}
-                  <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {management?.pickup}
-                    </div>
-                  </TableCell>
+                {/* Pickup */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                    {history?.pickup}
+                  </div>
+                </TableCell>
 
-                  {/* Destination */}
-                  <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {management?.destination}
-                    </div>
-                  </TableCell>
+                {/* Destination */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
+                    {history?.destination}
+                  </div>
+                </TableCell>
 
-                  {/* Distance */}
-                  <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {management?.distance} km
-                    </div>
-                  </TableCell>
+                {/* Distance */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis text-center">
+                    {history?.distance} km
+                  </div>
+                </TableCell>
 
-                  {/* Fare */}
-                  <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      ৳ {management?.fare}
-                    </div>
-                  </TableCell>
+                {/* Vehicle */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis text-center">
+                    {history?.vehicleType}
+                  </div>
+                </TableCell>
 
-                  {/* Status */}
-                  <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      <Badge
-                        className={`${
-                          (management?.status === rideStatus.CANCELLED ||
-                            management?.status === rideStatus.REJECTED) &&
-                          "bg-muted-foreground/60 text-primary-foreground"
-                        }`}
-                      >
-                        {management?.status}
-                      </Badge>
-                    </div>
-                  </TableCell>
+                {/* Fare */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis text-center">
+                    ৳ {history?.fare}
+                  </div>
+                </TableCell>
 
-                  {/* Date */}
-                  <TableCell className="py-3">
-                    <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis">
-                      {format(new Date(management?.createdAt), "dd-MM-yyyy")}
-                    </div>
-                  </TableCell>
+                {/* Status */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis text-center">
+                    <Badge
+                      className={`${
+                        (history.status === rideStatus.CANCELLED ||
+                          history.status === rideStatus.REJECTED) &&
+                        "bg-muted-foreground/60 text-primary-foreground"
+                      }`}
+                    >
+                      {history.status}
+                    </Badge>
+                  </div>
+                </TableCell>
 
-                  {/* Action */}
-                  <TableCell className="py-3">
-                    <Link to={`/user/ride/${management?._id}`}>
-                      <Button size="sm">Details</Button>
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              )
-            )}
+                {/* Date */}
+                <TableCell className="py-3">
+                  <div className="text-sm max-w-60 overflow-hidden whitespace-nowrap text-ellipsis text-center">
+                    {format(new Date(history?.createdAt), "dd-MM-yyyy")}
+                  </div>
+                </TableCell>
+
+                {/* Action */}
+                <TableCell className="py-3">
+                  <Link
+                    to={`/admin/ride/${history?._id}`}
+                    className=" text-center"
+                  >
+                    <Button size="sm">Details</Button>
+                  </Link>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
 

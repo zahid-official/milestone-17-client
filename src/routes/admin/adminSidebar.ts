@@ -1,42 +1,23 @@
+import ChangePassword from "@/pages/user/ChangePassword";
 import type { ISidebarItems } from "@/types";
 import { lazy } from "react";
 
 // Lazy loading
 const Analytics = lazy(() => import("@/pages/admin/Analytics"));
-const AllDriverApplications = lazy(
-  () => import("@/pages/admin/AllDriverApplications")
-);
-const DriverManagement = lazy(() => import("@/pages/admin/DriverManagement"));
 const UserManagement = lazy(() => import("@/pages/admin/UserManagement"));
 const RideOversight = lazy(() => import("@/pages/admin/RideOversight"));
+const Profile = lazy(() => import("@/pages/user/Profile"));
 
 // adminSidebarItems
 const adminSidebarItems: ISidebarItems[] = [
-  // Dashboard
+  // Admin Services
   {
-    title: "Dashboard",
+    title: "Admin Services",
     items: [
       {
         title: "Analytics",
         url: "/admin/analytics",
         component: Analytics,
-      },
-    ],
-  },
-
-  // Data Management
-  {
-    title: "Data Management",
-    items: [
-      {
-        title: "Driver Applications",
-        url: "/admin/driver-applications",
-        component: AllDriverApplications,
-      },
-      {
-        title: "Driver Management",
-        url: "/admin/driver-management",
-        component: DriverManagement,
       },
       {
         title: "User Management",
@@ -47,6 +28,23 @@ const adminSidebarItems: ISidebarItems[] = [
         title: "Ride Oversight",
         url: "/admin/ride-oversight",
         component: RideOversight,
+      },
+    ],
+  },
+
+  // Profile Management
+  {
+    title: "Profile Management",
+    items: [
+      {
+        title: "Profile",
+        url: "/admin/profile",
+        component: Profile,
+      },
+      {
+        title: "Security",
+        url: "/admin/chanege-password",
+        component: ChangePassword,
       },
     ],
   },

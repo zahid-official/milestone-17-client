@@ -22,7 +22,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -70,9 +69,6 @@ const ProfileForm = ({ userInfo, handleCancel }: IProps) => {
   // State for loading
   const [isLoading, setIsloading] = useState(false);
 
-  // Navigation hook
-  const navigate = useNavigate();
-
   // RTK Query mutation hook
   const [updateProfile] = useUpdateProfileMutation();
 
@@ -104,11 +100,9 @@ const ProfileForm = ({ userInfo, handleCancel }: IProps) => {
 
     try {
       const result = await updateProfile(updatedData).unwrap();
-      console.log(result);
       toast.success(result.message || "User details updated successfully");
-      navigate("/user/ride-request");
+      handleCancel()
     } catch (error: any) {
-      console.log(error);
       toast.error(
         error?.data?.error[0]?.message ||
           error?.data?.message ||

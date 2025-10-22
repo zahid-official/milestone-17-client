@@ -20,6 +20,7 @@ import {
 import type { RideStatus } from "@/types";
 import { format } from "date-fns";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
 // Interfaces for IRideRequest, Meta & IProps
@@ -69,6 +70,7 @@ interface IProps {
   currentSortOrder: "asc" | "desc";
   searchTerm: string;
   onSearchChange: (value: string) => void;
+  isAvailable?: boolean;
 }
 
 // Columns title
@@ -95,10 +97,14 @@ const IncomingRequestsTable = ({
   currentSortOrder,
   searchTerm,
   onSearchChange,
+  isAvailable = true,
 }: IProps) => {
   // RTK Query mutation hook
   const [acceptRide] = useAcceptRideMutation();
   const [rejectRide] = useRejectRideMutation();
+
+  // Navigation hook
+  const navigate = useNavigate();
 
   // separate datas
   const requestData = data?.data;
@@ -108,12 +114,11 @@ const IncomingRequestsTable = ({
   const handleAccept = async (id: string) => {
     try {
       const result = await acceptRide(id).unwrap();
-      console.log(result);
+      navigate(`/driver/current-ride`);
       if (result.success) {
         toast.success(result.message || "Ride accepted successfully");
       }
     } catch (error: any) {
-      console.log(error);
       toast.error(error.data.message || "Something went wrong!");
     }
   };
@@ -289,10 +294,15 @@ const IncomingRequestsTable = ({
 
                 {/* Action */}
                 <TableCell className="py-3 flex gap-2">
-                  {/* Ride Accept btn */}
-                  <Button size="sm" onClick={() => handleAccept(request?._id)}>
-                    Accept
-                  </Button>
+                  {/* Ride Accept btn - hidden when driver is offline */}
+                  {isAvailable && (
+                    <Button
+                      size="sm"
+                      onClick={() => handleAccept(request?._id)}
+                    >
+                      Accept
+                    </Button>
+                  )}
 
                   {/* Ride Reject btn */}
                   <Confirmation

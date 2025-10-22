@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import availability from "@/constants/availability";
 import { cn } from "@/lib/utils";
 import { useDriverRegisterMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -150,11 +151,11 @@ const DriverRegisterForm = ({
         vehicleModel: data.vehicleModel,
         plateNumber: data.plateNumber,
       },
+      availability: availability.ONLINE,
     };
 
     try {
       const result = await driverRegister(userInfo).unwrap();
-      console.log(result);
       toast.success(
         result.message || "Driver has been registered successfully"
       );
@@ -162,7 +163,6 @@ const DriverRegisterForm = ({
         navigate("/verify", { state: result.data.email });
       }
     } catch (error: any) {
-      console.log(error);
       toast.error(
         error?.data?.error[0]?.message ||
           error?.data?.message ||

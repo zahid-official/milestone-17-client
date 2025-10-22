@@ -60,11 +60,9 @@ const Verify = () => {
 
     try {
       const result = await otpSend(otpInfo).unwrap();
-      console.log(result);
       toast.success(result.message || "OTP sent successfully");
       setConfirm(true);
     } catch (error: any) {
-      console.log(error);
       toast.error(error.data.message || "Something went wrong!");
     } finally {
       setIsloading(false);
@@ -78,12 +76,10 @@ const Verify = () => {
 
     try {
       const result = await otpSend(otpInfo).unwrap();
-      console.log(result);
       toast.success(result.message || "OTP sent successfully");
       setTimer(120);
       setConfirm(true);
     } catch (error: any) {
-      console.log(error);
       toast.error(error.data.message || "Something went wrong!");
     } finally {
       setResending(false);
@@ -97,11 +93,9 @@ const Verify = () => {
 
     try {
       const result = await verifyOtp(otpInfo).unwrap();
-      console.log(result);
       toast.success(result.message || "OTP sent successfully");
       navigate("/login");
     } catch (error: any) {
-      console.log(error);
       toast.error(error.data.message || "Something went wrong!");
     } finally {
       setIsloading(false);

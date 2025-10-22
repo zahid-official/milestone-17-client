@@ -6,14 +6,17 @@ import { useState } from "react";
 const UserManagement = () => {
   // State from react
   const [page, setPage] = useState(1);
+  const [status, setStatus] = useState<string | undefined>(undefined);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [searchTerm, setSearchTerm] = useState("");
+
   const limit = 10;
 
   // RTK Query mutation hooks
   const { data, isLoading } = useManageUsersQuery({
     page,
     limit,
+    status,
     sort: sortOrder === "desc" ? "-createdAt" : "createdAt",
     searchTerm,
   });
@@ -21,6 +24,12 @@ const UserManagement = () => {
   // Handle pageChange
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
+  };
+
+  // Handle statusChange
+  const handleStatusChange = (newStatus: string | undefined) => {
+    setPage(1);
+    setStatus(newStatus);
   };
 
   // Handle sortOrderChange
@@ -34,6 +43,8 @@ const UserManagement = () => {
     setPage(1);
     setSearchTerm(value);
   };
+
+  // Handle minFare change
 
   // Loader
   if (isLoading) {
@@ -50,6 +61,8 @@ const UserManagement = () => {
         data={data}
         onPageChange={handlePageChange}
         currentPage={page}
+        onStatusChange={handleStatusChange}
+        currentStatus={status}
         onSortOrderChange={handleSortOrderChange}
         currentSortOrder={sortOrder}
         searchTerm={searchTerm}

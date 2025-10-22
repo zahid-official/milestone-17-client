@@ -1,26 +1,39 @@
 import RideOversightTable from "@/components/modules/admin/RideOversightTable";
-import { useManageRidesQuery } from "@/redux/features/admin/admin.api";
+import { useRideOversightQuery } from "@/redux/features/admin/admin.api";
 import { useState } from "react";
 
 // RideOversight Component
 const RideOversight = () => {
   // State from react
   const [page, setPage] = useState(1);
+  const [status, setStatus] = useState<string | undefined>(undefined);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [searchTerm, setSearchTerm] = useState("");
+  const [dateRange, setDateRange] = useState<
+    "today" | "week" | "month" | "year" | undefined
+  >(undefined);
+
   const limit = 10;
 
   // RTK Query mutation hooks
-  const { data, isLoading } = useManageRidesQuery({
+  const { data, isLoading } = useRideOversightQuery({
     page,
     limit,
+    status,
     sort: sortOrder === "desc" ? "-createdAt" : "createdAt",
     searchTerm,
+    dateRange,
   });
 
   // Handle pageChange
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
+  };
+
+  // Handle statusChange
+  const handleStatusChange = (newStatus: string | undefined) => {
+    setPage(1);
+    setStatus(newStatus);
   };
 
   // Handle sortOrderChange
@@ -33,6 +46,14 @@ const RideOversight = () => {
   const handleSearchChange = (value: string) => {
     setPage(1);
     setSearchTerm(value);
+  };
+
+  // Handle date range change
+  const handleDateRangeChange = (
+    newDateRange: "today" | "week" | "month" | "year" | undefined
+  ) => {
+    setPage(1);
+    setDateRange(newDateRange);
   };
 
   // Loader
@@ -50,10 +71,14 @@ const RideOversight = () => {
         data={data}
         onPageChange={handlePageChange}
         currentPage={page}
+        onStatusChange={handleStatusChange}
+        currentStatus={status}
         onSortOrderChange={handleSortOrderChange}
         currentSortOrder={sortOrder}
         searchTerm={searchTerm}
         onSearchChange={handleSearchChange}
+        dateRange={dateRange}
+        onDateRangeChange={handleDateRangeChange}
       />
     </div>
   );

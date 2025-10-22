@@ -1,4 +1,5 @@
 import ChangePassword from "@/pages/user/ChangePassword";
+import EmergencyContact from "@/pages/user/EmergencyContact";
 import type { ISidebarItems } from "@/types";
 import { lazy } from "react";
 
@@ -44,6 +45,11 @@ const userSidebarItems: ISidebarItems[] = [
         title: "Security",
         url: "/user/chanege-password",
         component: ChangePassword,
+      },
+      {
+        title: "Emergency Contact",
+        url: "/user/emergency-contact",
+        component: EmergencyContact,
       },
     ],
   },
