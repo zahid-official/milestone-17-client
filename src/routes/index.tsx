@@ -19,6 +19,7 @@ import Contact from "@/pages/public/Contact";
 import NotFound from "@/pages/public/NotFound";
 import Features from "@/pages/public/Features";
 import ContactUs from "@/pages/public/ContactUs";
+import FAQ from "@/pages/public/FAQ";
 
 const Router = createBrowserRouter([
   // Common layout
@@ -43,6 +44,10 @@ const Router = createBrowserRouter([
       {
         path: "contact-us",
         Component: ContactUs,
+      },
+      {
+        path: "faq",
+        Component: FAQ,
       },
     ],
   },
