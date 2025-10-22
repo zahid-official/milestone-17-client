@@ -19,7 +19,7 @@ const HeroSection = () => {
               <Icon />
             </div>
             <div>
-              <h1 className="mb-6 text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight tight text-balance">
+              <h1 className="mb-6 text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight tight text-balance">
                 Ride your own way,{" "}
                 <span className="text-muted-foreground">Anytime Velocia.</span>
               </h1>

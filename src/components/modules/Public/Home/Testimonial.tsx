@@ -90,13 +90,13 @@ const Testimonial = () => {
   return (
     <div className="min-h-screen w-full flex justify-center items-center sm:py-36 py-24 px-6">
       <div className="w-full">
-        <h2 className="text-5xl font-semibold text-center tracking-[-0.03em]">
+        <h2 className="text-4xl sm:text-5xl font-semibold text-center tracking-[-0.03em]">
           Testimonials
         </h2>
-        <p className="mt-3 text-center text-muted-foreground text-xl">
+        <p className="mt-1.5 text-center text-muted-foreground text-xl">
           See what our users have to say about us
         </p>
-        <div className="mt-10 container w-full mx-auto px-12">
+        <div className="mt-10 container w-full mx-auto px-5">
           <Carousel setApi={setApi}>
             <CarouselContent>
               {testimonials.map((testimonial) => (
@@ -131,7 +131,7 @@ const TestimonialCard = ({
 }: {
   testimonial: (typeof testimonials)[number];
 }) => (
-  <div className="mb-8 bg-accent rounded-xl py-8 px-6 sm:py-6">
+  <div className="sm:mb-8 bg-accent rounded-xl py-8 px-6 sm:py-6">
     <div className="flex items-center justify-between gap-20">
       <div className="hidden lg:block relative shrink-0 aspect-3/4 max-w-[18rem] w-full bg-muted-foreground/20 rounded-xl">
         <div className="absolute top-1/4 right-0 translate-x-1/2 h-12 w-12 bg-primary rounded-full flex items-center justify-center">

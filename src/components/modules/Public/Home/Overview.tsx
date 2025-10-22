@@ -63,8 +63,8 @@ const features = [
 const Overview = () => {
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="w-full sm:py-36 py-24 px-6">
-        <h2 className="text-4xl md:text-[2.5rem] md:leading-[1.2] font-semibold tracking-[-0.03em] sm:max-w-xl text-pretty">
+      <div className="w-full lg:py-36 sm:py-24 pt-10 pb-24 px-6">
+        <h2 className="sm:text-5xl text-4xl md:leading-[1.2] font-semibold tracking-[-0.03em] sm:max-w-xl text-pretty">
           How Velocia Works
         </h2>
         <p className="mt-2 text-muted-foreground text-lg sm:text-xl text-justify">

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router";
 
 function FeatureCard({ rotate = "", translate = "" }) {
   return (
@@ -20,11 +21,11 @@ function FeatureCard({ rotate = "", translate = "" }) {
 // CTA Section Component
 const CTA = () => {
   return (
-    <section className="pb-24">
-      <div className="max-w-full sm:pl-10 px-3 rounded-4xl overflow-hidden bg-gradient-to-b from-accent/30 to-background pt-10 md:pt-16 lg:pt-20">
+    <section className="lg:pb-28 pb-24 px-6">
+      <div className="max-w-full sm:pl-10 sm:px-3 px-8 rounded-4xl overflow-hidden bg-gradient-to-b from-accent/30 to-background pt-10 md:pt-16 lg:pt-20">
         <div className="container relative flex flex-col md:flex-row md:space-x-16">
           {/* Left Content */}
-          <div className="mb-72 md:mb-28 md:w-3/5 lg:shrink-0 xl:mb-20 xl:w-1/2">
+          <div className="lg:mb-28 lg:w-3/5 lg:shrink-0 xl:mb-20 xl:w-1/2">
             <div className="relative">
               {/* Decorative Circles */}
               <div className="absolute -left-4 -top-6 h-28 w-28 rounded-full bg-primary/5" />
@@ -46,24 +47,28 @@ const CTA = () => {
               </p>
 
               {/* Buttons */}
-              <div className="flex sm:gap-3 gap-2">
-                <Button className="rounded-full group relative overflow-hidden py-2 h-10">
-                  <span className="relative z-10">Explore Features</span>
-                  <ArrowRight className="-ml-1 relative z-10 size-4 transition-transform group-hover:translate-x-1" />
-                </Button>
+              <div className="flex sm:flex-row flex-col gap-3">
+                <Link to={"/features"}>
+                  <Button className="rounded-full group relative overflow-hidden py-2 h-10">
+                    <span className="relative z-10">Explore Features</span>
+                    <ArrowRight className="-ml-1 relative z-10 size-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </Link>
 
-                <Button
-                  variant="outline"
-                  className="rounded-full px-6 py-2 h-10"
-                >
-                  Learn More
-                </Button>
+                <Link to={"/about"}>
+                  <Button
+                    variant="outline"
+                    className="rounded-full px-6 py-2 h-10"
+                  >
+                    Learn More
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
 
           {/* Right Visual Cards */}
-          <div className="absolute bottom-0 right-1/2 h-min w-full max-w-md translate-x-1/2 md:-right-36 md:-mr-4 md:w-3/4 md:max-w-xl md:translate-x-0 lg:mt-auto xl:relative xl:right-0 xl:size-full xl:max-w-full">
+          <div className="lg:block hidden absolute bottom-10 right-1/2 h-min w-full max-w-md translate-x-1/2 md:-right-34 md:-mr-4 md:w-3/4 md:max-w-xl md:translate-x-0 lg:mt-auto xl:relative xl:right-0 xl:size-full xl:max-w-full">
             <div className="relative aspect-[8/5] size-full min-h-64">
               {/* Card 1 */}
               <FeatureCard
