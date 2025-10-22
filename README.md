@@ -262,6 +262,9 @@ VITE_GOOGLE_MAPS_KEY=your-google-maps-key
 
 ## 📁 **Project Structure**
 
+<details>
+<summary><b>Click to view project folder structure</b></summary>
+
 ```
 velocia-frontend/
 ├── 📄 Configuration Files
@@ -365,6 +368,8 @@ velocia-frontend/
         └── public/               # Public pages
 ```
 
+</details>
+
 ---
 
 ## 🎨 **Key Features**
@@ -424,6 +429,9 @@ velocia-frontend/
 
 ### **Login Credentials for Testing**
 
+<details>
+<summary><b>Click to view login credentials</b></summary>
+
 ```plaintext
 Admin Account:
 Email: default@email.com
@@ -438,6 +446,8 @@ Email: rider@email.com
 Password: default@Admin123
 ```
 
+</details>
+
 ### **Protected Routes**
 
 Routes are protected based on user roles:
@@ -447,6 +457,59 @@ Routes are protected based on user roles:
 - `/user/*` - Riders only
 
 Unauthorized access attempts redirect to appropriate pages.
+
+### **Routing Structure**
+
+<details>
+<summary><b>Click to view endpoints</b></summary>
+
+### **Public Routes** (No Authentication Required)
+
+```typescript
+/                    → Home page
+/about              → About us
+/features           → Platform features
+/faq                → Frequently asked questions
+/contact            → Contact form
+/login              → Login page
+/register           → Registration (Rider/Driver)
+/verify             → OTP verification
+```
+
+### **Protected Routes** (Authentication Required)
+
+#### **Rider Routes** (`/user/*`)
+
+```typescript
+/user/ride-request     → Request a new ride
+/user/active-ride      → Current active ride
+/user/ride-history     → Past rides with filters
+/user/profile          → Profile management
+/user/change-password  → Password update
+/user/emergency        → Emergency contacts
+```
+
+#### **Driver Routes** (`/driver/*`)
+
+```typescript
+/driver/availability      → Toggle online/offline
+/driver/requests          → Incoming ride requests
+/driver/current-ride      → Active ride management
+/driver/earnings          → Earnings dashboard
+/driver/history           → Completed rides
+/driver/vehicle-info      → Vehicle details
+```
+
+#### **Admin Routes** (`/admin/*`)
+
+```typescript
+/admin/analytics         → Platform analytics
+/admin/users             → User management
+/admin/drivers           → Driver management
+/admin/rides             → All rides oversight
+```
+
+</details>
 
 ---
 
