@@ -11,6 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import role from "@/constants/role";
 import { useLogoutMutation } from "@/redux/features/auth/auth.api";
 import { useProfileInfoQuery, userApi } from "@/redux/features/user/user.api";
 import { useAppDispatch } from "@/redux/hooks";
@@ -18,13 +19,13 @@ import { Link } from "react-router";
 import { toast } from "sonner";
 import Logo from "./Logo";
 import ThemeToggler from "./ThemeToggler";
-import role from "@/constants/role";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
   { href: "/", label: "Home", role: "PUBLIC" },
   { href: "/about", label: "About", role: "PUBLIC" },
   { href: "/features", label: "Features", role: "PUBLIC" },
+  { href: "/contact-us", label: "Contact", role: "PUBLIC" },
   { href: "/admin", label: "Dashboard", role: role.ADMIN },
   { href: "/driver", label: "Dashboard", role: role.DRIVER },
   { href: "/user", label: "Dashboard", role: role.RIDER },

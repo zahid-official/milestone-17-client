@@ -1,8 +1,8 @@
-import CTA from "@/components/modules/Public/Home/CTA";
-import HeroSection from "@/components/modules/Public/Home/HeroSection";
-import Overview from "@/components/modules/Public/Home/Overview";
-import Services from "@/components/modules/Public/Home/Services";
-import Testimonial from "@/components/modules/Public/Home/Testimonial";
+import CTA from "@/components/modules/Public/home/CTA";
+import HeroSection from "@/components/modules/Public/home/HeroSection";
+import Overview from "@/components/modules/Public/home/Overview";
+import Services from "@/components/modules/Public/home/Services";
+import Testimonial from "@/components/modules/Public/home/Testimonial";
 
 const Home = () => {
   return (

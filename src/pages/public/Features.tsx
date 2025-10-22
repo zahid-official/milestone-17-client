@@ -1,5 +1,5 @@
-import DetailedBreakdown from "@/components/modules/Public/Features/DetailedBreakdown";
-import DiscoverFeatures from "@/components/modules/Public/Features/DiscoverFeatures";
+import DetailedBreakdown from "@/components/modules/Public/features/DetailedBreakdown";
+import DiscoverFeatures from "@/components/modules/Public/features/DiscoverFeatures";
 
 const Features = () => {
   return (

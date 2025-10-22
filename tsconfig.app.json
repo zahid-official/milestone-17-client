@@ -33,5 +33,5 @@
     /* Silence deprecated warning */
     "ignoreDeprecations": "6.0"
   },
-  "include": ["src", "src/pages/user/.tsx"]
+  "include": ["src", "src/pages/user/.tsx", "src/components/modules/Public/contactUs/ContactSection.tsx"]
 }

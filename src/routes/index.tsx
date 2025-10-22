@@ -18,6 +18,7 @@ import RideDetails from "@/components/modules/user/rideHistory/RideDetails";
 import Contact from "@/pages/public/Contact";
 import NotFound from "@/pages/public/NotFound";
 import Features from "@/pages/public/Features";
+import ContactUs from "@/pages/public/ContactUs";
 
 const Router = createBrowserRouter([
   // Common layout
@@ -38,6 +39,10 @@ const Router = createBrowserRouter([
       {
         path: "features",
         Component: Features,
+      },
+      {
+        path: "contact-us",
+        Component: ContactUs,
       },
     ],
   },
