@@ -127,6 +127,11 @@ const RideRequestForm = ({
       const destinationCoords = await getCoordinatesFromAddress(
         data.destination
       );
+
+      if (!pickupCoords || !destinationCoords) {
+        toast.error("Could not get coordinates for pickup or destination.");
+        return;
+      }
       const distance = calculateDistance(pickupCoords, destinationCoords);
 
       // Fare calculation
