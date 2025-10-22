@@ -101,11 +101,31 @@ const Navbar = () => {
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link, index) => (
-                    <NavigationMenuItem key={index} className="w-full">
-                      <NavigationMenuLink className="py-1.5" asChild>
-                        <Link to={link.href}>{link.label}</Link>
-                      </NavigationMenuLink>
-                    </NavigationMenuItem>
+                    <div key={index}>
+                      {/* Public routes */}
+                      {link.role === "PUBLIC" && (
+                        <NavigationMenuItem key={index}>
+                          <NavigationMenuLink
+                            className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                            asChild
+                          >
+                            <Link to={link.href}>{link.label}</Link>
+                          </NavigationMenuLink>
+                        </NavigationMenuItem>
+                      )}
+
+                      {/* Logged users routes */}
+                      {link.role === userRole && (
+                        <NavigationMenuItem key={index}>
+                          <NavigationMenuLink
+                            className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                            asChild
+                          >
+                            <Link to={link.href}>{link.label}</Link>
+                          </NavigationMenuLink>
+                        </NavigationMenuItem>
+                      )}
+                    </div>
                   ))}
                 </NavigationMenuList>
               </NavigationMenu>
