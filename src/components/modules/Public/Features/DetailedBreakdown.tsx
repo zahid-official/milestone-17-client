@@ -46,7 +46,7 @@ const DetailedBreakdown = () => {
           Explore the Full Velocia Experience
         </h2>
         <p className="mt-2 text-muted-foreground text-lg sm:text-xl sm:text-center">
-          A detailed breakdown of what Riders, Drivers, and Admins can do.
+          A detailed breakdown of what Riders, Drivers and Admins can do.
         </p>
 
         <div className="mt-8 md:mt-16 w-full mx-auto space-y-20">

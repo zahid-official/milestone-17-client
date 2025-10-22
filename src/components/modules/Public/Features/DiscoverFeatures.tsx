@@ -57,8 +57,8 @@ const DiscoverFeatures = () => {
     <section className="">
       <div className="mx-auto max-w-7xl px-4 pt-8">
         {/* Header */}
-        <div className="space-y-2.5 sm:mb-10">
-          <h2 className="text-2xl font-semibold md:text-3xl lg:text-4xl">
+        <div className="space-y-2.5 mb-10">
+          <h2 className="font-semibold text-3xl lg:text-4xl">
             Discover What Makes Velocia Different
           </h2>
           <p className="text-muted-foreground text-xl">
