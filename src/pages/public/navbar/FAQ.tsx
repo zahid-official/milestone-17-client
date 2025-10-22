@@ -1,5 +1,6 @@
 // src/components/FAQ.jsx
 
+import { Badge } from "@/components/ui/badge";
 import {
   Car,
   CreditCard,
@@ -59,8 +60,11 @@ const FAQ = () => {
   return (
     <section className="py-8 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="space-y-4 text-center sm:mb-12">
-          <h2 className="relative inline-block text-pretty text-4xl font-bold tracking-tight lg:text-6xl md:text-3xl">
+        <div className="space-y-4 text-center sm:mb-12 mb-8 mx-auto flex max-w-3xl flex-col items-center">
+          <Badge variant="outline" className="w-max py-1 -mb-0 rounded-full px-3">
+            FAQ
+          </Badge>
+          <h2 className="relative inline-block text-pretty text-5xl font-bold tracking-tight lg:text-6xl">
             <span className="relative z-10">
               Frequently Asked
               <span className="bg-primary absolute bottom-1 left-0 -z-10 h-px w-full"></span>

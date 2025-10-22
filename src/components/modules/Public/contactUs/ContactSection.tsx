@@ -40,7 +40,7 @@ const contactDetails = [
 
 const ContactSection = () => (
   <div className="flex items-center justify-center">
-    <div className="w-full mx-auto px-6 xl:px-0">
+    <div className="w-full mx-auto px-3 sm:px-6 xl:px-0">
       {/* Title */}
       <div className="pb-10">
         <b className="text-muted-foreground uppercase font-semibold text-sm">

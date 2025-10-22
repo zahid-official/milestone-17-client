@@ -1,3 +1,5 @@
+import { Badge } from "@/components/ui/badge";
+
 const features = [
   {
     category: "Rider",
@@ -42,12 +44,20 @@ const DetailedBreakdown = () => {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="w-full">
-        <h2 className="text-4xl md:text-[2.75rem] md:leading-[1.2] font-semibold tracking-[-0.03em] sm:max-w-xl text-pretty sm:mx-auto sm:text-center">
-          Explore the Full Velocia Experience
-        </h2>
-        <p className="mt-2 text-muted-foreground text-lg sm:text-xl sm:text-center">
-          A detailed breakdown of what Riders, Drivers and Admins can do.
-        </p>
+        <div className="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
+          <Badge variant="outline" className="w-max py-1 rounded-full px-3">
+            Exclusive Features
+          </Badge>
+          <h1 className="text-pretty text-5xl font-bold tracking-tight lg:text-6xl sm:max-w-xl sm:mx-auto sm:text-center">
+            Explore Velocia's{" "}
+            <span className="relative text-primary">Features</span>
+          </h1>
+          <p className="text-lg text-muted-foreground">
+            Velocia is revolutionizing urban mobility by connecting riders and
+            drivers for faster, greener and smarter travel. Join us on the road
+            to a more sustainable future.
+          </p>
+        </div>
 
         <div className="mt-8 md:mt-16 w-full mx-auto space-y-20">
           {features.map((feature) => (
