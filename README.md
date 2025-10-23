@@ -656,6 +656,16 @@ const API_URL = "http://localhost:5000/api/v1";
 const API_URL = "https://velocia-api.vercel.app/api/v1";
 ```
 
+### **Live Overview URL**
+
+```typescript
+// Client Side
+URL = "https://velocia-official.vercel.app/";
+
+// Server Side
+URL = "https://velocia-api.vercel.app/";
+```
+
 ---
 
 ## 🌟 **Author**
