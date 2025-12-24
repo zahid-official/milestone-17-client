@@ -193,7 +193,7 @@ const Footer = () => {
                   to="tel:+8801869618216"
                   className="transition hover:opacity-75"
                 >
-                  (+880) 1869618216
+                  (+880) 18696-18216
                 </Link>
               </li>
 

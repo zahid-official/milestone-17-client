@@ -130,6 +130,7 @@ const ContactForm = () => {
             isLoading={isLoading}
             value="Send Message"
             loadingValue="Sending Message"
+            className="max-w-40"
           />
         </form>
       </Form>
