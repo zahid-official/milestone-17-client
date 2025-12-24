@@ -36,7 +36,7 @@ const Router = createBrowserRouter([
         Component: Home,
       },
       {
-        path: "about-us",
+        path: "about",
         Component: About,
       },
       {
@@ -44,11 +44,11 @@ const Router = createBrowserRouter([
         Component: Features,
       },
       {
-        path: "contact",
+        path: "contact-us",
         Component: ContactUs,
       },
       {
-        path: "faqs",
+        path: "faq",
         Component: FAQ,
       },
       {

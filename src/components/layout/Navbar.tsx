@@ -23,11 +23,11 @@ import ThemeToggler from "./ThemeToggler";
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
   { href: "/", label: "Home", role: "PUBLIC" },
-  { href: "/about-us", label: "About", role: "PUBLIC" },
+  { href: "/about", label: "About", role: "PUBLIC" },
   { href: "/features", label: "Features", role: "PUBLIC" },
   { href: "/blogs", label: "Blogs", role: "PUBLIC" },
-  { href: "/faqs", label: "FAQs", role: "PUBLIC" },
-  { href: "/contact", label: "Contact", role: "PUBLIC" },
+  { href: "/faq", label: "FAQs", role: "PUBLIC" },
+  { href: "/contact-us", label: "Contact", role: "PUBLIC" },
   { href: "/admin", label: "Dashboard", role: role.ADMIN },
   { href: "/driver", label: "Dashboard", role: role.DRIVER },
   { href: "/user", label: "Dashboard", role: role.RIDER },
