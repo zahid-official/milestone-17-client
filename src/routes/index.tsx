@@ -1,25 +1,27 @@
 import App from "@/App";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import RideDetails from "@/components/modules/user/rideHistory/RideDetails";
 import role from "@/constants/role";
-import About from "@/pages/public/navbar/About";
-import Home from "@/pages/public/navbar/Home";
 import Login from "@/pages/public/auth/Login";
 import Register from "@/pages/public/auth/Register";
-import Unauthorized from "@/pages/public/error/Unauthorized";
 import Verify from "@/pages/public/auth/Verify";
+import Contact from "@/pages/public/error/Contact";
 import Error from "@/pages/public/error/Error";
+import NotFound from "@/pages/public/error/NotFound";
+import Unauthorized from "@/pages/public/error/Unauthorized";
+import About from "@/pages/public/navbar/About";
+import Blog from "@/pages/public/navbar/Blog";
+import BlogDetails from "@/pages/public/navbar/BlogDetails";
+import ContactUs from "@/pages/public/navbar/ContactUs";
+import FAQ from "@/pages/public/navbar/FAQ";
+import Features from "@/pages/public/navbar/Features";
+import Home from "@/pages/public/navbar/Home";
 import generateRoutes from "@/utils/generateRoutes";
 import withAuth from "@/utils/withAuth";
 import { createBrowserRouter, Navigate } from "react-router";
 import adminSidebarItems from "./admin/adminSidebar";
 import driverSidebarItems from "./driver/driverSidebar";
 import userSidebarItems from "./user/userSidebar";
-import RideDetails from "@/components/modules/user/rideHistory/RideDetails";
-import Contact from "@/pages/public/error/Contact";
-import NotFound from "@/pages/public/error/NotFound";
-import Features from "@/pages/public/navbar/Features";
-import ContactUs from "@/pages/public/navbar/ContactUs";
-import FAQ from "@/pages/public/navbar/FAQ";
 
 const Router = createBrowserRouter([
   // Common layout
@@ -34,7 +36,7 @@ const Router = createBrowserRouter([
         Component: Home,
       },
       {
-        path: "about",
+        path: "about-us",
         Component: About,
       },
       {
@@ -42,12 +44,20 @@ const Router = createBrowserRouter([
         Component: Features,
       },
       {
-        path: "contact-us",
+        path: "contact",
         Component: ContactUs,
       },
       {
-        path: "faq",
+        path: "faqs",
         Component: FAQ,
+      },
+      {
+        path: "blogs",
+        Component: Blog,
+      },
+      {
+        path: "blogs/:slug",
+        Component: BlogDetails,
       },
     ],
   },

@@ -23,10 +23,11 @@ import ThemeToggler from "./ThemeToggler";
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
   { href: "/", label: "Home", role: "PUBLIC" },
-  { href: "/about", label: "About", role: "PUBLIC" },
+  { href: "/about-us", label: "About", role: "PUBLIC" },
   { href: "/features", label: "Features", role: "PUBLIC" },
-  { href: "/contact-us", label: "Contact", role: "PUBLIC" },
-  { href: "/faq", label: "FAQ", role: "PUBLIC" },
+  { href: "/blogs", label: "Blogs", role: "PUBLIC" },
+  { href: "/faqs", label: "FAQs", role: "PUBLIC" },
+  { href: "/contact", label: "Contact", role: "PUBLIC" },
   { href: "/admin", label: "Dashboard", role: role.ADMIN },
   { href: "/driver", label: "Dashboard", role: role.DRIVER },
   { href: "/user", label: "Dashboard", role: role.RIDER },
@@ -63,7 +64,7 @@ const Navbar = () => {
           <Popover>
             <PopoverTrigger asChild>
               <Button
-                className="group size-8 md:hidden"
+                className="group size-8 lg:hidden"
                 variant="ghost"
                 size="icon"
               >
@@ -140,7 +141,7 @@ const Navbar = () => {
             </div>
 
             {/* Navigation menu */}
-            <NavigationMenu className="max-md:hidden">
+            <NavigationMenu className="max-lg:hidden">
               <NavigationMenuList className="gap-2">
                 {navigationLinks.map((link, index) => (
                   <div key={index}>
