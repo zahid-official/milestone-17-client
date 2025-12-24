@@ -9,12 +9,12 @@ const Footer = () => {
           <div>
             <Logo />
           </div>
-
-          <p className="mt-3 max-w-xs">
+          <p className="my-4 max-w-xs">
             Explore, connect and discover the world with ease. Start your
-            journey today with Velocia. Adventures await wherever you go.
+            journey today with Velocia.
           </p>
 
+          {/* Socials */}
           <ul className="mt-5 flex gap-6">
             <li>
               <Link
@@ -127,7 +127,7 @@ const Footer = () => {
               </li>
 
               <li>
-                <Link to="/features" className="transition hover:opacity-75">
+                <Link to="/about" className="transition hover:opacity-75">
                   Discover Velocia
                 </Link>
               </li>
@@ -144,7 +144,7 @@ const Footer = () => {
               </li>
 
               <li>
-                <Link to="/about" className="transition hover:opacity-75">
+                <Link to="/blogs" className="transition hover:opacity-75">
                   Our Story
                 </Link>
               </li>
@@ -185,20 +185,28 @@ const Footer = () => {
           </div>
 
           <div>
-            <p className="font-medium">Legal</p>
+            <p className="font-medium">Connect Us</p>
 
             <ul className="mt-6 space-y-4 text-sm">
               <li>
-                <Link to="/faq" className="transition hover:opacity-75">
-                  Returns Policy
+                <Link
+                  to="tel:+8801869618216"
+                  className="transition hover:opacity-75"
+                >
+                  (+880) 1869618216
                 </Link>
               </li>
 
               <li>
-                <Link to="/faq" className="transition hover:opacity-75">
-                  Refund Policy
+                <Link
+                  to="mailto:zahid.official8@gmail.com"
+                  className="transition hover:opacity-75"
+                >
+                  zahid.official8@gmail.com
                 </Link>
               </li>
+
+              <li>Secor-7, Uttara, Dhaka</li>
             </ul>
           </div>
         </div>
