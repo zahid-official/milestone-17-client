@@ -1,8 +1,33 @@
 import { Link } from "react-router";
 import Logo from "@/components/layout/Logo";
 import LoginForm from "@/components/modules/authentication/LoginForm";
+import role from "@/constants/role";
+import { useProfileInfoQuery } from "@/redux/features/user/user.api";
+import { Navigate } from "react-router";
 
 const Login = () => {
+  const { data, isLoading, isFetching } = useProfileInfoQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  const dashboardByRole = {
+    [role.ADMIN]: "/admin",
+    [role.DRIVER]: "/driver",
+    [role.RIDER]: "/user",
+  } as const;
+
+  const userRole = data?.data?.role;
+  const destination =
+    userRole && dashboardByRole[userRole as keyof typeof dashboardByRole];
+
+  if (!isLoading && !isFetching && destination) {
+    return <Navigate to={destination} replace />;
+  }
+
+  if (isLoading || isFetching) {
+    return null;
+  }
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       {/* Content */}

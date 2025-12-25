@@ -2,9 +2,33 @@ import Logo from "@/components/layout/Logo";
 import DriverRegisterForm from "@/components/modules/authentication/DriverRegisterForm";
 import RiderRegisterForm from "@/components/modules/authentication/RiderRegisterForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Link } from "react-router";
+import role from "@/constants/role";
+import { useProfileInfoQuery } from "@/redux/features/user/user.api";
+import { Link, Navigate } from "react-router";
 
 const Register = () => {
+  const { data, isLoading, isFetching } = useProfileInfoQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  const dashboardByRole = {
+    [role.ADMIN]: "/admin",
+    [role.DRIVER]: "/driver",
+    [role.RIDER]: "/user",
+  } as const;
+
+  const userRole = data?.data?.role;
+  const destination =
+    userRole && dashboardByRole[userRole as keyof typeof dashboardByRole];
+
+  if (!isLoading && !isFetching && destination) {
+    return <Navigate to={destination} replace />;
+  }
+
+  if (isLoading || isFetching) {
+    return null;
+  }
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       {/* Banner */}
