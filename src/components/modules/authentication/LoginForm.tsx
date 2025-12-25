@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ButtonSubmit from "@/components/ui/button-submit";
+import { FieldSeparator } from "@/components/ui/field";
 import {
   Form,
   FormControl,
@@ -12,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import InputPassword from "@/components/ui/input-password";
 import accountStatus from "@/constants/accountStatus";
+import role from "@/constants/role";
 import { cn } from "@/lib/utils";
 import { useLoginMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,6 +45,9 @@ const LoginForm = ({
 }: React.HTMLAttributes<HTMLDivElement>) => {
   // State for loading
   const [isLoading, setIsloading] = useState(false);
+  const [activeLogin, setActiveLogin] = useState<
+    "form" | "admin" | "rider" | "driver" | null
+  >(null);
 
   // Navigation hook
   const navigate = useNavigate();
@@ -59,6 +64,12 @@ const LoginForm = ({
     },
   });
 
+  const roleRedirects = {
+    [role.ADMIN]: "/admin",
+    [role.DRIVER]: "/driver",
+    [role.RIDER]: "/user",
+  } as const;
+
   // Handle credentials login
   const credentialsLogin = async (data: z.infer<typeof loginZodSchema>) => {
     setIsloading(true);
@@ -66,7 +77,9 @@ const LoginForm = ({
     try {
       const result = await login(data).unwrap();
       toast.success(result.message || "Logged in successfully");
-      navigate("/");
+      const destination =
+        roleRedirects[result.data?.role as keyof typeof roleRedirects];
+      navigate(destination ?? "/");
     } catch (error: any) {
       toast.error(error.data.message || "Something went wrong!");
 
@@ -107,7 +120,42 @@ const LoginForm = ({
       }
     } finally {
       setIsloading(false);
+      setActiveLogin(null);
     }
+  };
+
+  const roleCredentials = {
+    admin: {
+      email: "default@email.com",
+      password: "default@Admin123",
+    },
+    rider: {
+      email: "rider@email.com",
+      password: "default@Admin123",
+    },
+    driver: {
+      email: "driver@email.com",
+      password: "default@Admin123",
+    },
+  } as const;
+
+  const handleRoleLogin = (role: keyof typeof roleCredentials) => {
+    const credentials = roleCredentials[role];
+    form.setValue("email", credentials.email, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue("password", credentials.password, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    setActiveLogin(role);
+    void credentialsLogin(credentials);
+  };
+
+  const handleFormSubmit = (data: z.infer<typeof loginZodSchema>) => {
+    setActiveLogin("form");
+    return credentialsLogin(data);
   };
 
   return (
@@ -124,7 +172,7 @@ const LoginForm = ({
       <div className="grid gap-6">
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(credentialsLogin)}
+            onSubmit={form.handleSubmit(handleFormSubmit)}
             className="space-y-6"
           >
             {/* Email */}
@@ -165,10 +213,35 @@ const LoginForm = ({
 
             {/* Submit btn */}
             <ButtonSubmit
-              isLoading={isLoading}
+              isLoading={isLoading && activeLogin === "form"}
               value="Login"
               loadingValue="Logging in"
             />
+
+            <FieldSeparator>Or continue with credentials</FieldSeparator>
+            <div className="pt-6.5 grid grid-cols-3 gap-3">
+              <ButtonSubmit
+                isLoading={isLoading && activeLogin === "admin"}
+                value="Admin Login"
+                loadingValue="Logging in"
+                type="button"
+                onClick={() => handleRoleLogin("admin")}
+              />
+              <ButtonSubmit
+                isLoading={isLoading && activeLogin === "rider"}
+                value="Rider Login"
+                loadingValue="Logging in"
+                type="button"
+                onClick={() => handleRoleLogin("rider")}
+              />
+              <ButtonSubmit
+                isLoading={isLoading && activeLogin === "driver"}
+                value="Driver Login"
+                loadingValue="Logging in"
+                type="button"
+                onClick={() => handleRoleLogin("driver")}
+              />
+            </div>
           </form>
         </Form>
       </div>

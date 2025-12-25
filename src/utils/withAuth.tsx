@@ -6,18 +6,25 @@ import { Navigate } from "react-router";
 const withAuth = (Component: ComponentType, requiredRole?: TRole[]) => {
   const AuthWrapper = () => {
     // RTK Query mutation hook
-    const { data, isLoading } = useProfileInfoQuery(undefined);
+    const { data, isLoading, isFetching } = useProfileInfoQuery(undefined, {
+      refetchOnMountOrArgChange: true,
+    });
 
     const email = data?.data?.email;
     const userRole = data?.data?.role;
 
     // check is user logged in
-    if (!isLoading && !email) {
+    if (!isLoading && !isFetching && !email) {
       return <Navigate to={"/login"} />;
     }
 
     // check is user role matches the required role
-    if (!isLoading && requiredRole && !requiredRole.includes(userRole)) {
+    if (
+      !isLoading &&
+      !isFetching &&
+      requiredRole &&
+      !requiredRole.includes(userRole)
+    ) {
       return <Navigate to={"/unauthorized"} />;
     }
 

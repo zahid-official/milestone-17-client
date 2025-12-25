@@ -1,4 +1,5 @@
 import { LoaderCircleIcon } from "lucide-react";
+import type { MouseEventHandler } from "react";
 import { Button } from "@/components/ui/button";
 
 interface IProps {
@@ -7,6 +8,8 @@ interface IProps {
   loadingValue: string;
   form?: string;
   className?: string;
+  type?: "button" | "submit" | "reset";
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 const ButtonSubmit = ({
@@ -15,13 +18,16 @@ const ButtonSubmit = ({
   loadingValue,
   form,
   className,
+  type = "submit",
+  onClick,
 }: IProps) => {
   return (
     <Button
       form={form}
-      type="submit"
+      type={type}
       disabled={isLoading}
       data-loading={isLoading || undefined}
+      onClick={onClick}
       className={`w-full disabled:opacity-100 ${className}`}
     >
       {isLoading ? (
