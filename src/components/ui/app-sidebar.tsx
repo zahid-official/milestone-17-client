@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 
 import {
@@ -12,15 +13,32 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { useLogoutMutation } from "@/redux/features/auth/auth.api";
+import { useProfileInfoQuery, userApi } from "@/redux/features/user/user.api";
+import { useAppDispatch } from "@/redux/hooks";
 import generateSidebar from "@/utils/generateSidebar";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { toast } from "sonner";
 import Logo from "../layout/Logo";
-import { useProfileInfoQuery } from "@/redux/features/user/user.api";
 
 const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
   // RTK Query mutation hook
   const { data } = useProfileInfoQuery(undefined);
   const userRole = data?.data?.role;
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [logout, { isLoading: isLogoutLoading }] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    try {
+      const result = await logout(null).unwrap();
+      dispatch(userApi.util.resetApiState());
+      toast.success(result.message || "Logged out successfully");
+      navigate("/login");
+    } catch (error: any) {
+      toast.error(error.data?.message || "Something went wrong!");
+    }
+  };
 
   // Nav items based on user role
   const navItems = {
@@ -57,6 +75,28 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
             </SidebarGroupContent>
           </SidebarGroup>
         ))}
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Return to</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/">Back to Home</Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  type="button"
+                  onClick={handleLogout}
+                  disabled={isLogoutLoading}
+                >
+                  Logout
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
