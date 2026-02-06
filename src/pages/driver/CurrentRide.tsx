@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Circle, MapPin, Navigation, WifiOff } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import ButtonSubmit from "@/components/ui/button-submit";
@@ -24,6 +25,39 @@ import ToggleAvailability from "./ToggleAvailability";
 import { useProfileInfoQuery } from "@/redux/features/user/user.api";
 import availability from "@/constants/availability";
 import EmergencyButton from "@/components/modules/user/activeRide/EmergencyButton";
+
+const CurrentRideSkeleton = () => (
+  <div className="flex justify-center items-center min-h-[85vh]">
+    <Card className="border max-w-lg w-full mx-auto border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 rounded-2xl shadow-lg transition-colors">
+      <CardHeader>
+        <Skeleton className="h-8 w-40 mx-auto" />
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {[0, 1, 2].map((row) => (
+          <div key={row} className="flex items-start gap-3">
+            <Skeleton className="h-8 w-8 rounded-full" />
+            <div className="flex-1 space-y-2">
+              <Skeleton className="h-3 w-24" />
+              <Skeleton className="h-4 w-full" />
+            </div>
+          </div>
+        ))}
+        <div className="border-t border-border mt-7"></div>
+        <div className="flex items-center justify-between text-center text-sm">
+          {[0, 1, 2].map((col) => (
+            <div key={col} className="flex flex-col items-center gap-2">
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="h-4 w-14" />
+            </div>
+          ))}
+        </div>
+      </CardContent>
+      <CardFooter>
+        <Skeleton className="h-10 w-full rounded-md" />
+      </CardFooter>
+    </Card>
+  </div>
+);
 
 const CurrentRide = () => {
   // States from react
@@ -86,11 +120,7 @@ const CurrentRide = () => {
 
   // Loader
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center py-6">
-        <div className="w-8 h-8 border-5 border-black/30 border-t-black dark:border-white/30 dark:border-t-white rounded-full animate-spin" />
-      </div>
-    );
+    return <CurrentRideSkeleton />;
   }
 
   // If driver is offline, show themed notice with toggle to go online

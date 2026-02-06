@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useProfileInfoQuery } from "@/redux/features/user/user.api";
 import {
   Bike,
@@ -27,7 +28,7 @@ const VehicleInfo = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   // RTK Query mutation hook
-  const { data } = useProfileInfoQuery(undefined);
+  const { data, isLoading } = useProfileInfoQuery(undefined);
   const userInfo = data?.data;
 
   // Display data
@@ -53,6 +54,50 @@ const VehicleInfo = () => {
       value: userInfo?.vehicleInfo?.vehicleModel,
     },
   ];
+
+  if (isLoading) {
+    return (
+      <div className="w-full max-w-2xl mx-auto transition-all ease-out duration-300 min-h-[87vh] place-content-center">
+        <Card className="border pb-11 pt-9 px-1 shadow-sm bg-card/70 backdrop-blur-sm ">
+          <CardHeader>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="space-y-2">
+                <Skeleton className="h-8 w-52" />
+                <Skeleton className="h-4 w-64" />
+              </div>
+              <Skeleton className="h-8 w-24 rounded-md" />
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6 -mt-2">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <Skeleton className="h-14 w-14 rounded-xl" />
+              <div className="space-y-2 flex-1">
+                <Skeleton className="h-5 w-40" />
+                <div className="flex gap-2">
+                  <Skeleton className="h-6 w-20 rounded-md" />
+                  <Skeleton className="h-6 w-20 rounded-md" />
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2.5">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-3 p-3 rounded-xl border bg-card/50"
+                >
+                  <Skeleton className="h-8 w-8 rounded-xl" />
+                  <div className="min-w-0 flex-1 space-y-2">
+                    <Skeleton className="h-3 w-24" />
+                    <Skeleton className="h-4 w-32" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (isEditing) {
     return (

@@ -15,6 +15,7 @@ import role from "@/constants/role";
 import { useLogoutMutation } from "@/redux/features/auth/auth.api";
 import { useProfileInfoQuery, userApi } from "@/redux/features/user/user.api";
 import { useAppDispatch } from "@/redux/hooks";
+import { motion } from "motion/react";
 import { Link } from "react-router";
 import { toast } from "sonner";
 import Logo from "./Logo";
@@ -23,6 +24,7 @@ import ThemeToggler from "./ThemeToggler";
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
   { href: "/", label: "Home", role: "PUBLIC" },
+  { href: "/book-ride", label: "Book Ride", role: "PUBLIC" },
   { href: "/about", label: "About", role: "PUBLIC" },
   { href: "/features", label: "Features", role: "PUBLIC" },
   { href: "/blogs", label: "Blogs", role: "PUBLIC" },
@@ -41,6 +43,9 @@ const Navbar = () => {
   const dispatch = useAppDispatch();
   const email = data?.data?.email;
   const userRole = data?.data?.role;
+  const visibleLinks = navigationLinks.filter(
+    (link) => link.role === "PUBLIC" || link.role === userRole
+  );
 
   // Handle logout
   const handleLogout = async () => {
@@ -50,24 +55,83 @@ const Navbar = () => {
       dispatch(userApi.util.resetApiState());
       toast.success(result.message || "Logged out successfully");
     } catch (error: any) {
-      console.log(error);
       toast.error(error.data.message);
     }
   };
 
   return (
-    <header className="border-b py-3 ">
+    <motion.header
+      className="border-b container mx-auto py-3"
+      initial={{ opacity: 0, y: -12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+    >
       <div className="flex h-16 items-center justify-between sm:gap-4">
         {/* Left side */}
-        <div className="flex items-center sm:gap-2">
+        <motion.div
+          className="flex items-center sm:gap-2"
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.55,
+            ease: [0.22, 1, 0.36, 1],
+            delay: 0.08,
+          }}
+        >
+          {/* Main nav */}
+          <div className="flex items-center gap-6">
+            <div className="w-40">
+              <Link to="/" className="text-primary hover:text-primary/90">
+                <Logo />
+              </Link>
+            </div>
+
+            {/* Navigation menu */}
+            <NavigationMenu className="max-lg:hidden">
+              <NavigationMenuList className="gap-2">
+                {visibleLinks.map((link) => (
+                  <NavigationMenuItem key={`${link.href}-${link.label}`}>
+                    <NavigationMenuLink
+                      className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                      asChild
+                    >
+                      <Link to={link.href}>{link.label}</Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
+        </motion.div>
+
+        {/* Right side */}
+        <motion.div
+          className="flex items-center gap-2"
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.55,
+            ease: [0.22, 1, 0.36, 1],
+            delay: 0.16,
+          }}
+        >
+          {email ? (
+            <Button onClick={handleLogout} className="text-sm">
+              Logout
+            </Button>
+          ) : (
+            <Link to="/login">
+              <Button className="text-sm">Login</Button>
+            </Link>
+          )}
+
+          {/* Theme mode */}
+          <ThemeToggler />
+
           {/* Mobile menu trigger */}
           <Popover>
             <PopoverTrigger asChild>
-              <Button
-                className="group size-8 lg:hidden"
-                variant="ghost"
-                size="icon"
-              >
+              <Button className="group lg:hidden" variant="outline" size="icon">
                 <svg
                   className="pointer-events-none"
                   width={16}
@@ -97,101 +161,23 @@ const Navbar = () => {
             </PopoverTrigger>
 
             {/* Mobile menu */}
-            <PopoverContent align="start" className="w-36 p-1 md:hidden">
-              <NavigationMenu className="max-w-none *:w-full">
-                <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
-                  {navigationLinks.map((link, index) => (
-                    <div key={index}>
-                      {/* Public routes */}
-                      {link.role === "PUBLIC" && (
-                        <NavigationMenuItem key={index}>
-                          <NavigationMenuLink
-                            className="text-muted-foreground hover:text-primary py-1.5 font-medium"
-                            asChild
-                          >
-                            <Link to={link.href}>{link.label}</Link>
-                          </NavigationMenuLink>
-                        </NavigationMenuItem>
-                      )}
-
-                      {/* Logged users routes */}
-                      {link.role === userRole && (
-                        <NavigationMenuItem key={index}>
-                          <NavigationMenuLink
-                            className="text-muted-foreground hover:text-primary py-1.5 font-medium"
-                            asChild
-                          >
-                            <Link to={link.href}>{link.label}</Link>
-                          </NavigationMenuLink>
-                        </NavigationMenuItem>
-                      )}
-                    </div>
-                  ))}
-                </NavigationMenuList>
-              </NavigationMenu>
+            <PopoverContent align="end" className="w-44 p-1 mt-0.5 lg:hidden">
+              <nav className="flex flex-col">
+                {visibleLinks.map((link) => (
+                  <Link
+                    key={`${link.href}-${link.label}`}
+                    to={link.href}
+                    className="w-full rounded-md px-3 py-2 text-center text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
             </PopoverContent>
           </Popover>
-
-          {/* Main nav */}
-          <div className="flex items-center gap-6">
-            <div className="w-40">
-              <Link to="/" className="text-primary hover:text-primary/90">
-                <Logo />
-              </Link>
-            </div>
-
-            {/* Navigation menu */}
-            <NavigationMenu className="max-lg:hidden">
-              <NavigationMenuList className="gap-2">
-                {navigationLinks.map((link, index) => (
-                  <div key={index}>
-                    {/* Public routes */}
-                    {link.role === "PUBLIC" && (
-                      <NavigationMenuItem key={index}>
-                        <NavigationMenuLink
-                          className="text-muted-foreground hover:text-primary py-1.5 font-medium"
-                          asChild
-                        >
-                          <Link to={link.href}>{link.label}</Link>
-                        </NavigationMenuLink>
-                      </NavigationMenuItem>
-                    )}
-
-                    {/* Logged users routes */}
-                    {link.role === userRole && (
-                      <NavigationMenuItem key={index}>
-                        <NavigationMenuLink
-                          className="text-muted-foreground hover:text-primary py-1.5 font-medium"
-                          asChild
-                        >
-                          <Link to={link.href}>{link.label}</Link>
-                        </NavigationMenuLink>
-                      </NavigationMenuItem>
-                    )}
-                  </div>
-                ))}
-              </NavigationMenuList>
-            </NavigationMenu>
-          </div>
-        </div>
-
-        {/* Right side */}
-        <div className="flex items-center gap-2">
-          {email ? (
-            <Button onClick={handleLogout} className="text-sm">
-              Logout
-            </Button>
-          ) : (
-            <Link to="/login">
-              <Button className="text-sm">Login</Button>
-            </Link>
-          )}
-
-          {/* Theme mode */}
-          <ThemeToggler />
-        </div>
+        </motion.div>
       </div>
-    </header>
+    </motion.header>
   );
 };
 

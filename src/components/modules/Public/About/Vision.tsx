@@ -1,10 +1,36 @@
 import { Badge } from "@/components/ui/badge";
+import { motion } from "motion/react";
 
 const Vission = () => {
+  const sectionVariants = {
+    hidden: {},
+    show: {
+      transition: {},
+    },
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 12 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6 },
+    },
+  };
+
   return (
-    <div className="grid gap-8 md:grid-cols-2">
+    <motion.section
+      className="grid gap-8 md:grid-cols-2"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.01 }}
+      variants={sectionVariants}
+    >
       {/* Vision */}
-      <div className="group flex flex-col justify-between gap-6 rounded-lg bg-muted p-6 shadow-sm transition-all duration-300 hover:shadow-md md:p-8">
+      <motion.div
+        className="group flex flex-col justify-between gap-6 rounded-lg bg-muted p-6 shadow-sm transition-all duration-300 hover:shadow-md md:p-8"
+        variants={fadeUp}
+      >
         <div className="overflow-hidden rounded-md">
           <img
             src="/images/about-1.jpg"
@@ -23,10 +49,13 @@ const Vission = () => {
             within cities.
           </p>
         </div>
-      </div>
+      </motion.div>
 
       {/* Mission */}
-      <div className="relative overflow-hidden rounded-lg shadow-sm">
+      <motion.div
+        className="relative overflow-hidden rounded-lg shadow-sm"
+        variants={fadeUp}
+      >
         <img
           src="/images/about-2.jpg"
           width={500}
@@ -48,8 +77,8 @@ const Vission = () => {
             </p>
           </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.section>
   );
 };
 

@@ -9,6 +9,7 @@ import {
   UserCheck,
   Clock,
 } from "lucide-react";
+import { motion } from "motion/react";
 
 const faqs = [
   {
@@ -57,10 +58,56 @@ const faqs = [
 
 // FAQ Component
 const FAQ = () => {
+  const sectionVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.05,
+      },
+    },
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8 },
+    },
+  };
+
+  const cardContainer = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.06,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 14 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6 },
+    },
+  };
+
   return (
-    <section className="py-8 sm:py-16 lg:py-24">
+    <motion.section
+      className="py-8 sm:py-16 lg:py-24"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.25 }}
+      variants={sectionVariants}
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="space-y-4 text-center sm:mb-12 mb-8 mx-auto flex max-w-3xl flex-col items-center">
+        <motion.div
+          className="space-y-4 text-center sm:mb-12 mb-8 mx-auto flex max-w-3xl flex-col items-center"
+          variants={fadeUp}
+        >
           <Badge variant="outline" className="w-max py-1 -mb-0 rounded-full px-3">
             FAQ
           </Badge>
@@ -74,11 +121,14 @@ const FAQ = () => {
           <p className="text-muted-foreground text-xl">
             Everything you need to know about using Velocia for your daily rides
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 gap-x-16 gap-y-6 md:grid-cols-2">
+        <motion.div
+          className="grid grid-cols-1 gap-x-16 gap-y-6 md:grid-cols-2"
+          variants={cardContainer}
+        >
           {faqs.map((faq, index) => (
-            <div key={index} className="space-y-4 p-6">
+            <motion.div key={index} className="space-y-4 p-6" variants={cardVariants}>
               <div className="flex gap-4">
                 <div className="relative flex shrink-0 overflow-hidden size-[42px] rounded-sm">
                   <div className="flex size-full items-center justify-center bg-primary/10 text-primary rounded-sm">
@@ -93,11 +143,11 @@ const FAQ = () => {
                 </div>
               </div>
               <p className="text-muted-foreground">{faq.answer}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

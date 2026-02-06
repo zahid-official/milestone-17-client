@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { motion } from "motion/react";
 
 const features = [
   {
@@ -41,29 +42,69 @@ const features = [
 
 // DetailedBreakdown Component
 const DetailedBreakdown = () => {
+  const sectionVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.05,
+      },
+    },
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 18 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.7 },
+    },
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <motion.section
+      className="min-h-screen flex items-center justify-center"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.25 }}
+      variants={sectionVariants}
+    >
       <div className="w-full">
         <div className="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
-          <Badge variant="outline" className="w-max py-1 rounded-full px-3">
-            Exclusive Features
-          </Badge>
-          <h1 className="text-pretty text-5xl font-bold tracking-tight lg:text-6xl sm:max-w-xl sm:mx-auto sm:text-center">
+          <motion.div variants={fadeUp}>
+            <Badge variant="outline" className="w-max py-1 rounded-full px-3">
+              Exclusive Features
+            </Badge>
+          </motion.div>
+          <motion.h1
+            className="text-pretty text-5xl font-bold tracking-tight lg:text-6xl sm:max-w-xl sm:mx-auto sm:text-center"
+            variants={fadeUp}
+          >
             Explore Velocia's{" "}
             <span className="relative text-primary">Features</span>
-          </h1>
-          <p className="text-lg text-muted-foreground">
+          </motion.h1>
+          <motion.p className="text-lg text-muted-foreground" variants={fadeUp}>
             Velocia is revolutionizing urban mobility by connecting riders and
             drivers for faster, greener and smarter travel. Join us on the road
             to a more sustainable future.
-          </p>
+          </motion.p>
         </div>
 
         <div className="mt-8 md:mt-16 w-full mx-auto space-y-20">
           {features.map((feature) => (
-            <div
+            <motion.div
               key={feature.category}
               className="flex flex-col md:flex-row items-center gap-x-12 gap-y-6 md:even:flex-row-reverse"
+              variants={itemVariants}
             >
               {/* Image or placeholder */}
               <div className="w-full aspect-[4/3] bg-muted rounded-xl border max-h-96 border-border/50 basis-1/2">
@@ -91,11 +132,11 @@ const DetailedBreakdown = () => {
                     ))}
                 </ul>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
-    </div>
+    </motion.section>
   );
 };
 

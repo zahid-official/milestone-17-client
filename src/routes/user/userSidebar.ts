@@ -4,7 +4,6 @@ import type { ISidebarItems } from "@/types";
 import { lazy } from "react";
 
 // Lazy loading
-const RideRequest = lazy(() => import("@/pages/user/RideRequest"));
 const ActiveRide = lazy(() => import("@/pages/user/ActiveRide"));
 const RideHistory = lazy(() => import("@/pages/user/RideHistory"));
 const Profile = lazy(() => import("@/pages/user/Profile"));
@@ -14,11 +13,6 @@ const userSidebarItems: ISidebarItems[] = [
   {
     title: "Ride Services",
     items: [
-      {
-        title: "Ride Request",
-        url: "/user/ride-request",
-        component: RideRequest,
-      },
       {
         title: "Active Ride",
         url: "/user/active-ride",

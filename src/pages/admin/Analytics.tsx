@@ -2,6 +2,7 @@ import AdminChartAreaInteractive from "@/components/ui/admin-chart-area-interact
 import AdminSectionCards from "@/components/ui/admin-section-cards";
 import AdminDriverBar from "@/components/ui/admin-driver-bar";
 import { AdminChartBarHorizontal } from "@/components/ui/admin-chart-bar-horizontal";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAnalyticsQuery } from "@/redux/features/admin/admin.api";
 
 type Ride = {
@@ -23,9 +24,35 @@ const toDateKey = (iso?: string) => {
   return d.toISOString().slice(0, 10);
 };
 
+const AnalyticsSkeleton = () => (
+  <div className="flex flex-1 flex-col">
+    <div className="@container/main flex flex-1 flex-col gap-2">
+      <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+        <div className="grid grid-cols-1 gap-4 px-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <Skeleton key={index} className="h-28 w-full rounded-xl" />
+          ))}
+        </div>
+        <div className="px-4 lg:px-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+          <Skeleton className="h-72 w-full rounded-xl" />
+          <Skeleton className="h-72 w-full rounded-xl" />
+        </div>
+        <div className="px-4 lg:px-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+          <Skeleton className="h-72 w-full rounded-xl" />
+          <Skeleton className="h-72 w-full rounded-xl" />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const Analytics = () => {
-  const { data } = useAnalyticsQuery(undefined);
+  const { data, isLoading } = useAnalyticsQuery(undefined);
   const rides: Ride[] = data?.data ?? [];
+
+  if (isLoading) {
+    return <AnalyticsSkeleton />;
+  }
 
   // only completed rides
   const completed = rides.filter((r) => r.status === "COMPLETED");

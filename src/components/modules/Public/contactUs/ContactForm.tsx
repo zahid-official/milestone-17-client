@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ButtonSubmit from "@/components/ui/button-submit";
 import {
@@ -60,12 +61,11 @@ const ContactForm = () => {
     setIsloading(true);
 
     try {
-      console.log(data);
+      void data;
       await new Promise((resolve) => setTimeout(resolve, 2000));
       form.reset();
       toast.success("Message sent successfully");
     } catch (error: any) {
-      console.log(error);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsloading(false);
@@ -75,7 +75,7 @@ const ContactForm = () => {
   return (
     <div className="grid gap-6">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           {/* Name */}
           <FormField
             control={form.control}
@@ -115,7 +115,7 @@ const ContactForm = () => {
                 <FormLabel>Message</FormLabel>
                 <FormControl>
                   <Textarea
-                    className="h-32"
+                    className="h-28"
                     placeholder="Type your message here"
                     {...field}
                   />

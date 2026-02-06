@@ -1,5 +1,6 @@
 import { DriverInteractiveChart } from "@/components/ui/driver-interactive-chart";
 import { DriverSectionCards } from "@/components/ui/driver-section-cards";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useEarningDetailsQuery } from "@/redux/features/driver/driver.api";
 import { format, startOfWeek } from "date-fns";
 import { useMemo, useState } from "react";
@@ -39,15 +40,32 @@ function groupByTimeframe(
   return { labels, totals, counts };
 }
 
+const EarningsSkeleton = () => (
+  <div className="flex flex-1 flex-col">
+    <div className="@container/main flex flex-1 flex-col gap-2">
+      <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+        <div className="grid grid-cols-1 gap-4 px-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <Skeleton key={index} className="h-28 w-full rounded-xl" />
+          ))}
+        </div>
+        <div className="px-4 lg:px-6">
+          <Skeleton className="h-72 w-full rounded-xl" />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const Earnings = () => {
-  const { data } = useEarningDetailsQuery(undefined);
+  const { data, isLoading } = useEarningDetailsQuery(undefined);
+  const [tf, setTf] = useState<"daily" | "weekly" | "monthly">("weekly");
   const items = useMemo(
     () => (
       data && Array.isArray(data.data) ? (data.data as RideItem[]) : []
     ) as RideItem[],
     [data]
   );
-  const [tf, setTf] = useState<"daily" | "weekly" | "monthly">("weekly");
 
   const total = useMemo(
     () => items.reduce((s, r) => s + (r.fare || 0), 0),
@@ -74,6 +92,10 @@ const Earnings = () => {
   const timeframeRides = grouped.counts.length
     ? grouped.counts[grouped.counts.length - 1]
     : 0;
+
+  if (isLoading) {
+    return <EarningsSkeleton />;
+  }
 
   return (
     <div className="flex flex-1 flex-col">

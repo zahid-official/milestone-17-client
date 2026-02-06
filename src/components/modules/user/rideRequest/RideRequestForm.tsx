@@ -157,6 +157,12 @@ const RideRequestForm = ({
   // Handle confirm to trigger backend
   const handleConfirm = async () => {
     setConfirmLoading(true);
+    if (!userInfo?.data?._id) {
+      toast.error("Please log in to confirm your ride.");
+      navigate("/login");
+      setConfirmLoading(false);
+      return;
+    }
     const confirmData = {
       ...rideData,
       paymentMethod: rideData.paymentMethod.toUpperCase(),
@@ -167,7 +173,7 @@ const RideRequestForm = ({
     try {
       const result = await requestRide(confirmData).unwrap();
       toast.success(result.message || "Ride requested successfully");
-      navigate("/user/history");
+      navigate("/user/active-ride");
     } catch (error: any) {
       toast.error(
         error?.data?.error[0]?.message ||

@@ -1,3 +1,5 @@
+import { motion } from "motion/react";
+
 const teamMembers = [
   {
     name: "John smith",
@@ -51,9 +53,51 @@ const teamMembers = [
 
 // Team Component
 const Team = () => {
+  const sectionVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.06,
+      },
+    },
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 18 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.75 },
+    },
+  };
+
+  const cardContainer = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.04,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 12 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.55 },
+    },
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center sm:py-14 py-4 px-4 sm:px-6 lg:px-8">
-      <div className="text-center max-w-xl mx-auto">
+    <motion.section
+      className="flex flex-col items-center justify-center sm:py-14 py-4 px-4 sm:px-6 lg:px-8"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={sectionVariants}
+    >
+      <motion.div className="text-center max-w-xl mx-auto" variants={fadeUp}>
         <b className="text-center text-muted-foreground font-semibold text-sm uppercase">
           Team Velocia!
         </b>
@@ -63,13 +107,20 @@ const Team = () => {
         <p className="mt-4 text-base sm:text-lg text-muted-foreground">
           Behind every smart ride and seamless experience is a team of
           passionate individuals who bring creativity, dedication and heart to
-          everything we do. At Velocia, it’s people who power progress.
+          everything we do. At Velocia, it's people who power progress.
         </p>
-      </div>
+      </motion.div>
 
-      <div className="sm:mt-20 mt-14 w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-12 max-w-(--breakpoint-lg) mx-auto">
+      <motion.div
+        className="sm:mt-20 mt-14 w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-12 max-w-(--breakpoint-lg) mx-auto"
+        variants={cardContainer}
+      >
         {teamMembers.map((member) => (
-          <div key={member.name} className="text-center">
+          <motion.div
+            key={member.name}
+            className="text-center"
+            variants={cardVariants}
+          >
             <img
               src={member.imageUrl}
               alt={member.name}
@@ -79,10 +130,10 @@ const Team = () => {
             />
             <h3 className="mt-4 text-lg font-semibold">{member.name}</h3>
             <p className="text-muted-foreground">{member.title}</p>
-          </div>
+          </motion.div>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </motion.section>
   );
 };
 

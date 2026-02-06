@@ -1,8 +1,32 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useSingleRideDetailsQuery } from "@/redux/features/user/user.api";
 import { MapPin, Navigation } from "lucide-react";
 import { useParams } from "react-router";
 import { format } from "date-fns";
+
+const RideDetailsSkeleton = () => (
+  <div className="grid xl:grid-cols-2 gap-7 mt-20 xl:max-w-5xl max-w-lg w-full mx-auto">
+    {Array.from({ length: 4 }).map((_, index) => (
+      <Card
+        key={index}
+        className="max-w-lg w-full border border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 rounded-2xl shadow-lg transition-colors"
+      >
+        <CardHeader>
+          <Skeleton className="h-6 w-36 mx-auto" />
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {Array.from({ length: 4 }).map((__, row) => (
+            <div key={row} className="space-y-2">
+              <Skeleton className="h-3 w-24" />
+              <Skeleton className="h-4 w-full" />
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+    ))}
+  </div>
+);
 
 const RideDetails = () => {
   const { id: rideId } = useParams();
@@ -13,11 +37,7 @@ const RideDetails = () => {
 
   // Loader
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center py-6">
-        <div className="w-8 h-8 border-5 border-black/30 border-t-black dark:border-white/30 dark:border-t-white rounded-full animate-spin" />
-      </div>
-    );
+    return <RideDetailsSkeleton />;
   }
 
   return (

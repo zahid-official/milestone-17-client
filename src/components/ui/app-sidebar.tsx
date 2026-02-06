@@ -4,6 +4,7 @@ import * as React from "react";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -20,10 +21,11 @@ import generateSidebar from "@/utils/generateSidebar";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import Logo from "../layout/Logo";
+import SidebarUserProfile from "./sidebar-user-profile";
 
 const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
   // RTK Query mutation hook
-  const { data } = useProfileInfoQuery(undefined);
+  const { data, isLoading: isProfileLoading } = useProfileInfoQuery(undefined);
   const userRole = data?.data?.role;
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -77,27 +79,28 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
         ))}
 
         <SidebarGroup>
-          <SidebarGroupLabel>Return to</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to="/">Back to Home</Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  type="button"
-                  onClick={handleLogout}
-                  disabled={isLogoutLoading}
-                >
-                  Logout
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
+        <SidebarGroupLabel>Return to</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link to="/">Back to Home</Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+    </SidebarContent>
+
+    {/* User info */}
+      <SidebarFooter>
+        <SidebarUserProfile
+          userInfo={data?.data}
+          onLogout={handleLogout}
+          isLoggingOut={isLogoutLoading}
+          isLoading={isProfileLoading}
+        />
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

@@ -7,6 +7,7 @@ import {
   Users,
   Zap,
 } from "lucide-react";
+import { motion } from "motion/react";
 
 const features = [
   {
@@ -14,7 +15,7 @@ const features = [
     title: "Set Your Route",
     description:
       "Enter your pickup and destination to find available rides or passengers nearby.",
-    image: "/images/route.jpg",
+    image: "/images/overview-1.jpg",
     alt: "set your route image",
   },
   {
@@ -22,7 +23,7 @@ const features = [
     title: "Match Instantly",
     description:
       "Our smart algorithm instantly pairs drivers and riders heading the same way.",
-    image: "/images/driver.jpg",
+    image: "/images/overview-2.jpg",
     alt: "driver matching image",
   },
   {
@@ -30,7 +31,7 @@ const features = [
     title: "Connect & Ride",
     description:
       "Communicate securely within the app, plan your ride, and travel together safely.",
-    image: "/images/connect-rider.jpg",
+    image: "/images/overview-3.jpg",
     alt: "connect and ride image",
   },
   {
@@ -38,15 +39,15 @@ const features = [
     title: "Ride With Confidence",
     description:
       "All profiles are verified and rated by the community for a safe and trusted experience.",
-    image: "/images/ride.jpg",
+    image: "/images/overview-4.jpg",
     alt: "ride with confidence image",
   },
   {
     icon: Repeat2,
     title: "Split Costs",
     description:
-      "Easily share ride costs through secure payments — making travel affordable for everyone.",
-    image: "/images/cost.jpg",
+      "Easily share ride costs through secure payments, making travel affordable.",
+    image: "/images/overview-5.jpg",
     alt: "cost splitting image",
   },
   {
@@ -54,53 +55,105 @@ const features = [
     title: "Save Time & Emissions",
     description:
       "Get where you're going faster while reducing carbon emissions. Smart mobility for all.",
-    image: "/images/save.jpg",
+    image: "/images/overview-6.jpg",
     alt: "save time and emissions image",
   },
 ];
 
 // Overview Component
 const Overview = () => {
+  const sectionVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.05,
+      },
+    },
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 22 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8 },
+    },
+  };
+
+  const cardContainer = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.06,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 16 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.65 },
+    },
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="w-full lg:py-36 sm:py-24 pt-10 pb-24 px-6">
-        <h2 className="sm:text-5xl text-4xl md:leading-[1.2] font-semibold tracking-[-0.03em] sm:max-w-xl text-pretty">
+    <motion.section
+      className="flex items-center justify-center container mx-auto sm:py-36 py-24"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.3 }}
+      variants={sectionVariants}
+    >
+      <div className="w-full">
+        <motion.h2
+          className="sm:text-5xl text-4xl md:leading-[1.2] font-semibold tracking-[-0.03em] sm:max-w-xl text-pretty"
+          variants={fadeUp}
+        >
           How Velocia Works
-        </h2>
-        <p className="mt-2 text-muted-foreground text-lg sm:text-xl text-justify">
+        </motion.h2>
+        <motion.p
+          className="mt-2 text-muted-foreground text-lg sm:text-xl text-justify"
+          variants={fadeUp}
+        >
           Discover a smarter, more connected way to commute. Velocia helps{" "}
           <br className="md:block hidden" />
           riders and drivers team up for efficient, eco-friendly travel.
-        </p>
-        <div className="mt-10 w-full mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
+        </motion.p>
+        <motion.div
+          className="mt-10 w-full mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8"
+          variants={cardContainer}
+        >
           {features.map((feature) => (
-            <Card
-              key={feature.title}
-              className="flex flex-col border rounded-xl overflow-hidden shadow-none pb-0"
-            >
-              <CardHeader>
-                <feature.icon />
-                <h4 className=" text-xl font-semibold tracking-tight">
-                  {feature.title}
-                </h4>
-                <p className="mt-1 text-muted-foreground text-[17px]">
-                  {feature.description}
-                </p>
-              </CardHeader>
-              <CardContent className="mt-auto px-0 pb-0">
-                <div className="h-52 ml-6 rounded-tl-xl">
-                  <img
-                    src={feature.image}
-                    alt={feature.alt || feature.title}
-                    className="w-full h-full  rounded-tl-xl object-cover"
-                  />
-                </div>
-              </CardContent>
-            </Card>
+            <motion.div key={feature.title} variants={cardVariants} className="h-full">
+              <Card className="flex h-full flex-col border rounded-xl overflow-hidden shadow-none pb-0">
+                <CardHeader>
+                  <feature.icon />
+                  <h4 className=" text-xl font-semibold tracking-tight">
+                    {feature.title}
+                  </h4>
+                  <p className="mt-1 text-muted-foreground text-[17px]">
+                    {feature.description}
+                  </p>
+                </CardHeader>
+                <CardContent className="mt-auto px-0 pb-0">
+                  <div className="h-52 ml-6 rounded-tl-xl">
+                    <img
+                      src={feature.image}
+                      alt={feature.alt || feature.title}
+                      className="w-full h-full  rounded-tl-xl object-cover"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.section>
   );
 };
 

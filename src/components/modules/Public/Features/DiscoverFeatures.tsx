@@ -6,6 +6,7 @@ import {
   StarIcon,
   SwatchBookIcon,
 } from "lucide-react";
+import { motion } from "motion/react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
@@ -53,11 +54,54 @@ const featuresList = [
 
 // DiscoverFeatures Component
 const DiscoverFeatures = () => {
+  const sectionVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.05,
+      },
+    },
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8 },
+    },
+  };
+
+  const cardContainer = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.06,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 14 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6 },
+    },
+  };
+
   return (
-    <section className="">
+    <motion.section
+      className=""
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.25 }}
+      variants={sectionVariants}
+    >
       <div className="mx-auto max-w-7xl px-4 pt-8">
         {/* Header */}
-        <div className="space-y-2.5 mb-10">
+        <motion.div className="space-y-2.5 mb-10" variants={fadeUp}>
           <h2 className="font-semibold text-3xl lg:text-4xl">
             Discover What Makes Velocia Different
           </h2>
@@ -65,35 +109,46 @@ const DiscoverFeatures = () => {
             From smart ride tracking to powerful admin tools, explore features
             that move people, safely and efficiently.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <motion.div
+          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          variants={cardContainer}
+        >
           {featuresList.map((features, index) => (
-            <Card
-              key={index}
-              className={cn(
-                "shadow-none transition-colors duration-300",
-                "border-primary/20 hover:border-primary/70"
-              )}
-            >
-              <CardContent>
-                <Avatar
-                  className={cn("mb-4 size-10 rounded-md", "text-primary")}
-                >
-                  <AvatarFallback
-                    className={cn("rounded-md [&>svg]:size-6", "bg-primary/10")}
+            <motion.div key={index} variants={cardVariants}>
+              <Card
+                className={cn(
+                  "shadow-none transition-colors duration-300",
+                  "border-primary/20 hover:border-primary/70"
+                )}
+              >
+                <CardContent>
+                  <Avatar
+                    className={cn("mb-4 size-10 rounded-md", "text-primary")}
                   >
-                    <features.icon />
-                  </AvatarFallback>
-                </Avatar>
-                <h6 className="mb-2 text-lg font-semibold">{features.title}</h6>
-                <p className="text-muted-foreground">{features.description}</p>
-              </CardContent>
-            </Card>
+                    <AvatarFallback
+                      className={cn(
+                        "rounded-md [&>svg]:size-6",
+                        "bg-primary/10"
+                      )}
+                    >
+                      <features.icon />
+                    </AvatarFallback>
+                  </Avatar>
+                  <h6 className="mb-2 text-lg font-semibold">
+                    {features.title}
+                  </h6>
+                  <p className="text-muted-foreground">
+                    {features.description}
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

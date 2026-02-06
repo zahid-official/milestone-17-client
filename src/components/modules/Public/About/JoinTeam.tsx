@@ -1,15 +1,40 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { motion } from "motion/react";
 import { Link } from "react-router";
 
 const JoinTeam = () => {
+  const sectionVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.06,
+      },
+    },
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 18 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.75 },
+    },
+  };
+
   return (
-    <div className="overflow-hidden rounded-3xl bg-gradient-to-tr from-background/80 to-muted/40 p-6 md:p-10">
+    <motion.section
+      className="overflow-hidden rounded-3xl bg-gradient-to-tr from-background/80 to-muted/40 p-6 md:p-10"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={sectionVariants}
+    >
       <div className="grid items-center md:grid-cols-2 gap-10">
-        <div className="md:pt-0 pt-6 ">
+        <motion.div className="md:pt-0 pt-6" variants={fadeUp}>
           <Badge className="mb-3">JOIN THE MOVEMENT</Badge>
           <h2 className="mb-3 text-3xl font-bold md:text-4xl">
-            Be a Part of Velocia’s Journey
+            Be a Part of Velocia's Journey
           </h2>
           <p className="mb-6 text-muted-foreground">
             Whether you're a builder, thinker or visionary — there's a place for
@@ -23,8 +48,8 @@ const JoinTeam = () => {
               </Button>
             </Link>
           </div>
-        </div>
-        <div className="relative">
+        </motion.div>
+        <motion.div className="relative" variants={fadeUp}>
           <div className="relative">
             <img
               src="/images/about-3.jpg"
@@ -37,9 +62,9 @@ const JoinTeam = () => {
               <p className="text-sm text-muted-foreground">Remote & On-site</p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.section>
   );
 };
 

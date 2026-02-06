@@ -6,6 +6,25 @@ import availability from "@/constants/availability";
 import { Card } from "@/components/ui/card";
 import ToggleAvailability from "./ToggleAvailability";
 import { WifiOff } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const TableSkeleton = () => (
+  <div className="space-y-4 px-4 py-4">
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      <Skeleton className="h-8 w-40" />
+      <Skeleton className="h-8 w-28" />
+    </div>
+    <div className="space-y-2">
+      {Array.from({ length: 8 }).map((_, index) => (
+        <Skeleton key={index} className="h-12 w-full rounded-lg" />
+      ))}
+    </div>
+    <div className="flex items-center justify-between">
+      <Skeleton className="h-8 w-28" />
+      <Skeleton className="h-8 w-20" />
+    </div>
+  </div>
+);
 
 // IncomingRequests Component
 const IncomingRequests = () => {
@@ -47,11 +66,7 @@ const IncomingRequests = () => {
 
   // Loader
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center py-6">
-        <div className="w-8 h-8 border-5 border-black/30 border-t-black dark:border-white/30 dark:border-t-white rounded-full animate-spin" />
-      </div>
-    );
+    return <TableSkeleton />;
   }
 
   return (

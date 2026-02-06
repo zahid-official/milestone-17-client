@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { motion } from "motion/react";
 import { Link } from "react-router";
 
 function FeatureCard({ rotate = "", translate = "" }) {
@@ -20,12 +21,40 @@ function FeatureCard({ rotate = "", translate = "" }) {
 
 // CTA Section Component
 const CTA = () => {
+  const sectionVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.05,
+      },
+    },
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 22 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8 },
+    },
+  };
+
   return (
-    <section className="lg:pb-28 pb-24 px-6">
+    <motion.section
+      className="sm:pt-36 sm:pb-24 py-20 container mx-auto"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.3 }}
+      variants={sectionVariants}
+    >
       <div className="max-w-full sm:pl-10 sm:px-3 px-8 rounded-4xl overflow-hidden bg-gradient-to-b from-accent/30 to-background pt-10 md:pt-16 lg:pt-20">
         <div className="container relative flex flex-col md:flex-row md:space-x-16">
           {/* Left Content */}
-          <div className="lg:mb-28 lg:w-3/5 lg:shrink-0 xl:mb-20 xl:w-1/2">
+          <motion.div
+            className="lg:mb-28 lg:w-3/5 lg:shrink-0 xl:mb-20 xl:w-1/2"
+            variants={fadeUp}
+          >
             <div className="relative">
               {/* Decorative Circles */}
               <div className="absolute -left-4 -top-6 h-28 w-28 rounded-full bg-primary/5" />
@@ -65,10 +94,13 @@ const CTA = () => {
                 </Link>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Visual Cards */}
-          <div className="lg:block hidden absolute bottom-10 right-1/2 h-min w-full max-w-md translate-x-1/2 md:-right-34 md:-mr-4 md:w-3/4 md:max-w-xl md:translate-x-0 lg:mt-auto xl:relative xl:right-0 xl:size-full xl:max-w-full">
+          <motion.div
+            className="lg:block hidden absolute bottom-10 right-1/2 h-min w-full max-w-md translate-x-1/2 md:-right-34 md:-mr-4 md:w-3/4 md:max-w-xl md:translate-x-0 lg:mt-auto xl:relative xl:right-0 xl:size-full xl:max-w-full"
+            variants={fadeUp}
+          >
             <div className="relative aspect-[8/5] size-full min-h-64">
               {/* Card 1 */}
               <FeatureCard
@@ -85,10 +117,10 @@ const CTA = () => {
               {/* Card 3 */}
               <FeatureCard />
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

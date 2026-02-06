@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Form,
   FormControl,
@@ -55,10 +56,10 @@ const emergencyContactZodSchema = z.object({
 // EmergencyContact Component
 const EmergencyContact = () => {
   // State for loading
-  const [isLoading, setIsloading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   // RTK Query mutation hook
-  const { data } = useProfileInfoQuery(undefined);
+  const { data, isLoading: isProfileLoading } = useProfileInfoQuery(undefined);
   const [updateProfile] = useUpdateProfileMutation();
   const userInfo = data?.data;
 
@@ -99,7 +100,7 @@ const EmergencyContact = () => {
     }
     const contactInfo = { ...data, _id: userInfo._id };
 
-    setIsloading(true);
+    setIsSaving(true);
     try {
       const result = await updateProfile(contactInfo).unwrap();
       toast.success(
@@ -113,7 +114,7 @@ const EmergencyContact = () => {
           "Something went wrong!"
       );
     } finally {
-      setIsloading(false);
+      setIsSaving(false);
     }
   };
 
@@ -126,6 +127,30 @@ const EmergencyContact = () => {
       });
     }
   }, [userInfo, form]);
+
+  if (isProfileLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[85vh]">
+        <Card className="max-w-lg w-full mx-auto border pb-10 shadow-sm bg-card/70 backdrop-blur-sm">
+          <CardHeader className="space-y-2">
+            <Skeleton className="h-8 w-56" />
+            <Skeleton className="h-4 w-72" />
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-3">
+              <Skeleton className="h-4 w-40" />
+              <Skeleton className="h-10 w-full rounded-md" />
+            </div>
+            <div className="space-y-3">
+              <Skeleton className="h-4 w-40" />
+              <Skeleton className="h-10 w-full rounded-md" />
+            </div>
+            <Skeleton className="h-10 w-32 rounded-md" />
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center items-center min-h-[85vh]">
@@ -189,7 +214,7 @@ const EmergencyContact = () => {
                 {/* Submit button */}
                 <div>
                   <ButtonSubmit
-                    isLoading={isLoading}
+                    isLoading={isSaving}
                     value="Save changes"
                     loadingValue="Saving"
                   />

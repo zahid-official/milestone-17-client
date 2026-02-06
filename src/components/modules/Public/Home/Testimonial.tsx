@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import { StarIcon } from "lucide-react";
+import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 
 const testimonials = [
@@ -70,6 +71,25 @@ const testimonials = [
 
 // Testimonial Component
 const Testimonial = () => {
+  const sectionVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.05,
+      },
+    },
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 22 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8 },
+    },
+  };
+
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
@@ -88,15 +108,30 @@ const Testimonial = () => {
   }, [api]);
 
   return (
-    <div className="min-h-screen w-full flex justify-center items-center sm:py-36 py-24 px-6">
+    <motion.section
+      className="w-full flex justify-center items-center sm:py-36 py-20 container mx-auto"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.3 }}
+      variants={sectionVariants}
+    >
       <div className="w-full">
-        <h2 className="text-4xl sm:text-5xl font-semibold text-center tracking-[-0.03em]">
+        <motion.h2
+          className="text-4xl sm:text-5xl font-semibold text-center tracking-[-0.03em]"
+          variants={fadeUp}
+        >
           Testimonials
-        </h2>
-        <p className="mt-1.5 text-center text-muted-foreground text-xl">
+        </motion.h2>
+        <motion.p
+          className="mt-1.5 text-center text-muted-foreground text-xl"
+          variants={fadeUp}
+        >
           See what our users have to say about us
-        </p>
-        <div className="mt-10 container w-full mx-auto px-5">
+        </motion.p>
+        <motion.div
+          className="mt-10 container w-full mx-auto px-5"
+          variants={fadeUp}
+        >
           <Carousel setApi={setApi}>
             <CarouselContent>
               {testimonials.map((testimonial) => (
@@ -119,9 +154,9 @@ const Testimonial = () => {
               />
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.section>
   );
 };
 

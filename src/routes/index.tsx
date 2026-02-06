@@ -12,10 +12,13 @@ import Unauthorized from "@/pages/public/error/Unauthorized";
 import About from "@/pages/public/navbar/About";
 import Blog from "@/pages/public/navbar/Blog";
 import BlogDetails from "@/pages/public/navbar/BlogDetails";
+import BookRide from "@/pages/public/navbar/BookRide";
 import ContactUs from "@/pages/public/navbar/ContactUs";
 import FAQ from "@/pages/public/navbar/FAQ";
 import Features from "@/pages/public/navbar/Features";
 import Home from "@/pages/public/navbar/Home";
+import OfferDetails from "@/pages/public/navbar/OfferDetails";
+import CoreListingDetails from "@/pages/public/navbar/CoreListingDetails";
 import generateRoutes from "@/utils/generateRoutes";
 import withAuth from "@/utils/withAuth";
 import { createBrowserRouter, Navigate } from "react-router";
@@ -44,6 +47,10 @@ const Router = createBrowserRouter([
         Component: Features,
       },
       {
+        path: "book-ride",
+        Component: BookRide,
+      },
+      {
         path: "contact-us",
         Component: ContactUs,
       },
@@ -58,6 +65,14 @@ const Router = createBrowserRouter([
       {
         path: "blogs/:slug",
         Component: BlogDetails,
+      },
+      {
+        path: "offers/:slug",
+        Component: OfferDetails,
+      },
+      {
+        path: "listings/:slug",
+        Component: CoreListingDetails,
       },
     ],
   },
@@ -98,7 +113,7 @@ const Router = createBrowserRouter([
     Component: withAuth(DashboardLayout, [role.RIDER]),
     errorElement: <Error />,
     children: [
-      { index: true, element: <Navigate to={"/user/ride-request"} /> },
+      { index: true, element: <Navigate to={"/user/active-ride"} /> },
       ...generateRoutes(userSidebarItems),
 
       {

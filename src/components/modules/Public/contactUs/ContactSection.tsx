@@ -9,6 +9,7 @@ import {
   PhoneIcon,
   ShieldCheck,
 } from "lucide-react";
+import { motion } from "motion/react";
 import { Link } from "react-router";
 import ContactForm from "./ContactForm";
 
@@ -62,10 +63,54 @@ const supportHighlights = [
   },
 ];
 
-const ContactSection = () => (
-  <div className="">
+const ContactSection = () => {
+  const sectionVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.05,
+      },
+    },
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8 },
+    },
+  };
+
+  const cardContainer = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.06,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 14 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6 },
+    },
+  };
+
+  return (
+    <motion.section
+      className=""
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.25 }}
+      variants={sectionVariants}
+    >
     {/* Title */}
-    <div className="pb-10 text-center sm:text-left">
+    <motion.div className="pb-10 text-center sm:text-left" variants={fadeUp}>
       <Badge variant="outline" className="w-max py-1 rounded-full px-3">
         Contact Us
       </Badge>
@@ -76,77 +121,84 @@ const ContactSection = () => (
         We&apos;d love to hear from you. Please fill out this form or shoot us
         an email.
       </p>
-    </div>
+    </motion.div>
 
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 pb-10">
+    <motion.div
+      className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 pb-10"
+      variants={cardContainer}
+    >
       {supportHighlights.map((item) => (
-        <Card
-          key={item.title}
-          className="border-primary/10 bg-background/70 shadow-sm"
-        >
-          <CardContent className="flex items-center gap-3 p-4">
-            <div className="flex size-10 items-center justify-center rounded-full bg-primary/5 text-primary">
-              <item.icon className="size-5" />
-            </div>
-            <div>
-              <p className="text-sm font-semibold">{item.title}</p>
-              <p className="text-xs text-muted-foreground">
-                {item.description}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+        <motion.div key={item.title} variants={cardVariants}>
+          <Card className="border-primary/10 bg-background/70 shadow-sm">
+            <CardContent className="flex items-center gap-3 p-4">
+              <div className="flex size-10 items-center justify-center rounded-full bg-primary/5 text-primary">
+                <item.icon className="size-5" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold">{item.title}</p>
+                <p className="text-xs text-muted-foreground">
+                  {item.description}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
 
     {/* Content */}
-    <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
+    <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
       {/* Form */}
-      <Card className="rounded-3xl border bg-background/80 shadow-sm">
-        <CardContent className="p-6 md:p-9">
-          <div className="mb-6">
-            <h3 className="text-2xl font-semibold">Send a message</h3>
-            <p className="text-muted-foreground">
-              Tell us a bit about your ride needs. We reply within 1-2 business
-              days.
-            </p>
-          </div>
-          <ContactForm />
-        </CardContent>
-      </Card>
+      <motion.div variants={fadeUp}>
+        <Card className="rounded-3xl border bg-background/80 shadow-sm">
+          <CardContent className="px-6 py-2">
+            <div className="mb-5">
+              <h3 className="text-2xl font-semibold">Send a message</h3>
+              <p className="text-muted-foreground">
+                Tell us a bit about your ride needs. We reply within 1-2 business
+                days.
+              </p>
+            </div>
+            <ContactForm />
+          </CardContent>
+        </Card>
+      </motion.div>
 
       {/* Contact Details */}
-      <div className="space-y-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <motion.div className="space-y-8" variants={fadeUp}>
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+          variants={cardContainer}
+        >
           {contactDetails.map((item, idx) => (
-            <Card
-              key={idx}
-              className="group border-primary/10 bg-background/70 shadow-sm transition hover:-translate-y-1 hover:border-primary/40"
-            >
-              <CardContent className="space-y-3 p-5">
-                <div className="h-11 w-11 flex items-center justify-center bg-primary/5 dark:bg-primary/10 text-primary rounded-full">
-                  <item.icon className="size-5" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {item.description}
-                  </p>
-                </div>
-                <Link
-                  to={item.linkTo}
-                  className="text-sm font-semibold text-primary"
-                  target={item.target}
-                >
-                  {item.linkText}
-                </Link>
-              </CardContent>
-            </Card>
+            <motion.div key={idx} variants={cardVariants}>
+              <Card className="group border-primary/10 bg-background/70 shadow-sm transition hover:-translate-y-1 hover:border-primary/40">
+                <CardContent className="space-y-3 p-5">
+                  <div className="h-11 w-11 flex items-center justify-center bg-primary/5 dark:bg-primary/10 text-primary rounded-full">
+                    <item.icon className="size-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {item.description}
+                    </p>
+                  </div>
+                  <Link
+                    to={item.linkTo}
+                    className="text-sm font-semibold text-primary"
+                    target={item.target}
+                  >
+                    {item.linkText}
+                  </Link>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
-  </div>
-);
+    </motion.section>
+  );
+};
 
 export default ContactSection;

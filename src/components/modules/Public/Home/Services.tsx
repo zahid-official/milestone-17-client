@@ -6,6 +6,7 @@ import {
   MessageCircle,
   Settings2,
 } from "lucide-react";
+import { motion } from "motion/react";
 
 const features = [
   {
@@ -47,17 +48,68 @@ const features = [
 ];
 
 const Services = () => {
+  const sectionVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.05,
+      },
+    },
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 22 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8 },
+    },
+  };
+
+  const cardContainer = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.06,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 16 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.65 },
+    },
+  };
+
   return (
-    <div className="flex items-center justify-center">
+    <motion.section
+      className="flex items-center justify-center container mx-auto"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.3 }}
+      variants={sectionVariants}
+    >
       <div>
-        <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-center">
+        <motion.h2
+          className="text-4xl sm:text-5xl font-semibold tracking-tight text-center"
+          variants={fadeUp}
+        >
           Service Highlights
-        </h2>
-        <div className="mt-8 sm:mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mx-auto px-6">
+        </motion.h2>
+        <motion.div
+          className="mt-8 sm:mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mx-auto"
+          variants={cardContainer}
+        >
           {features.map((feature) => (
-            <div
+            <motion.div
               key={feature.title}
               className="flex flex-col border rounded-xl py-8 px-5"
+              variants={cardVariants}
             >
               <div className="mb-4 h-10 w-10 flex items-center justify-center bg-muted rounded-full">
                 <feature.icon className="size-5" />
@@ -66,11 +118,11 @@ const Services = () => {
               <p className="mt-1 text-foreground/80 text-[15px]">
                 {feature.description}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.section>
   );
 };
 

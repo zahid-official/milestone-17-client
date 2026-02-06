@@ -3,7 +3,7 @@ import Logo from "./Logo";
 
 const Footer = () => {
   return (
-    <footer>
+    <footer className="container mx-auto">
       <div className="py-12 grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div>
           <div>

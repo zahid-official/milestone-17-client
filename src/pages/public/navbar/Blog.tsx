@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { blogPosts, topics } from "@/data/blogs";
 import { ArrowUpRight, Calendar, Clock, User } from "lucide-react";
+import { motion } from "motion/react";
 import { useState } from "react";
 import { Link } from "react-router";
 
@@ -11,7 +12,7 @@ const latestPosts = blogPosts.filter((post) => !post.featured);
 
 const BlogCard = ({ post }: { post: (typeof blogPosts)[number] }) => {
   return (
-    <article className="group overflow-hidden rounded-3xl border border-foreground/10 bg-foreground text-background shadow-sm transition hover:shadow-md dark:border-border dark:bg-card dark:text-card-foreground">
+    <article className="group h-full overflow-hidden rounded-3xl border border-foreground/10 bg-foreground text-background shadow-sm transition hover:shadow-md dark:border-border dark:bg-card dark:text-card-foreground">
       <div className="flex h-full flex-col sm:flex-row">
         <div className="relative md:w-1/2">
           <img
@@ -48,7 +49,7 @@ const BlogCard = ({ post }: { post: (typeof blogPosts)[number] }) => {
               to={`/blogs/${post.slug}`}
               className="group/link inline-flex items-center gap-2 text-sm font-semibold text-background/90 transition hover:text-background dark:text-card-foreground dark:hover:text-card-foreground"
             >
-              <Button variant={"ghost"} size={"sm"}>
+              <Button variant={"secondary"} size={"sm"}>
                 Read story
                 <ArrowUpRight className="size-4 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
               </Button>
@@ -61,6 +62,43 @@ const BlogCard = ({ post }: { post: (typeof blogPosts)[number] }) => {
 };
 
 const Blog = () => {
+  const sectionVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.05,
+      },
+    },
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8 },
+    },
+  };
+
+  const cardContainer = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.06,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 14 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6 },
+    },
+  };
+
   const topicFilters = ["All", ...topics];
   const [activeTopic, setActiveTopic] = useState("All");
 
@@ -77,22 +115,36 @@ const Blog = () => {
   return (
     <div className="bg-background py-16 md:py-24 px-2">
       {/* Title */}
-      <section className="container mx-auto bg-background">
+      <motion.section
+        className="container mx-auto bg-background"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
+      >
         <div className="flex flex-col items-center gap-6 text-center">
           <div className="mx-auto flex max-w-3xl flex-col items-center gap-4">
-            <Badge variant="outline" className="w-max py-1 rounded-full px-3">
-              Velocia Blog
-            </Badge>
-            <h1 className="text-pretty text-5xl font-bold tracking-tight lg:text-6xl sm:max-w-xl sm:mx-auto">
+            <motion.div variants={fadeUp}>
+              <Badge variant="outline" className="w-max py-1 rounded-full px-3">
+                Velocia Blog
+              </Badge>
+            </motion.div>
+            <motion.h1
+              className="text-pretty text-5xl font-bold tracking-tight lg:text-6xl sm:max-w-xl sm:mx-auto"
+              variants={fadeUp}
+            >
               Explore Velocia&apos;s{" "}
               <span className="relative text-primary">Stories</span>
-            </h1>
-            <p className="text-lg text-muted-foreground">
+            </motion.h1>
+            <motion.p className="text-lg text-muted-foreground" variants={fadeUp}>
               The Velocia journal covers ride culture, driver success, and the
               innovations shaping smarter mobility for everyone.
-            </p>
+            </motion.p>
           </div>
-          <div className="flex flex-wrap justify-center gap-2">
+          <motion.div
+            className="flex flex-wrap justify-center gap-2"
+            variants={fadeUp}
+          >
             {topicFilters.map((topic) => {
               const isActive = topic === activeTopic;
               return (
@@ -108,14 +160,23 @@ const Blog = () => {
                 </Badge>
               );
             })}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Editor picks */}
-      <section className="container mx-auto py-16 md:py-24">
+      <motion.section
+        className="container mx-auto py-16 md:py-24"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.25 }}
+        variants={sectionVariants}
+      >
         <div className="flex flex-col gap-10">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <motion.div
+            className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+            variants={fadeUp}
+          >
             <div className="space-y-3">
               <Badge variant="outline" className="rounded-full px-3 py-1">
                 Featured
@@ -128,25 +189,39 @@ const Blog = () => {
                 daily travel.
               </p>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="grid gap-8 lg:grid-cols-2">
+          <motion.div
+            className="grid items-stretch gap-8 lg:grid-cols-2"
+            variants={cardContainer}
+          >
             {filteredFeatured.length ? (
               filteredFeatured.map((post) => (
-                <BlogCard key={post.slug} post={post} />
+                <motion.div key={post.slug} variants={cardVariants} className="h-full">
+                  <BlogCard post={post} />
+                </motion.div>
               ))
             ) : (
               <p className="text-muted-foreground">
                 No featured stories match this topic yet.
               </p>
             )}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Fresh blogs */}
-      <section className="container mx-auto">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <motion.section
+        className="container mx-auto"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={sectionVariants}
+      >
+        <motion.div
+          className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+          variants={fadeUp}
+        >
           <div className="space-y-3">
             <Badge variant="outline" className="rounded-full px-3 py-1">
               Latest
@@ -158,79 +233,81 @@ const Blog = () => {
               Quick reads from drivers, riders, and our mobility team.
             </p>
           </div>
-        </div>
+        </motion.div>
 
         {/* Cards */}
-        <div className="mt-8 grid xl:gap-6 gap-8 sm:grid-cols-2 xl:grid-cols-4">
+        <motion.div
+          className="mt-8 grid xl:gap-6 gap-8 sm:grid-cols-2 xl:grid-cols-4"
+          variants={cardContainer}
+        >
           {filteredLatest.length ? (
             filteredLatest.map((post) => (
-              <Card
-                key={post.slug}
-                className="group h-full overflow-hidden rounded-2xl border bg-background/80 py-0 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-              >
-                <div className="relative min-h-44 overflow-hidden">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <Badge
-                    variant="secondary"
-                    className="absolute left-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide"
-                  >
-                    {post.category}
-                  </Badge>
-                </div>
-
-                <CardContent className="flex flex-col gap-3 p-5">
-                  {/* Stamps */}
-                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                    <span className="inline-flex items-center gap-1">
-                      <Clock className="size-3.5" />
-                      {post.readTime}
-                    </span>
-                    <span className="inline-flex items-center gap-1">
-                      <Calendar className="size-3.5" />
-                      {post.date}
-                    </span>
-                  </div>
-
-                  {/* Heading & description */}
-                  <div>
-                    <h3 className="text-lg font-semibold leading-snug">
-                      {post.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {post.excerpt}
-                    </p>
-                  </div>
-
-                  <div className=" flex items-center justify-between gap-4">
-                    <span className="inline-flex items-center gap-2 text-sm text-background/70 dark:text-muted-foreground">
-                      <User className="size-4" />
-                      {post.author}
-                    </span>
-                    <Link
-                      to={`/blogs/${post.slug}`}
-                      className="group/link inline-flex items-center gap-2 text-sm font-semibold text-background/90 transition hover:text-background dark:text-card-foreground dark:hover:text-card-foreground"
+              <motion.div key={post.slug} variants={cardVariants} className="h-full">
+                <Card className="group h-full overflow-hidden rounded-2xl border bg-background/80 py-0 shadow-sm transition hover:shadow-md">
+                  <div className="relative min-h-44 overflow-hidden">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    <Badge
+                      variant="secondary"
+                      className="absolute left-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide"
                     >
-                      <Button variant={"ghost"} size={"sm"}>
-                        Read story
-                        <ArrowUpRight className="size-4 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
-                      </Button>
-                    </Link>
+                      {post.category}
+                    </Badge>
                   </div>
-                </CardContent>
-              </Card>
+
+                  <CardContent className="flex h-full flex-col gap-3 p-5">
+                    {/* Stamps */}
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                      <span className="inline-flex items-center gap-1">
+                        <Clock className="size-3.5" />
+                        {post.readTime}
+                      </span>
+                      <span className="inline-flex items-center gap-1">
+                        <Calendar className="size-3.5" />
+                        {post.date}
+                      </span>
+                    </div>
+
+                    {/* Heading & description */}
+                    <div className="space-y-2">
+                      <h3 className="text-lg font-semibold leading-snug">
+                        {post.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        {post.excerpt}
+                      </p>
+                    </div>
+
+                    <div className="mt-auto flex items-center justify-between gap-4">
+                      <span className="inline-flex items-center gap-2 text-sm text-background/70 dark:text-muted-foreground">
+                        <User className="size-4" />
+                        {post.author}
+                      </span>
+                      <Link
+                        to={`/blogs/${post.slug}`}
+                        className="group/link inline-flex items-center gap-2 text-sm font-semibold text-background/90 duration-300 transition hover:text-background dark:text-card-foreground dark:hover:text-card-foreground"
+                      >
+                        <Button variant={"secondary"} size={"sm"}>
+                          Read story
+                          <ArrowUpRight className="size-4 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))
           ) : (
             <p className="text-muted-foreground">
               No fresh stories match this topic yet.
             </p>
           )}
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
     </div>
   );
 };
